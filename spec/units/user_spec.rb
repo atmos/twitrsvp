@@ -5,6 +5,6 @@ describe "TwitRSVP::User" do
     @user = TwitRSVP::User.gen
   end
   it "should be valid" do
-    @user.save.should be_true
+    @user.should be_true
   end
 end
