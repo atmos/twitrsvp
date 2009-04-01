@@ -1,0 +1,21 @@
+gem 'oauth'
+require 'oauth'
+gem 'json'
+require 'json'
+gem 'haml', '~>2.0.9'
+require 'haml/util'
+require 'haml/engine'
+
+gem 'data_objects', '~>0.9.11'
+gem 'dm-core', '~>0.9.10'
+gem 'dm-types', '~>0.9.10'
+gem 'dm-validations', '~>0.9.10'
+gem 'dm-timestamps', '~>0.9.10'
+require 'dm-core'
+require 'dm-types'
+require 'dm-validations'
+require 'dm-timestamps'
+require 'sinatra/base'
+
+root = File.dirname(__FILE__)
+require root + '/twitrsvp/models/user'
