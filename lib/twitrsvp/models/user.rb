@@ -9,5 +9,7 @@ module TwitRSVP
     property :secret, String
 
     timestamps :at
+
+    has n, :events, :class_name => '::TwitRSVP::Event', :child_key => [:user_id]
   end
 end

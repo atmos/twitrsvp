@@ -5,6 +5,8 @@ require 'json'
 gem 'haml', '~>2.0.9'
 require 'haml/util'
 require 'haml/engine'
+gem 'chronic'
+require 'chronic'
 
 gem 'data_objects', '~>0.9.11'
 gem 'dm-core', '~>0.9.10'
@@ -19,3 +21,5 @@ require 'sinatra/base'
 
 root = File.dirname(__FILE__)
 require root + '/twitrsvp/models/user'
+require root + '/twitrsvp/models/event'
+require root + '/twitrsvp/models/attendee'
