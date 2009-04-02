@@ -1,6 +1,8 @@
 module TwitRSVP
   class Attendee
     include DataMapper::Resource
+    
+    property :id, Serial
 
     timestamps :at
     belongs_to :user, :class_name => '::TwitRSVP::User', :child_key => [:user_id]
