@@ -10,20 +10,27 @@ module TwitRSVP
 
     timestamps :at
 
-    has n, :events, :class_name => '::TwitRSVP::Event', :child_key => [:user_id]
+    has n, :events, :class_name => '::TwitRSVP::Event', 
+           :child_key => [:user_id]
+    has n, :invites, :class_name => '::TwitRSVP::Attendee', 
+           :child_key => [:user_id], :order => [:status.asc]
 
     def organize(name, place, map_link, end_time, start_time, ids)
-      event = self.events.build({:user_id => self.id,
-                                 :name     => name, 
-                                 :place    => place, 
-                                 :map_link => map_link,
-                                 :end_at   => Chronic.parse(end_time), 
-                                 :start_at => Chronic.parse(start_time)})
+      event = self.events.create({:user_id => self.id,
+                                  :name     => name, 
+                                  :place    => place, 
+                                  :map_link => map_link,
+                                  :end_at   => Chronic.parse(end_time), 
+                                  :start_at => Chronic.parse(start_time)})
       if event.valid?
         ids.each do |idx|
           event.attendees.create(:user_id => idx)
         end
       end
+    end
+
+    def engagements
+      invites.map { |invite| invite.event }
     end
   end
 end

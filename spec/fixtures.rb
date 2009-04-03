@@ -16,7 +16,11 @@ TwitRSVP::Event.fix {{
 }}
 
 TwitRSVP::Attendee.fix {{
-  :user_id  => TwitRSVP::User.gen.id,
+  :user_id  => TwitRSVP::User.gen.id
+}}
+
+TwitRSVP::Attendee.fix(:user) {{
+  :event_id => TwitRSVP::Event.gen.id
 }}
 
 TwitRSVP::Attendee.fix(:standalone) {{
