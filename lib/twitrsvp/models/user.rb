@@ -27,6 +27,7 @@ module TwitRSVP
           event.attendees.create(:user_id => idx)
         end
       end
+      event
     end
 
     def engagements

@@ -23,3 +23,14 @@ root = File.dirname(__FILE__)
 require root + '/twitrsvp/models/user'
 require root + '/twitrsvp/models/event'
 require root + '/twitrsvp/models/attendee'
+require root + '/twitrsvp/sinatra/app'
+
+module TwitRSVP
+  module OAuth
+    def self.consumer
+      ::OAuth::Consumer.new(ENV['TWIT_RSVP_READKEY'],
+                            ENV['TWIT_RSVP_READSECRET'],
+                            {:site => 'http://twitter.com'})
+    end
+  end
+end

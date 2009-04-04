@@ -1,0 +1,25 @@
+%fieldset
+  %legend Organize an Event
+  %form{:action => '/organize'}
+    %label{:for => 'name'}
+      Whatta you wanna call the event?
+      %input{:type => 'text', :name => 'name', :size => 50}
+      %br
+    %label{:for => 'place'}
+      Where's it gonna be?
+      %input{:type => 'text', :name => 'place', :size => 50}
+      %br
+    %label{:for => 'starts_at'}
+      Starts At:
+      %input{:type => 'text', :name => 'starts_at'}
+      %br
+    %label{:for => 'ends_at'}
+      Ends At:
+      %input{:type => 'text', :name => 'ends_at'}
+      %br
+    %label{:for => 'map_link'}
+      %input{:type => 'text', :name => 'map_link'}
+      %br
+    %input{:type => 'submit', :value => 'Create!'}
+    or
+    %a{:href => '/'} Cancel
