@@ -10,6 +10,10 @@ module TwitRSVP
       def current_user
         session[:user_id].nil? ? nil : ::TwitRSVP::User.get(session[:user_id])
       end
+
+      def event_url(event)
+        "/events/#{event.id}"
+      end
     end
 
     get '/organize' do
@@ -51,6 +55,13 @@ module TwitRSVP
       session[:request_token] = request_token.token
       session[:request_token_secret] = request_token.secret
       redirect request_token.authorize_url
+    end
+
+    get '/' do
+      @pending_events   = Event.invited(current_user.id)
+      @declined_events  = Event.declined(current_user.id)
+      @confirmed_events = Event.confirmed(current_user.id)
+      haml :home
     end
   end
 end
