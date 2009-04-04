@@ -17,10 +17,10 @@ module TwitRSVP
     end
 
     post '/organize' do
-      event = current_user.organize(params['name'], params['place'], params['map_link'],
-                                    params['starts_at'], params['ends_at'], [ ])
+      @event = current_user.organize(params['name'], params['place'], params['map_link'],
+                                     params['starts_at'], params['ends_at'], [ ])
 
-      event.valid? ? redirect("/event/#{event.id}") : haml(:organize)
+      @event.valid? ? redirect("/event/#{@event.id}") : haml(:organize)
     end
 
     get '/callback' do
@@ -35,16 +35,14 @@ module TwitRSVP
       case oauth_response
       when Net::HTTPSuccess
         @user_info = JSON.parse(oauth_response.body)
-        @user = ::TwitRSVP::User.first_or_create({:twitter_id  => @user_info['id']},
-                                                  {
-                                                    :name        => @user_info['name'],
-                                                    :token       => access_token.token,
-                                                    :secret      => access_token.secret
-                                                  })
+        @user = ::TwitRSVP::User.first_or_create({:twitter_id  => @user_info['id']}, {
+                                                  :name        => @user_info['name'],
+                                                  :token       => access_token.token,
+                                                  :secret      => access_token.secret})
         session[:user_id] = @user.id
         redirect '/'
       else
-        haml :registration_failed
+        haml :failed
       end
     end
 

@@ -35,6 +35,7 @@ Spec::Runner.configure do |config|
     response = Net::HTTPSuccess.new('1.0', 200, nil)
     response.body = "{\"description\":\"lulz\",\"profile_background_image_url\":\"http:\\/\\/static.twitter.com\\/images\\/themes\\/theme3\\/bg.gif\",\"utc_offset\":-25200,\"friends_count\":157,\"profile_background_color\":\"EDECE9\",\"profile_text_color\":\"634047\",\"url\":\"http:\\/\\/example.org\",\"name\":\"Quentin Blake\",\"favourites_count\":6,\"profile_link_color\":\"088253\",\"protected\":false,\"status\":{\"truncated\":false,\"in_reply_to_status_id\":null,\"text\":\"stu stu studio\",\"in_reply_to_user_id\":null,\"favorited\":false,\"created_at\":\"Tue Mar 31 19:02:12 +0000 2009\",\"id\":1426242614,\"source\":\"<a href=\\\"http:\\/\\/iconfactory.com\\/software\\/twitterrific\\\">twitterrific<\\/a>\"},\"created_at\":\"Sun Mar 18 20:07:13 +0000 2007\",\"statuses_count\":2560,\"profile_background_tile\":false,\"time_zone\":\"Mountain Time (US & Canada)\",\"profile_sidebar_fill_color\":\"E3E2DE\",\"profile_image_url\":\"http:\\/\\/static.twitter.com\\/images\\/default_profile_normal.png\",\"notifications\":false,\"profile_sidebar_border_color\":\"D3D2CF\",\"location\":\"Boulder, Colorado\",\"id\":1484261,\"following\":false,\"followers_count\":368,\"screen_name\":\"caboose\"}"
     login(response)
+    last_response.headers['Location'].should eql('/')
   end
 
   def unauthorized_quentin

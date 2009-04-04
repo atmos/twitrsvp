@@ -1,7 +1,7 @@
 require File.dirname(__FILE__)+'/../spec_helper'
 
 describe "organizing an event" do
-  it "should be awesome" do
+  it "can organize events" do
     login_quentin
 
     get '/organize'
