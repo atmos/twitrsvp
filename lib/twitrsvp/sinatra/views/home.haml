@@ -1,5 +1,5 @@
 %h1.fancy Pending
-%ul
+%ul.pending
   - if @pending_events.nil? || @pending_events.empty?
     %li None at this time
   - else
@@ -9,7 +9,7 @@
         .meta= event.start_at.strftime('%b %m -> %H:%M')
 
 %h1.fancy Accepted
-%ul
+%ul.accepted
   - if @confirmed_events.nil? || @confirmed_events.empty?
     %li None at this time
   - else
@@ -19,7 +19,7 @@
         .meta= event.start_at.strftime('%b %d -> %H:%M')
 
 %h1.fancy Declined
-%ul
+%ul.declined
   - if @declined_events.nil? || @declined_events.empty?
     %li None at this time
   - else

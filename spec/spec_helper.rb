@@ -12,7 +12,6 @@ require 'pp'
 require File.dirname(__FILE__)+'/fixtures'
 
 DataMapper.setup(:default, 'sqlite3::memory:')
-DataMapper.auto_migrate!
 
 class Net::HTTPResponse 
   def body=(content) 
@@ -25,6 +24,11 @@ Spec::Runner.configure do |config|
   config.include(Rack::Test::Methods)
   config.include(Webrat::Methods)
   config.include(Webrat::Matchers)
+
+  config.before(:each) do
+    DataMapper.auto_migrate!
+  end
+
   def app
     @app = Rack::Builder.new do
       run TwitRSVP::App

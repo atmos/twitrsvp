@@ -16,6 +16,18 @@ module TwitRSVP
       end
     end
 
+    post '/events/:id/confirm' do
+      attendee = TwitRSVP::Attendee.first(:user_id => current_user.id, :event_id => params['id'])
+      attendee.confirm!
+      redirect '/'
+    end
+
+    post '/events/:id/decline' do
+      attendee = TwitRSVP::Attendee.first(:user_id => current_user.id, :event_id => params['id'])
+      attendee.decline!
+      redirect '/'
+    end
+
     get '/organize' do
       haml :organize
     end
