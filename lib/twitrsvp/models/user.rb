@@ -20,7 +20,7 @@ module TwitRSVP
     has n, :invites, :class_name => '::TwitRSVP::Attendee', 
            :child_key => [:user_id], :order => [:status.asc]
 
-    def organize(name, place, map_link, end_time, start_time, names)
+    def organize(name, place, map_link, start_time, end_time, names)
       event = self.events.create({:user_id => self.id,
                                   :name     => name, 
                                   :place    => place, 

@@ -9,7 +9,8 @@ describe "viewing an event" do
     event = TwitRSVP::Event.get(attendee.event_id)
 
     get "/events/#{event.id}"
-    last_response.should have_selector("h2.fancy:contains('#{event.description}')")
+    last_response.should have_selector("h1.fancy:contains('#{event.description}')")
+    last_response.should have_selector("h2.fancy")
     last_response.should have_selector("h3.fancy a[href='#{event.map_link}']:contains('Map Link')")
     last_response.should have_selector("ul.confirmed")
     last_response.should have_selector("ul.invited")
