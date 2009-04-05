@@ -16,7 +16,7 @@ module TwitRSVP
     timestamps :at
 
     has n, :events, :class_name => '::TwitRSVP::Event', 
-           :child_key => [:user_id]
+           :child_key => [:user_id], :order => [:created_at.desc]
     has n, :invites, :class_name => '::TwitRSVP::Attendee', 
            :child_key => [:user_id], :order => [:status.asc]
 

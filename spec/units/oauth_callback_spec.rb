@@ -13,7 +13,7 @@ describe "authenticating with oauth" do
 
     OAuth::Consumer.stub!(:new).and_return(consumer)
 
-    post '/signup'
+    get '/signup'
     last_response.headers['Location'].should eql('http://api.twitter.com/oauth')
   end
 end

@@ -1,29 +1,34 @@
+- unless @event.errors.empty?
+  .errors
+    - @event.errors.each do |error|
+      %span= error
+
 %fieldset
   %legend Organize an Event
-  %form{:action => '/organize'}
+  %form{:action => '/organize', :method => 'POST'}
     %label{:for => 'name'}
       Whatta you wanna call the event?
-      %input{:type => 'text', :name => 'name', :size => 50}
+      %input{:type => 'text', :name => 'name', :size => 50, :value => @event.name}
       %br
     %label{:for => 'place'}
       Where's it gonna be?
-      %input{:type => 'text', :name => 'place', :size => 50}
+      %input{:type => 'text', :name => 'place', :size => 50, :value => @event.place}
       %br
     %label{:for => 'starts_at'}
       Starts At:
-      %input{:type => 'text', :name => 'starts_at'}
+      %input{:type => 'text', :name => 'starts_at', :value => params['starts_at']}
       %br
     %label{:for => 'ends_at'}
       Ends At:
-      %input{:type => 'text', :name => 'ends_at'}
+      %input{:type => 'text', :name => 'ends_at', :value => params['ends_at']}
       %br
     %label{:for => 'map_link'}
       Google Map Link
-      %input{:type => 'text', :name => 'map_link'}
+      %input{:type => 'text', :name => 'map_link', :value => @event.map_link}
       %br
     %label{:for => 'usernames'}
       Twitter names to invite, separated by commas
-      %input{:type => 'text', :name => 'usernames', :size => 128}
+      %input{:type => 'text', :name => 'usernames', :size => 128, :value => params['usernames']}
       %br
     %input{:type => 'submit', :value => 'Create!'}
     or
