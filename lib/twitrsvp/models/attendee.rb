@@ -5,6 +5,8 @@ module TwitRSVP
     DECLINED  = 3
     CONFIRMED = 5
 
+    storage_names[:default] = 'twitrsvp_attendees'
+
     property :id, Serial
     property :user_id, Integer, :nullable => false
     property :event_id, Integer, :nullable => false

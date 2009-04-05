@@ -2,6 +2,7 @@ module TwitRSVP
   class Event
     include DataMapper::Resource
     attr_accessor :start_time, :end_time
+    storage_names[:default] = 'twitrsvp_events'
 
     property :id,       Serial
     property :name,     String, :nullable => false

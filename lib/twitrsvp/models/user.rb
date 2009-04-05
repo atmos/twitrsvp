@@ -2,6 +2,7 @@ module TwitRSVP
   class User
     include DataMapper::Resource
     class  UserCreationError < StandardError; end
+    storage_names[:default] = 'twitrsvp_users'
 
     property :id, Serial
     property :twitter_id, Integer, :nullable => false, :unique => true
