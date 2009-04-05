@@ -30,7 +30,7 @@ module TwitRSVP
     def notify!
       TwitRSVP::OAuth.consumer.request(:post, '/direct_messages/new.json', 
                                        event.user.access_token, {:scheme => :query_string},
-                                       { :text => "#{event.description} - #{event.start_at.strftime('%b %d -> %H:%M')} http://twitrsvp.com",
+                                       { :text => "#{event.description} - #{event.start_at.strftime('%a %b %d -> %H:%M %P')} http://twitrsvp.com",
                                          :user => user.name })
     end
   end

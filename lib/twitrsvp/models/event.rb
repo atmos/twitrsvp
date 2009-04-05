@@ -29,7 +29,7 @@ module TwitRSVP
     end
 
     def description
-      "#{name} at #{place}"
+      "#{name}, #{place}"
     end
 
     def authorized?(user)

@@ -1,4 +1,4 @@
-%h3.fancy= @event.description
+%h2.fancy= "#{@event.description} - #{@event.start_at.strftime('%a %b %d -> %H:%M %P')} until #{@event.end_at.strftime('%a %b %d -> %H:%M %P')}"
 - unless @event.map_link.blank? 
   %h3.fancy
     %a{:href => @event.map_link} Map Link

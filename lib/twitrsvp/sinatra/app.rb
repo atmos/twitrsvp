@@ -67,6 +67,8 @@ module TwitRSVP
         @user_info = JSON.parse(oauth_response.body)
         @user = ::TwitRSVP::User.first_or_create({:twitter_id  => @user_info['id']}, {
                                                   :name        => @user_info['name'],
+                                                  :avatar      => @user_info['profile_image_url'],
+                                                  :url         => 'http://twitter.com/'+@user_info['screen_name'],
                                                   :token       => access_token.token,
                                                   :secret      => access_token.secret})
         session[:user_id] = @user.id
