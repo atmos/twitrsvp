@@ -3,6 +3,14 @@ module TwitRSVP
     set :views, File.dirname(__FILE__)+'/views'
     enable :sessions
 
+    before do
+      next if request.path_info == '/'
+      next if request.path_info == '/about'
+      next if request.path_info == '/signup'
+      next if request.path_info == '/callback'
+      throw(:halt, [302, {'Location' => '/signup'}, '']) unless session[:user_id]
+    end
+
     helpers do
       def oauth_consumer
         ::TwitRSVP::OAuth.consumer
