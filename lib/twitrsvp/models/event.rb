@@ -13,22 +13,26 @@ module TwitRSVP
     timestamps :at
 
     belongs_to :user, :class_Name => '::TwitRSVP::User', :child_key => [:user_id]
-    has n, :attendees
+    has n, :attendees, :order => [:status.asc]
 
-    def self.invited(user_id, limit = 5)
-      Attendee.all(:user_id => user_id, :status => TwitRSVP::Attendee::INVITED, :limit => limit, :order => [:created_at]).map { |attendee| attendee.event }
+    def invited
+      Attendee.all(:event_id => id, :status => TwitRSVP::Attendee::INVITED, :order => [:created_at])
     end
 
-    def self.declined(user_id, limit = 5)
-      Attendee.all(:user_id => user_id, :status => TwitRSVP::Attendee::DECLINED, :limit => limit, :order => [:created_at]).map { |attendee| attendee.event }
+    def declined
+      Attendee.all(:event_id => id, :status => TwitRSVP::Attendee::DECLINED, :order => [:created_at])
     end
 
-    def self.confirmed(user_id, limit = 5)
-      Attendee.all(:user_id => user_id, :status => TwitRSVP::Attendee::CONFIRMED, :limit => limit, :order => [:created_at]).map { |attendee| attendee.event }
+    def confirmed
+      Attendee.all(:event_id => id, :status => TwitRSVP::Attendee::CONFIRMED, :order => [:created_at])
     end
 
     def description
       "#{name} at #{place}"
+    end
+
+    def authorized?(user)
+      user_id == user.id || attendees.select { |attendee| attendee.user_id == user.id }
     end
   end
 end

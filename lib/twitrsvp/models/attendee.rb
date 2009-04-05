@@ -23,5 +23,13 @@ module TwitRSVP
       self.status = DECLINED
       save
     end
+    after :create, :notify!
+
+    def notify!
+      TwitRSVP::OAuth.consumer.request(:get, '/direct_messages/new.json', 
+                                       event.user.access_token,
+                                       { :text => event.description,
+                                         :user => user.name })
+    end
   end
 end

@@ -24,5 +24,6 @@ describe "home page" do
     last_response.should have_selector("ul.accepted")
     last_response.should have_selector("h1.fancy:contains('Declined')")
     last_response.should have_selector("ul.declined")
+    last_response.should have_selector("a[href='/organize']:contains('Organize a New Event')")
   end
 end

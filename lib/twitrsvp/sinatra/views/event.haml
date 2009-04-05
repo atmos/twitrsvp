@@ -1,0 +1,20 @@
+%h1.fancy The Big Event!
+%h3.fancy= @event.description
+%h3.fancy
+  %a{:href => @event.map_link} Map Link
+%h3.fancy Attendees
+%ul.confirmed
+  - @event.confirmed.each do |attendee|
+    %li
+      %a{:href => attendee.user.url}
+        %img{:src => attendee.user.avatar, :alt => attendee.user.name}
+%ul.invited
+  - @event.invited.each do |attendee|
+    %li
+      %a{:href => attendee.user.url}
+        %img{:src => attendee.user.avatar, :alt => attendee.user.name}
+%ul.declined
+  - @event.declined.each do |attendee|
+    %li
+      %a{:href => attendee.user.url}
+        %img{:src => attendee.user.avatar, :alt => attendee.user.name}

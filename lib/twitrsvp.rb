@@ -7,6 +7,8 @@ require 'haml/util'
 require 'haml/engine'
 gem 'chronic'
 require 'chronic'
+gem 'curb'
+require 'curb'
 
 gem 'data_objects', '~>0.9.11'
 gem 'dm-core', '~>0.9.10'

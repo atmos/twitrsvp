@@ -28,15 +28,22 @@ module TwitRSVP
       redirect '/'
     end
 
+    get '/events/:id' do
+      @event = TwitRSVP::Event.get(params['id'])
+      throw(:halt, [401, "You aren't authorized to view this event"]) unless @event.authorized?(current_user)
+      haml :event
+    end
+
     get '/organize' do
       haml :organize
     end
 
     post '/organize' do
-      @event = current_user.organize(params['name'], params['place'], params['map_link'],
-                                     params['starts_at'], params['ends_at'], [ ])
+      @event = current_user.organize(params['name'], params['place'], 
+                                     params['map_link'], params['starts_at'], 
+                                     params['ends_at'], params['usernames'].split(','))
 
-      @event.valid? ? redirect("/event/#{@event.id}") : haml(:organize)
+      @event.valid? ? redirect(event_url(@event)) : haml(:organize)
     end
 
     get '/callback' do
@@ -70,9 +77,9 @@ module TwitRSVP
     end
 
     get '/' do
-      @pending_events   = Event.invited(current_user.id)
-      @declined_events  = Event.declined(current_user.id)
-      @confirmed_events = Event.confirmed(current_user.id)
+      @pending_events   = current_user.invited
+      @declined_events  = current_user.declined
+      @confirmed_events = current_user.confirmed
       haml :home
     end
   end

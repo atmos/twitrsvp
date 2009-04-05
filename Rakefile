@@ -5,7 +5,7 @@ require 'date'
 require 'spec/rake/spectask'
 
 GEM = "twitrsvp"
-GEM_VERSION = "0.0.1"
+GEM_VERSION = "0.0.2"
 AUTHOR = "Corey Donohoe"
 EMAIL = "atmos@atmos.org"
 HOMEPAGE = "http://twitrsvp.com"
@@ -25,6 +25,7 @@ spec = Gem::Specification.new do |s|
   # Uncomment this to add a dependency
   s.add_dependency "oauth", '~>0.3.2'
   s.add_dependency "sinatra", '~>0.9.1.1'
+  s.add_dependency "curb", "~>0.3.2"
 
   s.require_path = 'lib'
   s.autorequire = GEM
