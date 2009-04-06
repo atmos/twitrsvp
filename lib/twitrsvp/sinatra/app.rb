@@ -2,6 +2,7 @@ module TwitRSVP
   class App < Sinatra::Base
     set :views, File.dirname(__FILE__)+'/views'
     enable :sessions
+    enable :methodoverride
 
     before do
       next if request.path_info == '/'
@@ -95,10 +96,15 @@ module TwitRSVP
     end
 
     get '/signup' do
-      request_token = oauth_consumer.get_request_token
-      session[:request_token] = request_token.token
-      session[:request_token_secret] = request_token.secret
-      redirect request_token.authorize_url
+      begin
+        request_token = oauth_consumer.get_request_token
+        session[:request_token] = request_token.token
+        session[:request_token_secret] = request_token.secret
+        redirect request_token.authorize_url
+      rescue => e
+        TwitRSVP::Log.logger.info e.inspect
+        haml :failed
+      end
     end
 
     get '/' do

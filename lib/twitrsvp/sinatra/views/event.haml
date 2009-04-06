@@ -5,7 +5,7 @@
     %a{:href => @event.map_link} Map Link
 
 %h3.fancy Attendees
-- if @event.confirmed.empty?
+- unless @event.confirmed.empty?
   %ul.confirmed
     - @event.confirmed.each do |attendee|
       %li
@@ -15,7 +15,7 @@
   %h5.fancy No one is coming, yet!
 
 %h3.fancy Pending
-- if @event.invited.empty?
+- unless @event.invited.empty?
   %ul.invited
     - @event.invited.each do |attendee|
       %li
@@ -25,7 +25,7 @@
   %h5.fancy Everyone has made their decision!
 
 %h3.fancy Declined
-- if @event.declined.empty?
+- unless @event.declined.empty?
   %ul.declined
     - @event.declined.each do |attendee|
       %li

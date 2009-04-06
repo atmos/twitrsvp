@@ -30,8 +30,13 @@ module TwitRSVP
       if event.valid?
         names.each do |invitee_name|
           user = User.first(:name => invitee_name.strip!)
-          user = User.create_twitter_user(invitee_name) if user.nil?
-          event.attendees.create(:user_id => user.id)
+          begin
+            user = User.create_twitter_user(invitee_name) if user.nil?
+            event.attendees.create(:user_id => user.id)
+          rescue UserCreationError => e
+            TwitRSVP::Log.logger.info e.message
+          end
+
         end
         event.attendees.create(:user_id => self.id,  :status => TwitRSVP::Attendee::CONFIRMED)
       end
@@ -43,7 +48,9 @@ module TwitRSVP
     end
 
     def self.create_twitter_user(twitter_id)
-      content = Curl::Easy.perform("http://twitter.com/users/show/#{twitter_id}.json")
+      content = Curl::Easy.perform("http://twitter.com/users/show/#{twitter_id}.json") do |curl|
+        curl.timeout = 30
+      end
       user_info = JSON.parse(content.body_str)
       raise UserCreationError.new("Unable to find '#{twitter_id}'") if(user_info['error'] == 'Not found')
       result = unless user_info['error']

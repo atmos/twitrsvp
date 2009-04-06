@@ -7,7 +7,7 @@
   %legend Organize an Event
   %form{:action => '/organize', :method => 'POST'}
     %label{:for => 'name'}
-      Whatta you wanna call the event?
+      Let's give the event a name:
       %input{:type => 'text', :name => 'name', :size => 50, :value => @event.name}
       %br
     %label{:for => 'place'}
@@ -27,7 +27,7 @@
       %input{:type => 'text', :name => 'map_link', :value => @event.map_link}
       %br
     %label{:for => 'usernames'}
-      Twitter names to invite, separated by commas
+      Twitter names to invite, separated by commas.  These are the names you normally @reply.  You can only invite people that follow you at this time.
       %input{:type => 'text', :name => 'usernames', :size => 128, :value => params['usernames']}
       %br
     %input{:type => 'submit', :value => 'Create!'}
