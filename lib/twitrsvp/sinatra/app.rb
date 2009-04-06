@@ -4,6 +4,8 @@ module TwitRSVP
     enable :sessions
 
     before do
+      next if request.path_info == '/'
+      next if request.path_info == '/about'
       next if request.path_info == '/signup'
       next if request.path_info == '/callback'
       throw(:halt, [302, {'Location' => '/signup'}, '']) unless session[:user_id]
@@ -100,11 +102,19 @@ module TwitRSVP
     end
 
     get '/' do
-      @organized_events = current_user.events[0..5] + current_user.invites.map { |invite| invite.event }[0..5]
-      @pending_events   = current_user.invited
-      @declined_events  = current_user.declined
-      @confirmed_events = current_user.confirmed
-      haml :home
+      if current_user
+        @organized_events = current_user.events[0..5] + current_user.invites.map { |invite| invite.event }[0..5]
+        @pending_events   = current_user.invited
+        @declined_events  = current_user.declined
+        @confirmed_events = current_user.confirmed
+        haml :home
+      else
+        haml :about
+      end
+    end
+
+    get '/about' do
+      haml :about
     end
   end
 end
