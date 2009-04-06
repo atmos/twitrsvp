@@ -13,7 +13,9 @@ describe "viewing an event" do
     last_response.should have_selector("h2.fancy")
     last_response.should have_selector("h3.fancy a[href='#{event.map_link}']:contains('Map Link')")
     last_response.should have_selector("ul.confirmed")
-    last_response.should have_selector("ul.invited")
-    last_response.should have_selector("ul.declined")
+    #last_response.should have_selector("ul.invited")
+    #last_response.should have_selector("ul.declined")
+    last_response.should have_selector("form[action='/events/#{event.id}/confirm'] > input[type='submit']")
+    last_response.should have_selector("form[action='/events/#{event.id}/decline'] > input[type='submit']")
   end
 end

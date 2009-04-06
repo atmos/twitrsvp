@@ -9,6 +9,7 @@ gem 'chronic'
 require 'chronic'
 gem 'curb'
 require 'curb'
+require 'logger'
 
 gem 'data_objects', '~>0.9.11'
 gem 'dm-core', '~>0.9.10'
@@ -28,6 +29,16 @@ require root + '/twitrsvp/models/attendee'
 require root + '/twitrsvp/sinatra/app'
 
 module TwitRSVP
+  module Log
+    def self.logger
+      if @logger.nil?
+        @logger        = Logger.new("twitrsvp.log")
+        @logger.level  = Logger::INFO 
+      end
+      @logger
+    end
+  end
+
   module OAuth
     def self.consumer
       ::OAuth::Consumer.new(ENV['TWIT_RSVP_READKEY'],

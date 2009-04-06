@@ -1,23 +1,48 @@
 %h1.fancy= @event.description
-%h2.fancy= "#{@event.start_at.strftime('%a %b %d -> %H:%M %P')} until #{@event.end_at.strftime('%a %b %d -> %H:%M %P')}"
+%h2.fancy= "#{@event.start_at.strftime('%a %b %e -> %l:%M %P')} until #{@event.end_at.strftime('%a %b %e -> %l:%M %P')}"
 - unless @event.map_link.blank? 
   %h3.fancy
     %a{:href => @event.map_link} Map Link
+
 %h3.fancy Attendees
-%ul.confirmed
-  - @event.confirmed.each do |attendee|
-    %li
-      %a{:href => attendee.user.url}
-        %img{:src => attendee.user.avatar, :alt => attendee.user.name}
-%ul.invited
-  - @event.invited.each do |attendee|
-    %li
-      %a{:href => attendee.user.url}
-        %img{:src => attendee.user.avatar, :alt => attendee.user.name}
-%ul.declined
-  - @event.declined.each do |attendee|
-    %li
-      %a{:href => attendee.user.url}
-        %img{:src => attendee.user.avatar, :alt => attendee.user.name}
+- if @event.confirmed.empty?
+  %ul.confirmed
+    - @event.confirmed.each do |attendee|
+      %li
+        %a{:href => attendee.user.url}
+          %img{:src => attendee.user.avatar, :alt => attendee.user.name}
+- else
+  %h5.fancy No one is coming, yet!
+
+%h3.fancy Pending
+- if @event.invited.empty?
+  %ul.invited
+    - @event.invited.each do |attendee|
+      %li
+        %a{:href => attendee.user.url}
+          %img{:src => attendee.user.avatar, :alt => attendee.user.name}
+- else
+  %h5.fancy Everyone has made their decision!
+
+%h3.fancy Declined
+- if @event.declined.empty?
+  %ul.declined
+    - @event.declined.each do |attendee|
+      %li
+        %a{:href => attendee.user.url}
+          %img{:src => attendee.user.avatar, :alt => attendee.user.name}
+- else
+  %h5.fancy No one has declined!
 
 %a{:href => '/'} Home
+
+%form{:action => event_url(@event)+'/confirm', :method => 'POST'}
+  %input{:type => 'submit', :value => "I'll be there!"}
+
+%form{:action => event_url(@event)+'/decline', :method => 'POST'}
+  %input{:type => 'submit', :value => "I can't make it"}
+
+- if current_user.id == @event.user_id
+  %form{:action => event_url(@event), :method => 'POST'}
+    %input{:type => 'hidden', :name => '_method', :value => "delete"}
+    %input{:type => 'submit', :value => "Cancel the entire event"}

@@ -13,6 +13,7 @@ module TwitRSVP
       def oauth_consumer
         ::TwitRSVP::OAuth.consumer
       end
+
       def current_user
         session[:user_id].nil? ? nil : ::TwitRSVP::User.get(session[:user_id])
       end
@@ -25,19 +26,28 @@ module TwitRSVP
     post '/events/:id/confirm' do
       attendee = TwitRSVP::Attendee.first(:user_id => current_user.id, :event_id => params['id'])
       attendee.confirm!
-      redirect '/'
+      redirect event_url(attendee.event)
     end
 
     post '/events/:id/decline' do
       attendee = TwitRSVP::Attendee.first(:user_id => current_user.id, :event_id => params['id'])
       attendee.decline!
-      redirect '/'
+      redirect event_url(attendee.event)
     end
 
     get '/events/:id' do
       @event = TwitRSVP::Event.get(params['id'])
       throw(:halt, [401, "You aren't authorized to view this event"]) unless @event.authorized?(current_user)
       haml :event
+    end
+
+    delete '/events/:id' do
+      @event = TwitRSVP::Event.get(params['id'])
+      @event.attendees.each { |attendee| attendee.destroy }
+      @event.destroy
+
+      throw(:halt, [401, "You aren't authorized to delete this event"]) unless @event.user_id == current_user.id
+      redirect '/'
     end
 
     get '/organize' do
@@ -65,15 +75,19 @@ module TwitRSVP
       case oauth_response
       when Net::HTTPSuccess
         @user_info = JSON.parse(oauth_response.body)
-        @user = ::TwitRSVP::User.first_or_create({:twitter_id  => @user_info['id']}, {
-                                                  :name        => @user_info['name'],
-                                                  :avatar      => @user_info['profile_image_url'],
-                                                  :url         => 'http://twitter.com/'+@user_info['screen_name'],
-                                                  :token       => access_token.token,
-                                                  :secret      => access_token.secret})
+        @user = ::TwitRSVP::User.first_or_create(:twitter_id  => @user_info['id'])  # really wish first_or_create behaved sanely
+        @user.name, @user.avatar  = @user_info['name'], @user_info['profile_image_url']
+        @user.token, @user.secret = access_token.token, access_token.secret
+        @user.url    = 'http://twitter.com/'+@user_info['screen_name']
+
+        @user.save
+        TwitRSVP::Log.logger.info @user.inspect
+        TwitRSVP::Log.logger.info @user.errors.inspect
+
         session[:user_id] = @user.id
         redirect '/'
       else
+        TwitRSVP::Log.logger.info oauth_response.body
         haml :failed
       end
     end
@@ -86,9 +100,9 @@ module TwitRSVP
     end
 
     get '/' do
+      @organized_events = current_user.events[0..5] + current_user.invites.map { |invite| invite.event }[0..5]
       @pending_events   = current_user.invited
       @declined_events  = current_user.declined
-      @organized_events = current_user.events[0..5]
       @confirmed_events = current_user.confirmed
       haml :home
     end

@@ -9,6 +9,18 @@ describe "TwitRSVP::User" do
     @user.should be_valid
   end
 
+  it "should be able to populate your token and secret after your user is created" do
+    @user.token = nil
+    @user.save
+
+    @new_user = TwitRSVP::User.first(:twitter_id => @user.twitter_id)
+    @new_user.token = /\w{16}/.gen
+    @new_user.secret = /\w{16}/.gen 
+    @new_user.save
+
+    TwitRSVP::User.get(@new_user.id).token.should_not be_nil
+  end
+
   it "can organize events" do
     mountain_sun = 'http://maps.google.com/maps?client=safari&oe=UTF-8&ie=UTF8&cid=0,0,18084609897785609242&fb=1&split=1&gl=us&dq=mountain+sun+boulder&daddr=1535+Pearl+St,+Boulder,+CO+80302&geocode=7476258840704006059,40.018911,-105.275170&ei=BqHVSYagIZa6sgPpzumvCg&z=16'
 

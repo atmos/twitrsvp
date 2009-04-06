@@ -33,6 +33,7 @@ module TwitRSVP
           user = User.create_twitter_user(invitee_name) if user.nil?
           event.attendees.create(:user_id => user.id)
         end
+        event.attendees.create(:user_id => self.id,  :status => TwitRSVP::Attendee::CONFIRMED)
       end
       event
     end
@@ -60,15 +61,15 @@ module TwitRSVP
     end
 
     def invited(limit = 5)
-      Attendee.all(:user_id => id, :status => TwitRSVP::Attendee::INVITED, :limit => limit, :order => [:created_at]).map { |attendee| attendee.event }
+      Attendee.all(:user_id => id, :status => TwitRSVP::Attendee::INVITED, :limit => limit, :order => [:created_at.desc]).map { |attendee| attendee.event }
     end
 
     def declined(limit = 5)
-      Attendee.all(:user_id => id, :status => TwitRSVP::Attendee::DECLINED, :limit => limit, :order => [:created_at]).map { |attendee| attendee.event }
+      Attendee.all(:user_id => id, :status => TwitRSVP::Attendee::DECLINED, :limit => limit, :order => [:created_at.desc]).map { |attendee| attendee.event }
     end
 
     def confirmed(limit = 5)
-      Attendee.all(:user_id => id, :status => TwitRSVP::Attendee::CONFIRMED, :limit => limit, :order => [:created_at]).map { |attendee| attendee.event }
+      Attendee.all(:user_id => id, :status => TwitRSVP::Attendee::CONFIRMED, :limit => limit, :order => [:created_at.desc]).map { |attendee| attendee.event }
     end
   end
 end

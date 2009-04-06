@@ -28,10 +28,12 @@ module TwitRSVP
     after :create, :notify!
 
     def notify!
-      TwitRSVP::OAuth.consumer.request(:post, '/direct_messages/new.json', 
-                                       event.user.access_token, {:scheme => :query_string},
-                                       { :text => "#{event.description} - #{event.start_at.strftime('%a %b %d -> %H:%M %P')} http://twitrsvp.com",
-                                         :user => user.name })
+      dm = TwitRSVP::OAuth.consumer.request(:post, '/direct_messages/new.json', 
+                                            event.user.access_token, {:scheme => :query_string},
+                                            { :text => "#{event.description} - #{event.start_at.strftime('%a %b %e @ %l:%M %P')} http://twitrsvp.com",
+                                              :user => user.twitter_id })
+      TwitRSVP::Log.logger.info("#{dm.inspect} => #{event.user.inspect} => #{user.inspect}")
+      true
     end
   end
 end

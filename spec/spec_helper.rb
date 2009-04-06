@@ -7,7 +7,10 @@ require 'do_sqlite3'
 require 'rack/test'
 require 'webrat/sinatra'
 require 'dm-sweatshop'
+require 'fakeweb'
 require 'pp'
+
+#FakeWeb.allow_net_connect = false
 
 require File.dirname(__FILE__)+'/fixtures'
 
@@ -27,6 +30,7 @@ Spec::Runner.configure do |config|
 
   config.before(:each) do
     DataMapper.auto_migrate!
+    FakeWeb.clean_registry
   end
 
   def app
