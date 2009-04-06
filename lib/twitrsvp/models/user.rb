@@ -29,14 +29,11 @@ module TwitRSVP
                                   :start_at => Chronic.parse(start_time)})
       if event.valid?
         names.each do |invitee_name|
-          user = User.first(:name => invitee_name.strip!)
-          begin
+          TwitRSVP.retryable(:times => 2) do 
+            user = User.first(:name => invitee_name.strip!)
             user = User.create_twitter_user(invitee_name) if user.nil?
             event.attendees.create(:user_id => user.id)
-          rescue UserCreationError => e
-            TwitRSVP::Log.logger.info e.message
           end
-
         end
         event.attendees.create(:user_id => self.id,  :status => TwitRSVP::Attendee::CONFIRMED)
       end

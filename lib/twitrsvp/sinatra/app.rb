@@ -1,4 +1,5 @@
 module TwitRSVP
+  
   class App < Sinatra::Base
     set :views, File.dirname(__FILE__)+'/views'
     enable :sessions
