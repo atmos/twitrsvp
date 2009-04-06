@@ -20,11 +20,10 @@ module TwitRSVP
     has n, :invites, :class_name => '::TwitRSVP::Attendee', 
            :child_key => [:user_id], :order => [:status.asc]
 
-    def organize(name, place, map_link, start_time, end_time, names)
+    def organize(name, place, start_time, end_time, names)
       event = self.events.create({:user_id => self.id,
                                   :name     => name, 
                                   :place    => place, 
-                                  :map_link => map_link,
                                   :end_at   => Chronic.parse(end_time), 
                                   :start_at => Chronic.parse(start_time)})
       if event.valid?

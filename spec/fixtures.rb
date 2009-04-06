@@ -9,7 +9,6 @@ TwitRSVP::Event.fix {{
   :user_id  => TwitRSVP::User.gen.id,
   :name     => /\w{8,20}/.gen,
   :place    => /\w{8,20}/.gen,
-  :map_link => 'http://maps.google.com/maps?client=safari&q=eiffel+tower',
   :end_at   => Time.now + 3600,
   :start_at => Time.now + 7200,
   :attendees => 7.of { TwitRSVP::Attendee.make }

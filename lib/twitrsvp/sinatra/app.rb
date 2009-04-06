@@ -61,8 +61,8 @@ module TwitRSVP
 
     post '/organize' do
       @event = current_user.organize(params['name'], params['place'], 
-                                     params['map_link'], params['starts_at'], 
-                                     params['ends_at'], params['usernames'].split(','))
+                                     params['starts_at'], params['ends_at'], 
+                                     params['usernames'].split(','))
 
       @event.valid? ? redirect(event_url(@event)) : haml(:organize)
     end
@@ -110,7 +110,7 @@ module TwitRSVP
 
     get '/' do
       if current_user
-        @organized_events = current_user.events[0..5] + current_user.invites.map { |invite| invite.event }[0..5]
+        @organized_events = current_user.events[0..5]
         @pending_events   = current_user.invited
         @declined_events  = current_user.declined
         @confirmed_events = current_user.confirmed

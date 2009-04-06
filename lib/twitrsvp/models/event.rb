@@ -9,7 +9,6 @@ module TwitRSVP
     property :place,    String
     property :end_at,   Time, :nullable => false
     property :start_at, Time, :nullable => false
-    property :map_link, String, :length => 2048
 
     timestamps :at
 

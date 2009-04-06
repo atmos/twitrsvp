@@ -1,8 +1,5 @@
 %h1.fancy= @event.description
 %h2.fancy= "#{@event.start_at.strftime('%a %b %e -> %l:%M %P')} until #{@event.end_at.strftime('%a %b %e -> %l:%M %P')}"
-- unless @event.map_link.blank? 
-  %h3.fancy
-    %a{:href => @event.map_link} Map Link
 
 %h3.fancy Attendees
 - unless @event.confirmed.empty?
