@@ -8,6 +8,7 @@ module TwitRSVP
     before do
       next if request.path_info == '/'
       next if request.path_info == '/about'
+      next if request.path_info == '/peace'
       next if request.path_info == '/signup'
       next if request.path_info == '/callback'
       throw(:halt, [302, {'Location' => '/signup'}, '']) unless session[:user_id]
@@ -120,6 +121,11 @@ module TwitRSVP
 
     get '/about' do
       haml :about
+    end
+    
+    get '/peace' do
+      session.clear
+      redirect '/'
     end
   end
 end

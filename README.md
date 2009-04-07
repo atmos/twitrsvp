@@ -4,7 +4,7 @@ Another [oauth][oauth] experiment.  Organize folks with [sinatra][sinatra] and [
 
 Installation
 ============
-Sinatra app packaged as a gem deployed as a rack app.
+It's a sinatra app, packaged as a gem, deployed as a rack app.
 
     % rake repackage
     % sudo gem install pkg/twitrsvp*.gem
@@ -15,7 +15,7 @@ Your basic deps look like this:
 
 Deployment
 ==========
-Use [apache][apache]+[passenger][passenger] and a config.ru like this:
+Use [passenger][passenger] and a config.ru like this:
 
 Example config.ru
 
@@ -49,5 +49,4 @@ Then you just run rake...
 [twitrsvp]: http://twitrsvp.com
 [twitter]: http://twitter.com
 [oauth]: http://oauth.net
-[apache]: http://httpd.apache.org
 [passenger]: http://modrails.com
