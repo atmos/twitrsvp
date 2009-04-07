@@ -33,6 +33,7 @@
           %a{:href => 'http://github.com/atmos/twitrsvp'} github,
           hosted on
           %a{:href => 'http://engineyard.com/solo'} EY Solo.
-        %p
-          Do me a favor and
-          %a{:href => '/peace'} delete these cookies.
+        - if current_user
+          %p
+            Do me a favor and
+            %a{:href => '/peace'} delete these cookies.
