@@ -9,6 +9,10 @@ Sinatra app packaged as a gem deployed as a rack app.
     % rake repackage
     % sudo gem install pkg/twitrsvp*.gem
 
+Your basic deps look like this:
+
+    % sudo gem install oauth json haml chronic curb data_objects dm-core dm-types dm-validations dm-timestamps sinatra
+
 Example config.ru
 
     require 'rubygems'
@@ -29,9 +33,6 @@ Example config.ru
 
 testing
 =======
-Your basic deps look like this:
-    % sudo gem install oauth json haml chronic curb data_objects dm-core dm-types dm-validations dm-timestamps sinatra
-
 You need [jacqui][jacqui]'s fork of fakeweb for the time being
     % git clone git://github.com/jacqui/fakeweb.git
     % cd fakeweb
