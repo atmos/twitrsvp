@@ -13,6 +13,10 @@ Your basic deps look like this:
 
     % sudo gem install oauth json haml chronic curb data_objects dm-core dm-types dm-validations dm-timestamps sinatra
 
+Deployment
+==========
+Use [apache][apache]+[passenger][passenger] and a config.ru like this:
+
 Example config.ru
 
     require 'rubygems'
@@ -46,3 +50,5 @@ Then you just run rake...
 [twitrsvp]: http://twitrsvp.com
 [twitter]: http://twitter.com
 [oauth]: http://oauth.net
+[apache]: http://httpd.apache.org
+[passenger]: http://modrails.com
