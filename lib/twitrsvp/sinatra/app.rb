@@ -88,10 +88,7 @@ module TwitRSVP
         @user.name, @user.avatar  = @user_info['name'], @user_info['profile_image_url']
         @user.token, @user.secret = access_token.token, access_token.secret
         @user.url    = 'http://twitter.com/'+@user_info['screen_name']
-
         @user.save
-        TwitRSVP::Log.logger.info @user.inspect
-        TwitRSVP::Log.logger.info @user.errors.inspect
 
         session[:user_id] = @user.id
         redirect '/'

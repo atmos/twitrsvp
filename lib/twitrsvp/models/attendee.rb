@@ -37,11 +37,14 @@ module TwitRSVP
                                               { :text => "#{event.description} - #{event.start_at.strftime('%a %b %e @ %l:%M %P')} http://twitrsvp.com",
                                                 :user => user.twitter_id })
         case dm
-        when Net::HTTPSuccess, Net::HTTPForbidden # success or denied, retry timeouts
+        when Net::HTTPSuccess # message was delivered
           self.notified = true
           save
-        else
-          TwitRSVP::Log.logger.info("#{dm.inspect} => #{event.user.inspect} => #{user.inspect}")
+        when Net::HTTPForbidden 
+          TwitRSVP::Log.logger.info("Response: #{dm.code}, #{user.name} probably doesn't follow #{event.user.name}.  http://doesfollow.com/#{user.name}/#{event.user.name}")
+          raise AttendeeDirectMessageError.new(user.twitter_id)
+        else # will retry up to 3 times, logging the response each time
+          TwitRSVP::Log.logger.info("Response: #{dm.code}, Something screwed up, hopefully a retry will fix it. #{event.user.twitter_id} inviting #{user.twitter_id}")
           raise AttendeeDirectMessageError.new(user.twitter_id)
         end
       end

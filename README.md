@@ -23,7 +23,6 @@ Example config.ru
     require 'twitrsvp'
 
     DataMapper.setup(:default, "mysql://atmos:s3cr3t@localhost/twitrsvp_production")
-    #DataMapper.auto_migrate!
 
     ENV['TWIT_RSVP_READKEY'] = /\w{18}/.gen  # this should really be what twitter gives you
     ENV['TWIT_RSVP_READSECRET'] = /\w{24}/.gen # this should really be what twitter gives you
