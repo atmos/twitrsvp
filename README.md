@@ -41,7 +41,7 @@ You need [jacqui][jacqui]'s fork of fakeweb for the time being
 Then you just run rake...
 
 [jacqui]: http://github.com/jacqui
-[sinatra]: http://sinatrarb.com
+[sinatra]: http://www.sinatrarb.com
 [twitrsvp]: http://twitrsvp.com
 [twitter]: http://twitter.com
 [oauth]: http://oauth.net
