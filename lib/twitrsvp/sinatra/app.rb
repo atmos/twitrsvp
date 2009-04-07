@@ -27,6 +27,11 @@ module TwitRSVP
       end
     end
 
+    error do
+      TwitRSVP::Log.logger.info env['sinatra.error'].message
+      haml :failed
+    end
+
     post '/events/:id/confirm' do
       attendee = TwitRSVP::Attendee.first(:user_id => current_user.id, :event_id => params['id'])
       attendee.confirm!
@@ -91,20 +96,16 @@ module TwitRSVP
         session[:user_id] = @user.id
         redirect '/'
       else
-        TwitRSVP::Log.logger.info oauth_response.body
-        haml :failed
+        raise ArgumentError.new('Unhandled HTTP Response')
       end
     end
 
     get '/signup' do
-      begin
+      TwitRSVP.retryable(:times => 2) do 
         request_token = oauth_consumer.get_request_token
         session[:request_token] = request_token.token
         session[:request_token_secret] = request_token.secret
         redirect request_token.authorize_url
-      rescue => e
-        TwitRSVP::Log.logger.info e.inspect
-        haml :failed
       end
     end
 
