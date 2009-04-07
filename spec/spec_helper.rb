@@ -10,7 +10,7 @@ require 'dm-sweatshop'
 require 'fakeweb'
 require 'pp'
 
-#FakeWeb.allow_net_connect = false
+FakeWeb.allow_net_connect = false
 
 require File.dirname(__FILE__)+'/fixtures'
 
@@ -31,6 +31,11 @@ Spec::Runner.configure do |config|
   config.before(:each) do
     DataMapper.auto_migrate!
     FakeWeb.clean_registry
+    FakeWeb.register_uri(:any, %r!^http://twitter.com!,
+                         [{:string => "", :status => ["200", "OK"]},
+                          {:string => "", :status => ["401", "Unauthorized"]},
+                          {:string => "", :status => ["403", "Forbidden"]},
+                          {:string => "", :status => ["502", "Bad Gateway"]}])
   end
 
   def app
@@ -49,7 +54,7 @@ Spec::Runner.configure do |config|
   def unauthorized_quentin
     response = Net::HTTPUnauthorized.new('1.0', 401, nil)
     response.body = "Unauthorized"
-    login(response)
+    lambda { login(response) }.should raise_error(ArgumentError)
   end
 
   def login(response)
