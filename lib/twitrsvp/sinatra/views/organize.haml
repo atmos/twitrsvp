@@ -11,20 +11,20 @@
       %input{:type => 'text', :name => 'name', :size => 50, :value => @event.name}
       %br
     %label{:for => 'place'}
-      Where's it gonna be?
-      %input{:type => 'text', :name => 'place', :size => 50, :value => @event.place}
+      Location
+      %textarea{:name => 'place', :value => @event.description}
       %br
     %label{:for => 'starts_at'}
-      Starts At:
+      Date/Time
       %input{:type => 'text', :name => 'starts_at', :value => params['starts_at']}
       %br
-    %label{:for => 'ends_at'}
-      Ends At:
-      %input{:type => 'text', :name => 'ends_at', :value => params['ends_at']}
+    %label{:for => 'description'}
+      140 Character description of the event
+      %textarea{:name => 'description', :rows => 12, :columns => 36, :value => @event.description}
       %br
     %label{:for => 'usernames'}
       Twitter names to invite, separated by commas.  These are the names you normally @reply.  You can only invite people that follow you at this time.
-      %input{:type => 'text', :name => 'usernames', :size => 128, :value => params['usernames']}
+      %textarea{:name => 'usernames', :value => params['usernames']}
       %br
     %input{:type => 'submit', :value => 'Create!'}
     or

@@ -66,9 +66,8 @@ module TwitRSVP
     end
 
     post '/organize' do
-      @event = current_user.organize(params['name'], params['place'], 
-                                     params['starts_at'], params['ends_at'], 
-                                     params['usernames'].split(','))
+      @event = current_user.organize(params['name'], params['place'], params['description'],
+                                     params['starts_at'], params['usernames'].split(','))
 
       @event.valid? ? redirect(event_url(@event)) : haml(:organize)
     end

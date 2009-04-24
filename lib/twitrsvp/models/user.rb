@@ -20,12 +20,12 @@ module TwitRSVP
     has n, :invites, :class_name => '::TwitRSVP::Attendee', 
            :child_key => [:user_id], :order => [:status.asc]
 
-    def organize(name, place, start_time, end_time, names)
+    def organize(name, place, description, start_time, names)
       event = self.events.create({:user_id => self.id,
-                                  :name     => name, 
-                                  :place    => place, 
-                                  :end_at   => Chronic.parse(end_time), 
-                                  :start_at => Chronic.parse(start_time)})
+                                  :name        => name, 
+                                  :description => description,
+                                  :place       => place, 
+                                  :start_at    => Chronic.parse(start_time)})
       if event.valid?
         names.each do |invitee_name|
           TwitRSVP.retryable(:times => 2) do 

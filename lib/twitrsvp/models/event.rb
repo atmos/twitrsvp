@@ -4,11 +4,11 @@ module TwitRSVP
     attr_accessor :start_time, :end_time
     storage_names[:default] = 'twitrsvp_events'
 
-    property :id,       Serial
-    property :name,     String, :nullable => false
-    property :place,    String
-    property :end_at,   Time, :nullable => false
-    property :start_at, Time, :nullable => false
+    property :id,          Serial
+    property :name,        String, :nullable => false
+    property :place,       String, :nullable => true,  :length => 2048
+    property :description, String, :nullable => false, :length => 140
+    property :start_at,    Time,   :nullable => false
 
     timestamps :at
 

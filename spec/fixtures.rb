@@ -9,8 +9,8 @@ TwitRSVP::Event.fix {{
   :user_id  => TwitRSVP::User.gen.id,
   :name     => /\w{8,20}/.gen,
   :place    => /\w{8,20}/.gen,
-  :end_at   => Time.now + 3600,
   :start_at => Time.now + 7200,
+  :description => [:paragraph][0..139],
   :attendees => 7.of { TwitRSVP::Attendee.make }
 }}
 

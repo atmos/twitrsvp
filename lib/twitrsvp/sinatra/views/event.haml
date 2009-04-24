@@ -1,5 +1,5 @@
 %h1.fancy= @event.description
-%h2.fancy= "#{@event.start_at.strftime('%a %b %e -> %l:%M %P')} until #{@event.end_at.strftime('%a %b %e -> %l:%M %P')}"
+%h2.fancy= "#{@event.start_at.strftime('%a %b %e -> %l:%M %P')}"
 
 %h3.fancy Attendees
 - unless @event.confirmed.empty?
