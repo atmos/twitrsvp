@@ -10,6 +10,9 @@ require 'chronic'
 gem 'curb'
 require 'curb'
 require 'logger'
+gem 'nokogiri'
+require 'nokogiri'
+require 'open-uri'
 
 gem 'data_objects', '~>0.9.11'
 gem 'dm-core', '~>0.9.10'
@@ -46,6 +49,16 @@ module TwitRSVP
                             {:site => 'http://twitter.com'})
     end
   end
+
+  def self.geocode(address)
+    response = Nokogiri::XML(open("http://maps.google.com/maps/geo?q=#{URI.escape(address)}&output=xml&key=&oe=utf-8"))
+    status =  response.search("code").inner_html
+    raise OpenURI::HTTPError.new('Bad Response') unless status == '200'
+    coords =  response.search("coordinates").inner_html.split(",")[0,2]
+    coords << response.search("address").inner_html
+    return coords
+  end
+
   def self.retryable(options = {}, &block)
     opts = { :tries => 1, :on => StandardError }.merge(options)
     retry_exception, retries = opts[:on], opts[:tries]

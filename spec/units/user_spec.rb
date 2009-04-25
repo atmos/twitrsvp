@@ -21,12 +21,33 @@ describe "TwitRSVP::User" do
     TwitRSVP::User.get(@new_user.id).token.should_not be_nil
   end
 
-  it "can organize events" do
-    lambda do
-      @user.organize(/\w{5,14}/.gen, /w{3,12}/.gen, '1535 Pearl St, Boulder, CO',
-                   'a big shindig with beer and stuff', 'tomorrow night at 8', 
-                   ['atmos', 'ubermajestix'])
-    end.should change(@user.events, :size).by(1)
+  describe "organizing events" do
+    it "with a valid event address" do
+      FakeWeb.register_uri(:any, %r!^http://maps.google.com!,
+        [{:string => TwitRSVP::Fixtures.successful_google_response,   :status => ['200', 'OK']}])
+
+      lambda do
+        @user.organize(/\w{5,14}/.gen, /w{3,12}/.gen, '1535 Pearl St, Boulder, CO',
+                     'a big shindig with beer and stuff', 'tomorrow night at 8', 
+                     ['atmos', 'ubermajestix'])
+      end.should change(@user.events, :size).by(1)
+      event = @user.events.last
+      event.longitude.should eql('-105.2751640')
+      event.latitude.should eql('40.0188937')
+    end
+
+    it "with an invalid event address" do
+      FakeWeb.register_uri(:any, %r!^http://maps.google.com!,
+                           [{:string => TwitRSVP::Fixtures.unsuccessful_google_response, :status => ['401', 'Unauthorized']}])
+      lambda do
+        @user.organize(/\w{5,14}/.gen, /w{3,12}/.gen, '15359428972 Somefreakinroadgooglecantfind, nome, AK',
+                     'a big shindig with beer and stuff', 'tomorrow night at 8', 
+                     ['atmos', 'ubermajestix'])
+      end.should change(@user.events, :size).by(1)
+      event = @user.events.last
+      event.longitude.should eql('')
+      event.latitude.should eql('')
+    end
   end
 
   it "can return a list of their engagements" do

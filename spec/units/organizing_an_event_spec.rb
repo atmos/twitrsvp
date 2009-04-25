@@ -2,6 +2,9 @@ require File.dirname(__FILE__)+'/../spec_helper'
 
 describe "organizing an event" do
   it "can organize events" do
+    FakeWeb.register_uri(:any, %r!^http://maps.google.com!,
+                         [{:string => TwitRSVP::Fixtures.successful_google_response,   :status => ['200', 'OK']}])
+
     login_quentin
 
     get '/organize'

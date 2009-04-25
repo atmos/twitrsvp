@@ -24,9 +24,9 @@ module TwitRSVP
     attr :address
 
     def geocode
-      unless address.nil?
-        puts address
-      end
+      self.longitude, self.latitude, self.address = TwitRSVP.geocode(address) unless address.nil?
+    rescue OpenURI::HTTPError
+      self.longitude = self.latitude = self.address = ''
     end
 
     def invited
