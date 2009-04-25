@@ -7,6 +7,10 @@ module TwitRSVP
     property :id,          Serial
     property :name,        String, :nullable => false
     property :place,       String, :nullable => true,  :length => 2048
+    property :address,     String, :nullable => true,  :length => 2048
+    property :latitude,    String, :nullable => true,  :length => 16
+    property :longitude,   String, :nullable => true,  :length => 16
+
     property :description, String, :nullable => false, :length => 140
     property :start_at,    Time,   :nullable => false
 
@@ -14,6 +18,16 @@ module TwitRSVP
 
     belongs_to :user, :class_Name => '::TwitRSVP::User', :child_key => [:user_id]
     has n, :attendees, :order => [:status.asc]
+
+    before :create, :geocode
+
+    attr :address
+
+    def geocode
+      unless address.nil?
+        puts address
+      end
+    end
 
     def invited
       Attendee.all(:event_id => id, :status => TwitRSVP::Attendee::INVITED, :order => [:created_at])

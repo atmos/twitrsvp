@@ -12,7 +12,11 @@
       %br
     %label{:for => 'place'}
       Location
-      %textarea{:name => 'place', :value => @event.description}
+      %input{:type => 'text', :name => 'place', :value => @event.place}
+      %br
+    %label{:for => 'address'}
+      Location
+      %input{:type => 'text', :name => 'address', :value => @event.address}
       %br
     %label{:for => 'starts_at'}
       Date/Time

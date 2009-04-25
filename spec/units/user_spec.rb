@@ -23,8 +23,8 @@ describe "TwitRSVP::User" do
 
   it "can organize events" do
     lambda do
-      @user.organize(/\w{5,14}/.gen, /w{3,12}/.gen,
-                   'tomorrow night at 8', 'tomorrow night at 11',
+      @user.organize(/\w{5,14}/.gen, /w{3,12}/.gen, '1535 Pearl St, Boulder, CO',
+                   'a big shindig with beer and stuff', 'tomorrow night at 8', 
                    ['atmos', 'ubermajestix'])
     end.should change(@user.events, :size).by(1)
   end
