@@ -5,7 +5,7 @@
   - else
     - @organized_events.each do |event|
       %li
-        %a{:href => event_url(event) }= event.description
+        %a{:href => event_url(event) }= event.short_name
         .meta= event.start_at.strftime('%a %b %e @ %l:%M %P')
 
 %h1.fancy Pending
@@ -15,7 +15,7 @@
   - else
     - @pending_events.each do |event|
       %li
-        %a{:href => event_url(event) }= event.description
+        %a{:href => event_url(event) }= event.short_name
         .meta= event.start_at.strftime('%a %b %e @ %l:%M %P')
 
 %h1.fancy Accepted
@@ -25,7 +25,7 @@
   - else
     - @confirmed_events.each do |event|
       %li
-        %a{:href => event_url(event) }= event.description
+        %a{:href => event_url(event) }= event.short_name
         .meta= event.start_at.strftime('%a %b %e @ %l:%M %P')
 
 %h1.fancy Declined
@@ -35,7 +35,7 @@
   - else
     - @declined_events.each do |event|
       %li
-        %a{:href => event_url(event) }= event.description
+        %a{:href => event_url(event) }= event.short_name
         .meta= event.start_at.strftime('%a %b %e @ %l:%M %P')
 
 %a{:href => '/organize'} Organize a New Event

@@ -34,7 +34,7 @@ module TwitRSVP
       TwitRSVP.retryable(:tries => 3) do
         dm = TwitRSVP::OAuth.consumer.request(:post, '/direct_messages/new.json', 
                                               event.user.access_token, {:scheme => :query_string},
-                                              { :text => "#{event.description} - #{event.start_at.strftime('%a %b %e @ %l:%M %P')} http://twitrsvp.com",
+                                              { :text => "#{event.short_name} - #{event.start_at.strftime('%a %b %e @ %l:%M %P')} : dm back with 'rsvp yes', 'rsvp no' or visit #{event.tiny_url}",
                                                 :user => user.twitter_id })
         case dm
         when Net::HTTPSuccess # message was delivered

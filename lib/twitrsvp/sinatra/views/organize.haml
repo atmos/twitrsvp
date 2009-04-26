@@ -24,11 +24,13 @@
       %br
     %label{:for => 'description'}
       140 Character description of the event
-      %textarea{:name => 'description', :rows => 12, :columns => 36, :value => @event.description}
+      %textarea{:name => 'description', :rows => 12, :columns => 36}
+        = @event.description
       %br
     %label{:for => 'usernames'}
       Twitter names to invite, separated by commas.  These are the names you normally @reply.  You can only invite people that follow you at this time.
-      %textarea{:name => 'usernames', :value => params['usernames']}
+      %textarea{:name => 'usernames'}
+        = params['usernames']
       %br
     %input{:type => 'submit', :value => 'Create!'}
     or

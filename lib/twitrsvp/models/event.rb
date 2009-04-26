@@ -11,7 +11,8 @@ module TwitRSVP
     property :latitude,    String, :nullable => true,  :length => 16
     property :longitude,   String, :nullable => true,  :length => 16
     property :permalink,   String, :nullable => true,  :length => 64
-    property :description, String, :nullable => false, :length => 140
+    property :tiny_url,    String, :nullable => true,  :length => 32
+    property :description, String, :nullable => true,  :length => 140
     property :start_at,    Time,   :nullable => false
 
     timestamps :at
@@ -30,6 +31,10 @@ module TwitRSVP
 
     def create_permalink
       self.permalink ||= ::UUID.random_create.to_s
+      content = Curl::Easy.perform("http://tinyurl.com/api-create.php?url=http://twitrsvp.com/events/#{::URI.escape(permalink)}") do |curl|
+        curl.timeout = 30
+      end
+      self.tiny_url  ||= content.body_str
     end
 
     def invited
@@ -44,7 +49,7 @@ module TwitRSVP
       Attendee.all(:event_id => id, :status => TwitRSVP::Attendee::CONFIRMED, :order => [:created_at])
     end
 
-    def description
+    def short_name
       "#{name}, #{place}"
     end
 

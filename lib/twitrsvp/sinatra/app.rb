@@ -11,7 +11,10 @@ module TwitRSVP
       next if request.path_info == '/peace'
       next if request.path_info == '/signup'
       next if request.path_info == '/callback'
-      throw(:halt, [302, {'Location' => '/signup'}, '']) unless session[:user_id]
+      unless session[:user_id]
+        session[:return_to] = request.path_info
+        throw(:halt, [302, {'Location' => '/signup'}, '']) 
+      end
     end
 
     helpers do
@@ -52,6 +55,7 @@ module TwitRSVP
 
     get '/events/:id' do
       @event = TwitRSVP::Event.get(params['id'])
+      @event = TwitRSVP::Event.first(:permalink => params['id']) if @event.nil?
       throw(:halt, [401, "You aren't authorized to view this event"]) unless @event.authorized?(current_user)
       haml :event
     end
@@ -92,7 +96,8 @@ module TwitRSVP
         @user = ::TwitRSVP::User.create_from_user_info(@user_info, access_token)
 
         session[:user_id] = @user.id
-        redirect '/'
+        new_path = session.delete(:return_to) || '/'
+        redirect new_path
       else
         raise ArgumentError.new('Unhandled HTTP Response')
       end
