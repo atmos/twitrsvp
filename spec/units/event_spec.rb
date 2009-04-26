@@ -7,5 +7,6 @@ describe "TwitRSVP::Event" do
 
   it "should create an event successfully" do
     @event.should be_valid
+    @event.permalink.should_not be_nil
   end
 end

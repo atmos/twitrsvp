@@ -32,8 +32,10 @@ module TwitRSVP
       if event.valid?
         names.each do |invitee_name|
           next if invitee_name == screen_name
+          invitee_name = invitee_name.strip.gsub(/^@/, '')
+          next if invitee_name.blank?
           TwitRSVP.retryable(:times => 2) do 
-            user = User.first(:name => invitee_name.strip!)
+            user = User.first(:name => invitee_name)
             user = User.create_twitter_user(invitee_name) if user.nil?
             event.attendees.create(:user_id => user.id)
           end
@@ -101,9 +103,9 @@ module TwitRSVP
             events.each do |event|
               next if event.start_at < now
               attendee = event.attendees.detect { |attendee| attendee if attendee.user.twitter_id == message['sender_id'] }
-              if message['text'] =~ /^rsvp yes$/
+              if message['text'] =~ /^rsvp yes/i
                 attendee.confirm!
-              elsif message['text'] =~ /^rsvp no$/
+              elsif message['text'] =~ /^rsvp no/i
                 attendee.decline!
               end
             end

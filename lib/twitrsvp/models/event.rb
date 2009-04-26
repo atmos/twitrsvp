@@ -10,7 +10,7 @@ module TwitRSVP
     property :address,     String, :nullable => true,  :length => 2048
     property :latitude,    String, :nullable => true,  :length => 16
     property :longitude,   String, :nullable => true,  :length => 16
-
+    property :permalink,   String, :nullable => true,  :length => 64
     property :description, String, :nullable => false, :length => 140
     property :start_at,    Time,   :nullable => false
 
@@ -20,13 +20,16 @@ module TwitRSVP
     has n, :attendees, :order => [:status.asc]
 
     before :create, :geocode
-
-    attr :address
+    before :create, :create_permalink
 
     def geocode
       self.longitude, self.latitude, self.address = TwitRSVP.geocode(address) unless address.nil?
     rescue OpenURI::HTTPError
       self.longitude = self.latitude = self.address = ''
+    end
+
+    def create_permalink
+      self.permalink ||= ::UUID.random_create.to_s
     end
 
     def invited
