@@ -26,6 +26,11 @@ module TwitRSVP
       def event_url(event)
         "/events/#{event.id}"
       end
+
+      def prune_expired_events(events)
+        now = Time.now
+        events.map { |event| event if event.start_at > now }.compact
+      end
     end
 
     error do
@@ -104,10 +109,10 @@ module TwitRSVP
 
     get '/' do
       if current_user
-        @organized_events = current_user.events[0..5]
-        @pending_events   = current_user.invited
-        @declined_events  = current_user.declined
-        @confirmed_events = current_user.confirmed
+        @organized_events = prune_expired_events(current_user.events)[0..5]
+        @pending_events   = prune_expired_events(current_user.invited)
+        @declined_events  = prune_expired_events(current_user.declined)
+        @confirmed_events = prune_expired_events(current_user.confirmed)
         haml :home
       else
         haml :about

@@ -87,7 +87,7 @@ module TwitRSVP
     end
 
     def confirmed(limit = 5)
-      Attendee.all(:user_id => id, :status => TwitRSVP::Attendee::CONFIRMED, :limit => limit, :order => [:created_at.desc]).map { |attendee| attendee.event }
+      Attendee.all(:user_id => id, :status => TwitRSVP::Attendee::CONFIRMED, :limit => limit, :order => [:created_at.desc]).map { |attendee| attendee.event  }
     end
 
     def poll_direct_messages
