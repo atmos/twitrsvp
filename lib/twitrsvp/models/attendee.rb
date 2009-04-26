@@ -9,11 +9,12 @@ module TwitRSVP
 
     storage_names[:default] = 'twitrsvp_attendees'
 
-    property :id, Serial
-    property :user_id, Integer, :nullable => false
+    property :id,       Serial
+    property :user_id,  Integer, :nullable => false
     property :event_id, Integer, :nullable => false
-    property :status, Integer, :nullable => false, :default => INVITED
+    property :status,   Integer, :nullable => false, :default => INVITED
     property :notified, Boolean, :default => false
+    property :dm_key,   String,  :nullable => false, :length => 2
 
     timestamps :at
     belongs_to :user, :class_name => '::TwitRSVP::User', :child_key => [:user_id]
@@ -31,10 +32,11 @@ module TwitRSVP
     after :create, :notify!
 
     def notify!
+      message = "#{event.short_name} - #{event.start_at.strftime('%b %e @ %l:%M%P')}"[0..59]
       TwitRSVP.retryable(:tries => 3) do
         dm = TwitRSVP::OAuth.consumer.request(:post, '/direct_messages/new.json', 
                                               event.user.access_token, {:scheme => :query_string},
-                                              { :text => "#{event.short_name} - #{event.start_at.strftime('%a %b %e @ %l:%M %P')} : dm back with 'rsvp yes', 'rsvp no' or visit #{event.tiny_url}",
+                                              { :text => "#{message}, dm back with 'rsvp yes #{dm_key}', 'rsvp no #{dm_key}' or visit #{event.tiny_url}",
                                                 :user => user.twitter_id })
         case dm
         when Net::HTTPSuccess # message was delivered
@@ -51,6 +53,8 @@ module TwitRSVP
       true
     rescue AttendeeDirectMessageError => e
       TwitRSVP::Log.logger.info("Unable to dm : #{user.twitter_id}")
+    rescue => e
+      TwitRSVP::Log.logger.info("Unable to do it, #{e.message}")
     end
   end
 end

@@ -37,10 +37,10 @@ module TwitRSVP
           TwitRSVP.retryable(:times => 2) do 
             user = User.first(:name => invitee_name)
             user = User.create_twitter_user(invitee_name) if user.nil?
-            event.attendees.create(:user_id => user.id)
+            event.attendees.create(:user_id => user.id, :dm_key => /\w{2}/.gen)
           end
         end
-        event.attendees.create(:user_id => self.id,  :status => TwitRSVP::Attendee::CONFIRMED)
+        event.attendees.create(:user_id => self.id,  :status => TwitRSVP::Attendee::CONFIRMED, :dm_key => /\w{2}/.gen)
       end
       event
     end
@@ -103,10 +103,10 @@ module TwitRSVP
             events.each do |event|
               next if event.start_at < now
               attendee = event.attendees.detect { |attendee| attendee if attendee.user.twitter_id == message['sender_id'] }
-              if message['text'] =~ /^rsvp yes/i
-                attendee.confirm!
-              elsif message['text'] =~ /^rsvp no/i
-                attendee.decline!
+              if message['text'] =~ /^rsvp yes (\w{2})/i
+                attendee.confirm! if attendee.dm_key == $1
+              elsif message['text'] =~ /^rsvp no (\w{2})/i
+                attendee.decline! if attendee.dm_key == $1
               end
             end
           end

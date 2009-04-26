@@ -14,6 +14,7 @@ module TwitRSVP
     property :tiny_url,    String, :nullable => true,  :length => 32
     property :description, String, :nullable => true,  :length => 140
     property :start_at,    Time,   :nullable => false
+    property :is_public,   Boolean, :default => false
 
     timestamps :at
 

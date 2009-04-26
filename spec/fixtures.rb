@@ -16,16 +16,19 @@ TwitRSVP::Event.fix {{
 }}
 
 TwitRSVP::Attendee.fix {{
-  :user_id  => TwitRSVP::User.gen.id
+  :user_id  => TwitRSVP::User.gen.id,
+  :dm_key   => /\w{2}/.gen
 }}
 
 TwitRSVP::Attendee.fix(:user) {{
-  :event_id => TwitRSVP::Event.gen.id
+  :event_id => TwitRSVP::Event.gen.id,
+  :dm_key   => /\w{2}/.gen
 }}
 
 TwitRSVP::Attendee.fix(:standalone) {{
   :user_id  => TwitRSVP::User.gen.id,
   :event_id => TwitRSVP::Event.gen.id,
+  :dm_key   => /\w{2}/.gen
 }}
 
 module TwitRSVP::Fixtures

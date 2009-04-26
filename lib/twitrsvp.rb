@@ -15,6 +15,8 @@ require 'nokogiri'
 gem 'uuidtools'
 require 'uuidtools'
 require 'open-uri'
+gem 'randexp'
+require 'randexp'
 
 gem 'data_objects', '~>0.9.11'
 gem 'dm-core', '~>0.9.10'
