@@ -53,15 +53,20 @@ module TwitRSVP
       user_info = JSON.parse(content.body_str)
       raise UserCreationError.new("Unable to find '#{twitter_id}'") if(user_info['error'] == 'Not found')
       result = unless user_info['error']
-        self.first_or_create({:twitter_id => user_info['id']},{
-                              :name       => user_info['name'],
-                              :avatar     => user_info['profile_image_url'],
-                              :url        => 'http://twitter.com/'+user_info['screen_name'],
-                              :location   => user_info['location'],
-                              :time_zone  => user_info['time_zone']})
+        create_from_user_info(user_info)
       end
     rescue JSON::ParserError
       raise UserCreationError.new("Unable to find '#{twitter_id}'")
+    end
+
+    def self.create_from_user_info(user_info, access_token = nil)
+      user = ::TwitRSVP::User.first_or_create(:twitter_id  => user_info['id'])  # really wish first_or_create behaved sanely
+      user.name, user.avatar  = user_info['name'], user_info['profile_image_url']
+      user.token, user.secret = access_token.token, access_token.secret unless access_token.nil?
+      user.location, user.time_zone = user_info['location'], user_info['time_zone']
+      user.url    = 'http://twitter.com/'+user_info['screen_name']
+      user.save
+      user
     end
 
     def engagements

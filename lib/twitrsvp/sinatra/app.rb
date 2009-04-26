@@ -84,11 +84,7 @@ module TwitRSVP
       case oauth_response
       when Net::HTTPSuccess
         @user_info = JSON.parse(oauth_response.body)
-        @user = ::TwitRSVP::User.first_or_create(:twitter_id  => @user_info['id'])  # really wish first_or_create behaved sanely
-        @user.name, @user.avatar  = @user_info['name'], @user_info['profile_image_url']
-        @user.token, @user.secret = access_token.token, access_token.secret
-        @user.url    = 'http://twitter.com/'+@user_info['screen_name']
-        @user.save
+        @user = ::TwitRSVP::User.create_from_user_info(@user_info, access_token)
 
         session[:user_id] = @user.id
         redirect '/'
