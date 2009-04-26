@@ -31,6 +31,7 @@ module TwitRSVP
                                   :address     => address})
       if event.valid?
         names.each do |invitee_name|
+          next if invitee_name == screen_name
           TwitRSVP.retryable(:times => 2) do 
             user = User.first(:name => invitee_name.strip!)
             user = User.create_twitter_user(invitee_name) if user.nil?
@@ -91,22 +92,34 @@ module TwitRSVP
 
     def poll_direct_messages
       return if events.empty?
-      last_event = events.last
+      now = Time.now
       TwitRSVP.retryable(:tries => 3) do
         messages = TwitRSVP::OAuth.consumer.request(:get, '/direct_messages.json', access_token, {:scheme => :query_string})
         case messages
         when Net::HTTPSuccess 
-          JSON.parse(message.body).each do |message|
-            attendee = last_event.attendees.detect { |attendee| attendee if attendee.user.twitter_id == message['sender_id'] }
-            if message['text'] =~ /^rsvp yes$/
-              attendee.confirm!
-            elsif message['text'] =~ /^rsvp no$/
-              attendee.decline!
+          JSON.parse(messages.body).each do |message|
+            events.each do |event|
+              next if event.start_at < now
+              attendee = event.attendees.detect { |attendee| attendee if attendee.user.twitter_id == message['sender_id'] }
+              if message['text'] =~ /^rsvp yes$/
+                attendee.confirm!
+              elsif message['text'] =~ /^rsvp no$/
+                attendee.decline!
+              end
             end
           end
         else # will retry up to 3 times, logging the response each time
           TwitRSVP::Log.logger.info("Response: #{dm.code}, Something screwed up, hopefully a retry will fix it. #{event.user.twitter_id} inviting #{user.twitter_id}")
           raise ArgumentError.new('Unable to retrieve direct messages')
+        end
+      end
+    end
+    def self.handle_direct_message_replies
+      User.all.each do |user| 
+        begin
+          user.poll_direct_messages
+        rescue
+          TwitRSVP::Log.logger.info("Unable to fetch direct messages for #{user.screen_name}")
         end
       end
     end
