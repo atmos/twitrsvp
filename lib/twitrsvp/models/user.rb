@@ -5,14 +5,14 @@ module TwitRSVP
     storage_names[:default] = 'twitrsvp_users'
 
     property :id, Serial
-    property :twitter_id, Integer, :nullable => false, :unique => true
-    property :name, String
-    property :token, String
-    property :secret, String
-    property :location, String, :nullable => true, :default => 'Unknown'
-    property :time_zone, String, :nullable => true, :default => 'Mountain Time (US & Canada)'
+    property :twitter_id,  Integer, :nullable => false, :unique => true
+    property :name,        String, :nullable => false
+    property :token,       String
+    property :secret,      String
+    property :screen_name, String, :nullable => false
+    property :location,    String, :nullable => true, :default => 'Unknown'
+    property :time_zone,   String, :nullable => true, :default => 'Mountain Time (US & Canada)'
 
-    property :url, String, :length => 512
     property :avatar, String, :length => 512, :default => 'http://static.twitter.com/images/default_profile_normal.png'
 
     timestamps :at
@@ -64,9 +64,13 @@ module TwitRSVP
       user.name, user.avatar  = user_info['name'], user_info['profile_image_url']
       user.token, user.secret = access_token.token, access_token.secret unless access_token.nil?
       user.location, user.time_zone = user_info['location'], user_info['time_zone']
-      user.url    = 'http://twitter.com/'+user_info['screen_name']
+      user.screen_name = user_info['screen_name']
       user.save
       user
+    end
+
+    def url
+      @url ||= "http://twitter.com/#{screen_name}"
     end
 
     def engagements
@@ -83,6 +87,28 @@ module TwitRSVP
 
     def confirmed(limit = 5)
       Attendee.all(:user_id => id, :status => TwitRSVP::Attendee::CONFIRMED, :limit => limit, :order => [:created_at.desc]).map { |attendee| attendee.event }
+    end
+
+    def poll_direct_messages
+      return if events.empty?
+      last_event = events.last
+      TwitRSVP.retryable(:tries => 3) do
+        messages = TwitRSVP::OAuth.consumer.request(:get, '/direct_messages.json', access_token, {:scheme => :query_string})
+        case messages
+        when Net::HTTPSuccess 
+          JSON.parse(message.body).each do |message|
+            attendee = last_event.attendees.detect { |attendee| attendee if attendee.user.twitter_id == message['sender_id'] }
+            if message['text'] =~ /^rsvp yes$/
+              attendee.confirm!
+            elsif message['text'] =~ /^rsvp no$/
+              attendee.decline!
+            end
+          end
+        else # will retry up to 3 times, logging the response each time
+          TwitRSVP::Log.logger.info("Response: #{dm.code}, Something screwed up, hopefully a retry will fix it. #{event.user.twitter_id} inviting #{user.twitter_id}")
+          raise ArgumentError.new('Unable to retrieve direct messages')
+        end
+      end
     end
   end
 end
