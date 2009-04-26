@@ -26,6 +26,7 @@ spec = Gem::Specification.new do |s|
   s.add_dependency "oauth", '~>0.3.2'
   s.add_dependency "sinatra", '~>0.9.1.1'
   s.add_dependency "curb", "~>0.3.2"
+  s.add_dependency "nokogiri", "~>1.2.3"
 
   s.require_path = 'lib'
   s.autorequire = GEM

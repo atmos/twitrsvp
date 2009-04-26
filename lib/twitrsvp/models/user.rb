@@ -9,6 +9,8 @@ module TwitRSVP
     property :name, String
     property :token, String
     property :secret, String
+    property :location, String, :nullable => true, :default => 'Unknown'
+    property :time_zone, String, :nullable => true, :default => 'Mountain Time (US & Canada)'
 
     property :url, String, :length => 512
     property :avatar, String, :length => 512, :default => 'http://static.twitter.com/images/default_profile_normal.png'
@@ -54,7 +56,9 @@ module TwitRSVP
         self.first_or_create({:twitter_id => user_info['id']},{
                               :name       => user_info['name'],
                               :avatar     => user_info['profile_image_url'],
-                              :url        => 'http://twitter.com/'+user_info['screen_name']})
+                              :url        => 'http://twitter.com/'+user_info['screen_name'],
+                              :location   => user_info['location'],
+                              :time_zone  => user_info['time_zone']})
       end
     rescue JSON::ParserError
       raise UserCreationError.new("Unable to find '#{twitter_id}'")

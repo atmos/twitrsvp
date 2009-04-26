@@ -5,7 +5,7 @@ module TwitRSVP
     storage_names[:default] = 'twitrsvp_events'
 
     property :id,          Serial
-    property :name,        String, :nullable => false
+    property :name,        String, :nullable => false, :length => 64
     property :place,       String, :nullable => true,  :length => 2048
     property :address,     String, :nullable => true,  :length => 2048
     property :latitude,    String, :nullable => true,  :length => 16
