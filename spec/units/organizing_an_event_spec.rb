@@ -9,43 +9,43 @@ describe "organizing an event" do
   it "can organize events" do
     get '/organize'
 
-    last_response.should have_selector("form[action='/organize']")
-    last_response.should have_selector("form[action='/organize'] label[for='name']")
-    last_response.should have_selector("form[action='/organize'] input[type='text'][name='name']")
-    last_response.should have_selector("form[action='/organize'] label[for='place']")
-    last_response.should have_selector("form[action='/organize'] input[type='text'][name='place']")
-    last_response.should have_selector("form[action='/organize'] label[for='address']")
-    last_response.should have_selector("form[action='/organize'] input[type='text'][name='address']")
-    last_response.should have_selector("form[action='/organize'] label[for='description']")
-    last_response.should have_selector("form[action='/organize'] textarea[name='description']")
-    last_response.should have_selector("form[action='/organize'] label[for='starts_at']")
-    last_response.should have_selector("form[action='/organize'] input[type='text'][name='starts_at']")
-    last_response.should have_selector("form[action='/organize'] textarea[name='usernames']")
-    last_response.should have_selector("form[action='/organize'] input[type='submit'][value='Create!']")
-    last_response.should have_selector("form[action='/organize'] a[href='/']:contains('Cancel')")
+    last_response.should have_selector("form[action='/events']")
+    last_response.should have_selector("form[action='/events'] label[for='name']")
+    last_response.should have_selector("form[action='/events'] input[type='text'][name='name']")
+    last_response.should have_selector("form[action='/events'] label[for='place']")
+    last_response.should have_selector("form[action='/events'] input[type='text'][name='place']")
+    last_response.should have_selector("form[action='/events'] label[for='address']")
+    last_response.should have_selector("form[action='/events'] input[type='text'][name='address']")
+    last_response.should have_selector("form[action='/events'] label[for='description']")
+    last_response.should have_selector("form[action='/events'] textarea[name='description']")
+    last_response.should have_selector("form[action='/events'] label[for='starts_at']")
+    last_response.should have_selector("form[action='/events'] input[type='text'][name='starts_at']")
+    last_response.should have_selector("form[action='/events'] textarea[name='usernames']")
+    last_response.should have_selector("form[action='/events'] input[type='submit'][value='Create!']")
+    last_response.should have_selector("form[action='/events'] a[href='/']:contains('Cancel')")
 
-    post '/organize', :name => /\w{4,20}/.gen, :place => /\w{4,20}/.gen,
+    post '/events', :name => /\w{4,20}/.gen, :place => /\w{4,20}/.gen,
       :starts_at => 'tonight at 8', :address => '1535 Pearl St, Boulder, CO',
       :usernames => 'atmos, ubermajestix', :description => /[:paragraph]/.gen[0..139]
     last_response.headers['Location'].should match(%r!/events/\d!)
   end
   it "should repopulate the form properly on failed signup" do
-    post '/organize', :name => /\w{4,20}/.gen, :place => /\w{4,20}/.gen,
+    post '/events', :name => /\w{4,20}/.gen, :place => /\w{4,20}/.gen,
       :address => '1535 Pearl St, Boulder, CO', :usernames => 'atmos, ubermajestix', :description => /[:paragraph]/.gen[0..139]
 
-    last_response.should have_selector("form[action='/organize']")
-    last_response.should have_selector("form[action='/organize'] label[for='name']")
-    last_response.should have_selector("form[action='/organize'] input[type='text'][name='name']")
-    last_response.should have_selector("form[action='/organize'] label[for='place']")
-    last_response.should have_selector("form[action='/organize'] input[type='text'][name='place']")
-    last_response.should have_selector("form[action='/organize'] label[for='address']")
-    last_response.should have_selector("form[action='/organize'] input[type='text'][name='address']")
-    last_response.should have_selector("form[action='/organize'] label[for='description']")
-    last_response.should have_selector("form[action='/organize'] textarea[name='description']")
-    last_response.should have_selector("form[action='/organize'] label[for='starts_at']")
-    last_response.should have_selector("form[action='/organize'] input[type='text'][name='starts_at']")
-    last_response.should have_selector("form[action='/organize'] textarea[name='usernames']:contains('atmos, ubermajestix')")
-    last_response.should have_selector("form[action='/organize'] input[type='submit'][value='Create!']")
-    last_response.should have_selector("form[action='/organize'] a[href='/']:contains('Cancel')")
+    last_response.should have_selector("form[action='/events']")
+    last_response.should have_selector("form[action='/events'] label[for='name']")
+    last_response.should have_selector("form[action='/events'] input[type='text'][name='name']")
+    last_response.should have_selector("form[action='/events'] label[for='place']")
+    last_response.should have_selector("form[action='/events'] input[type='text'][name='place']")
+    last_response.should have_selector("form[action='/events'] label[for='address']")
+    last_response.should have_selector("form[action='/events'] input[type='text'][name='address']")
+    last_response.should have_selector("form[action='/events'] label[for='description']")
+    last_response.should have_selector("form[action='/events'] textarea[name='description']")
+    last_response.should have_selector("form[action='/events'] label[for='starts_at']")
+    last_response.should have_selector("form[action='/events'] input[type='text'][name='starts_at']")
+    last_response.should have_selector("form[action='/events'] textarea[name='usernames']:contains('atmos, ubermajestix')")
+    last_response.should have_selector("form[action='/events'] input[type='submit'][value='Create!']")
+    last_response.should have_selector("form[action='/events'] a[href='/']:contains('Cancel')")
   end
 end
