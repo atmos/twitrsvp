@@ -2,38 +2,47 @@
   %head
     %meta{'http-equiv' => "Content-Type", 'content' => "text/html; charset=utf-8"}
     %title twitrsvp.com - RSVP via Twitter
-    %link{:href => '/css/screen.css', :media => 'screen', :rel => 'stylesheet', :type => 'text/css', :media => 'screen, projection'}
-    %link{:href => '/css/print.css', :media => 'screen', :rel => 'stylesheet', :type => 'text/css', :media => 'print' }
-    /[if IE]
-      %link{:href => '/css/ie.css', :media => 'screen', :rel => 'stylesheet', :type => 'text/css', :media => 'screen,projection' }
     %link{:href => '/css/style.css', :media => 'screen', :rel => 'stylesheet', :type => 'text/css', :media => 'screen, projection' }
+    %script{:type => 'text/javascript', :src => 'http://jqueryui.com/latest/jquery-1.3.2.js'}
+    %script{:type => 'text/javascript', :src => 'http://jqueryui.com/latest/ui/ui.core.js'}
+    %script{:type => 'text/javascript', :src => 'http://jqueryui.com/latest/ui/ui.tabs.js'}
 
   %body
-    #container.container
-      #header.span-22.prefix-1
-        %h1.caps
-          %a{:href => 'http://twitrsvp.com'} TwitRSVP
+    #page
+      #center
+        #header
+          %a#logo{:href => '/'}
+            twitRSVP
+          %ul#nav
+            %li{:class => (request.path_info == '/organize' ? 'current' : '') }
+              %a{:href => '/organize' } schedule
+            %li{:class => (request.path_info == '/organize' ? '' : 'current') }
+              %a{:href => '/'} manage
+        #main
+          = yield
 
-      #content.span-17.suffix-2.prefix-2
-        = yield
-      #footer.span-24.last.center
-        %p
-          TwitRSVP uses
-          %a{:href => 'http://twitter.com'} twitter's
-          %a{:href => 'http://apiwiki.twitter.com/'} oauth api
-          to simplify organizing events with your friends.
-          %a{:href => '/about'} Learn
-          more.
-        %p
-          Another
-          %a{:href => 'http://oauth.org'} oauth
-          experiment brought to you by 
-          %a{:href => 'http://atmos.org'} atmos,
-          source code available on 
-          %a{:href => 'http://github.com/atmos/twitrsvp'} github,
-          hosted on
-          %a{:href => 'http://engineyard.com/solo'} EY Solo.
-        - if current_user
+        #rounded_footer
+        #footer 
           %p
-            Do me a favor and
-            %a{:href => '/peace'} delete these cookies.
+            TwitRSVP uses
+            %a{:href => 'http://twitter.com'} twitter's
+            %a{:href => 'http://apiwiki.twitter.com/'} oauth api
+            to simplify organizing events with your friends.
+            %a{:href => '/about'} Learn
+            more.
+          %p
+            Another
+            %a{:href => 'http://github.com/atmos/twitrsvp'} open source
+            %a{:href => 'http://oauth.org'} oauth
+            experiment brought to you by 
+            %a{:href => 'http://twitter.com/atmos'} @atmos,
+            %a{:href => 'http://twitter.com/ubermajestix'} @ubermajestix,
+            and
+            %a{:href => 'http://twitter.com/jeffreylarrimore/'} @jlarrimore.
+            Hosted on
+            %a{:href => 'http://engineyard.com/solo'} EY Solo.
+          - if current_user
+            %p
+              Please,
+              %a{:href => '/peace'} log me out.
+        #twito Twito Ayes. Straight Outta Boulder. 

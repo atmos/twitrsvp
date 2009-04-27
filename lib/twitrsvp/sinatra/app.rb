@@ -31,8 +31,8 @@ module TwitRSVP
       end
 
       def prune_expired_events(events)
-        now = Time.now
-        events.map { |event| event if event.start_at > now }.compact
+        limit = Time.now.utc - 86400
+        events.map { |event| event if event.start_at > limit }.compact
       end
     end
 
@@ -71,7 +71,7 @@ module TwitRSVP
 
     get '/organize' do
       @event = Event.new
-      haml :organize
+      haml(:organize)
     end
 
     post '/organize' do
@@ -114,6 +114,7 @@ module TwitRSVP
 
     get '/' do
       if current_user
+        @event = Event.new
         @organized_events = prune_expired_events(current_user.events)[0..5]
         @pending_events   = prune_expired_events(current_user.invited)
         @declined_events  = prune_expired_events(current_user.declined)
@@ -127,10 +128,14 @@ module TwitRSVP
     get '/about' do
       haml :about
     end
-    
+
     get '/peace' do
       session.clear
       redirect '/'
+    end
+
+    get '/application.js' do
+      @application_js ||= File.read(File.dirname(__FILE__)+'/views/application.js')
     end
   end
 end

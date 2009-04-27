@@ -66,4 +66,25 @@ describe "TwitRSVP::User" do
   it "raises errors when its unable to create from twitter given a bad username" do
     lambda { ::TwitRSVP::User.create_twitter_user(/\w{16}/.gen) }.should raise_error(TwitRSVP::User::UserCreationError)
   end
+
+  it "can iterate over all users and poll for direct message replies" do
+    TwitRSVP::User.gen
+    lambda { TwitRSVP::User.handle_direct_message_replies }.should_not raise_error
+  end
+  it "can retrieve direct messages for the users" do
+    user  = TwitRSVP::User.gen
+    event = TwitRSVP::Event.gen(:user_id => user.id)
+
+    token = 'oU5W1XD2TTZhWT6Snfii9JbVBUkJOurCKhWQHz98765' 
+
+    response = Net::HTTPSuccess.new('1.0', 200, nil)
+    response.body = TwitRSVP::Fixtures.successful_direct_message_query(TwitRSVP::Attendee.all)
+    consumer = mock('Consumer', {:request => response})
+    request_token = mock('RequestToken', {:get_access_token => mock('AccessToken', {:token => 'foo', :secret => 'bar'})})
+
+    OAuth::Consumer.stub!(:new).and_return(consumer)
+    OAuth::RequestToken.stub!(:new).and_return(request_token)
+
+    user.poll_direct_messages
+  end
 end

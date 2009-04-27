@@ -1,41 +1,59 @@
-%h1.fancy Organized
-%ul.organized
-  - if @organized_events.nil? || @organized_events.empty?
-    %li None at this time
-  - else
-    - @organized_events.each do |event|
-      %li
-        %a{:href => event_url(event) }= event.short_name
-        .meta= event.start_at.strftime('%a %b %e @ %l:%M %P')
+#pending
+  %h1.pending_header Pending
+  %div.pending_event
+    - if @pending_events.nil? || @pending_events.empty?
+      %h3 None at this time
+    - else
+      - @pending_events.each do |event|
+        %div.left.event_detail
+          %h3
+            %a{:href => "/events/#{event.id}"}= event.name
+          %p
+            = event.localtime.strftime('%a %b %e @ %l:%M %P')
+            %br
+            = event.place
+        %div.left.event_action
+          %a.positive{:href => "/events/#{event.id}"} accept
+        %div.left.event_action
+          %a.negative{:href => "/events/#{event.id}"} decline
+        %div.clear
 
-%h1.fancy Pending
-%ul.pending
-  - if @pending_events.nil? || @pending_events.empty?
-    %li None at this time
-  - else
-    - @pending_events.each do |event|
-      %li
-        %a{:href => event_url(event) }= event.short_name
-        .meta= event.start_at.strftime('%a %b %e @ %l:%M %P')
+#your_and_going_to_events
+  #your_events.left
+    %h1 Your Events:
+    - if @organized_events.nil? || @organized_events.empty?
+      %div.your_event.left
+      %h3 None at this time
+      %div.clear
+    - else
+      - @organized_events.each do |event|
+        %div.your_event.left
+          %h3
+            %a.event{:href => "/events/#{event.id}"}= event.name
+          %p
+            = event.localtime.strftime('%a %b %e @ %l:%M %P')
+            %br
+            = event.place
+        %div.left.event_action
+          %a.negative{:href => "/events/#{event.id}"} edit
+        %div.clear
 
-%h1.fancy Accepted
-%ul.accepted
-  - if @confirmed_events.nil? || @confirmed_events.empty?
-    %li None at this time
-  - else
-    - @confirmed_events.each do |event|
-      %li
-        %a{:href => event_url(event) }= event.short_name
-        .meta= event.start_at.strftime('%a %b %e @ %l:%M %P')
-
-%h1.fancy Declined
-%ul.declined
-  - if @declined_events.nil? || @declined_events.empty?
-    %li None at this time
-  - else
-    - @declined_events.each do |event|
-      %li
-        %a{:href => event_url(event) }= event.short_name
-        .meta= event.start_at.strftime('%a %b %e @ %l:%M %P')
-
-%a{:href => '/organize'} Organize a New Event
+  #attending_events.left
+    %h1 Going To:
+    - if @confirmed_events.nil? || @confirmed_events.empty?
+      %div.going_to.left
+      %h3 None at this time
+      %div.clear
+    - else
+      - @confirmed_events.each do |event|
+        %div.going_to.left
+          %h3
+            %a.event{:href => "/events/#{event.id}"}= event.name
+          %p
+            = event.localtime.strftime('%a %b %e @ %l:%M %P')
+            %br
+            = event.place
+        %div.left.event_action
+          %a.negative{:href => "/events/#{event.id}"} decline
+        %div.clear
+  %div.clear

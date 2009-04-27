@@ -1,6 +1,10 @@
 require File.dirname(__FILE__)+'/../spec_helper'
 
 describe "home page" do
+  it "can view the application js" do
+    login_quentin
+    get '/application.js'
+  end
   it "can view events" do
     login_quentin
 
@@ -18,12 +22,10 @@ describe "home page" do
     end
 
     get '/'
-    last_response.should have_selector("h1.fancy:contains('Pending')")
-    last_response.should have_selector("ul.pending")
-    last_response.should have_selector("h1.fancy:contains('Accepted')")
-    last_response.should have_selector("ul.accepted")
-    last_response.should have_selector("h1.fancy:contains('Declined')")
-    last_response.should have_selector("ul.declined")
-    last_response.should have_selector("a[href='/organize']:contains('Organize a New Event')")
+
+    last_response.should have_selector("ul")
+    last_response.should have_selector("h1:contains('Pending')")
+    last_response.should have_selector("h1:contains('Your Events:')")
+    last_response.should have_selector("h1:contains('Going To:')")
   end
 end

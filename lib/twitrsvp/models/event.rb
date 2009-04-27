@@ -38,6 +38,11 @@ module TwitRSVP
       self.tiny_url  ||= content.body_str
     end
 
+    def localtime
+      time_offset = Time.now.dst? ? 3600 : 0
+      start_at + user.utc_offset + time_offset
+    end
+
     def invited
       Attendee.all(:event_id => id, :status => TwitRSVP::Attendee::INVITED, :order => [:created_at])
     end

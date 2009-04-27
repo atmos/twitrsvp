@@ -8,7 +8,7 @@ describe "organizing an event" do
   end
   it "can organize events" do
     get '/organize'
-    last_response.should have_selector("fieldset legend:contains('Organize an Event')")
+
     last_response.should have_selector("form[action='/organize']")
     last_response.should have_selector("form[action='/organize'] label[for='name']")
     last_response.should have_selector("form[action='/organize'] input[type='text'][name='name']")
@@ -33,7 +33,6 @@ describe "organizing an event" do
     post '/organize', :name => /\w{4,20}/.gen, :place => /\w{4,20}/.gen,
       :address => '1535 Pearl St, Boulder, CO', :usernames => 'atmos, ubermajestix', :description => /[:paragraph]/.gen[0..139]
 
-    last_response.should have_selector("fieldset legend:contains('Organize an Event')")
     last_response.should have_selector("form[action='/organize']")
     last_response.should have_selector("form[action='/organize'] label[for='name']")
     last_response.should have_selector("form[action='/organize'] input[type='text'][name='name']")

@@ -3,35 +3,29 @@
     - @event.errors.each do |error|
       %span= error
 
-%fieldset
-  %legend Organize an Event
-  %form{:action => '/organize', :method => 'POST'}
-    %label{:for => 'name'}
-      Let's give the event a name:
-      %input{:type => 'text', :name => 'name', :size => 50, :value => @event.name}
-      %br
-    %label{:for => 'place'}
-      Location
-      %input{:type => 'text', :name => 'place', :value => @event.place}
-      %br
-    %label{:for => 'address'}
-      Address
-      %input{:type => 'text', :name => 'address', :value => @event.address}
-      %br
-    %label{:for => 'starts_at'}
-      Date/Time
-      %input{:type => 'text', :name => 'starts_at', :value => params['starts_at']}
-      %br
-    %label{:for => 'description'}
-      140 Character description of the event
-      %textarea{:name => 'description', :rows => 12, :columns => 36}
-        = @event.description
-      %br
-    %label{:for => 'usernames'}
-      Twitter names to invite, separated by commas.  These are the names you normally @reply.  You can only invite people that follow you at this time.
-      %textarea{:name => 'usernames'}
-        = params['usernames']
-      %br
-    %input{:type => 'submit', :value => 'Create!'}
-    or
-    %a{:href => '/'} Cancel
+%form{:action => '/organize', :method => 'POST'}
+  %label{:for => 'name'}
+    %h2 Let's give the event a name:
+    %input{:type => 'text', :name => 'name', :size => 40, :value => @event.name}
+  %label{:for => 'place'}
+    %h2 Location
+    %input{:type => 'text', :name => 'place', :size => 40, :value => @event.place}
+  %label{:for => 'address'}
+    %h2 Address
+    %input{:type => 'text', :name => 'address', :size => 40, :value => @event.address}
+  %label{:for => 'starts_at'}
+    %h2 Date/Time
+    %input{:type => 'text', :name => 'starts_at', :size => 40, :value => params['starts_at']}
+  %label{:for => 'description'}
+    %h2 140 Character description of the event
+    %textarea{:name => 'description', :rows => 5, :columns => 76}
+      = @event.description
+  %label{:for => 'usernames'}
+    %h2 Twitter names to invite, separated by commas.  These are the names you normally @reply.  You can only invite people that follow you at this time.
+    %textarea{:name => 'usernames', :rows => 5, :columns => 76}
+      = params['usernames']
+    %br
+
+  %input.submit{:type => 'submit', :value => 'Create!'}
+  or
+  %a.class{:href => '/'} Cancel

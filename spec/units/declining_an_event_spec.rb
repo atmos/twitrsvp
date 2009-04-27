@@ -23,6 +23,6 @@ describe "declining an event" do
     last_response.headers['Location'].should eql("/events/#{@event_id}")
 
     get '/'
-    last_response.should have_selector("ul.declined li > a[href='/events/#{@event_id}']")
+    last_response.should have_selector("h3 > a[href='/events/#{@event_id}']")
   end
 end
