@@ -53,6 +53,13 @@ module TwitRSVP
       redirect event_url(attendee.event)
     end
 
+    get '/events/:id/edit' do
+      @event = TwitRSVP::Event.get(params['id'])
+      @form_path = "/events/#{params['id']}"
+      throw(:halt, [401, "You aren't authorized to view this event"]) unless @event.user == current_user
+      haml :organize
+    end
+
     get '/events/:id' do
       @event = TwitRSVP::Event.get(params['id'])
       @event = TwitRSVP::Event.first(:permalink => params['id']) if @event.nil?
@@ -69,16 +76,24 @@ module TwitRSVP
       redirect '/'
     end
 
-    get '/organize' do
-      @event = Event.new
-      haml(:organize)
+    put '/events/:id' do
+      @event = TwitRSVP::Event.get(params['id'])
+      #@event.update_attributes(current_user.organize(params['name'], params['place'], params['address'], params['description'],
+                                     #params['starts_at'], params['usernames'].split(','))
+
+      @event.valid? ? redirect(event_url(@event)) : haml(:organize)
     end
 
-    post '/organize' do
+    post '/events' do
       @event = current_user.organize(params['name'], params['place'], params['address'], params['description'],
                                      params['starts_at'], params['usernames'].split(','))
 
       @event.valid? ? redirect(event_url(@event)) : haml(:organize)
+    end
+
+    get '/organize' do
+      @event = Event.new
+      haml(:organize)
     end
 
     get '/callback' do

@@ -3,7 +3,7 @@
     - @event.errors.each do |error|
       %span= error
 
-%form{:action => '/organize', :method => 'POST'}
+%form{:action => (@form_path||'/events'), :method => (@form_path.nil? ? 'POST' : 'PUT')}
   %label{:for => 'name'}
     %h2 Let's give the event a name:
     %input{:type => 'text', :name => 'name', :size => 40, :value => @event.name}
@@ -22,6 +22,9 @@
       = @event.description
   %label{:for => 'usernames'}
     %h2 Twitter names to invite, separated by commas.  These are the names you normally @reply.  You can only invite people that follow you at this time.
+    - unless @event.new_record?
+      %h3 You've already invited these people
+      %p= @event.attendees.map { |attendee| attendee.user.screen_name }.join(',')
     %textarea{:name => 'usernames', :rows => 5, :columns => 76}
       = params['usernames']
     %br

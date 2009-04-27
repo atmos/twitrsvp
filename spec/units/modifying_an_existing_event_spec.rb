@@ -10,9 +10,8 @@ describe "modifying an event" do
 
     get "/events/#{event.id}/edit"
 
-    last_response.should have_selector("form[action='/events/#{event.id}']")
+    last_response.should have_selector("form[action='/events/#{event.id}'][method='PUT']")
     last_response.should have_selector("form[action='/events/#{event.id}'] label[for='name']")
-    last_response.should have_selector("form[action='/events/#{event.id}'] input[type='hidden'][name='_method'][value='PUT']")
     last_response.should have_selector("form[action='/events/#{event.id}'] input[type='text'][name='name'][value='#{event.name}']")
     last_response.should have_selector("form[action='/events/#{event.id}'] label[for='place']")
     last_response.should have_selector("form[action='/events/#{event.id}'] input[type='text'][name='place'][value='#{event.place}']")

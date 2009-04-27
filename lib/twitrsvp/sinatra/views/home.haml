@@ -13,9 +13,9 @@
             %br
             = event.place
         %div.left.event_action
-          %a.positive{:href => "/events/#{event.id}"} accept
+          %a.positive.should_post{:href => "/events/#{event.id}/confirm"} accept
         %div.left.event_action
-          %a.negative{:href => "/events/#{event.id}"} decline
+          %a.negative.should_post{:href => "/events/#{event.id}/decline"} decline
         %div.clear
 
 #your_and_going_to_events
@@ -35,7 +35,7 @@
             %br
             = event.place
         %div.left.event_action
-          %a.negative{:href => "/events/#{event.id}"} edit
+          %a.negative{:href => "/events/#{event.id}/edit"} edit
         %div.clear
 
   #attending_events.left
@@ -54,6 +54,6 @@
             %br
             = event.place
         %div.left.event_action
-          %a.negative{:href => "/events/#{event.id}"} decline
+          %a.negative.should_post{:href => "/events/#{event.id}/decline"} decline
         %div.clear
   %div.clear
