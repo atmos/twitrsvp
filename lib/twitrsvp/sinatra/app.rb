@@ -11,6 +11,7 @@ module TwitRSVP
       next if request.path_info == '/peace'
       next if request.path_info == '/signup'
       next if request.path_info == '/callback'
+      next if request.path_info == '/application.js'
       unless session[:user_id]
         session[:return_to] = request.path_info
         throw(:halt, [302, {'Location' => '/signup'}, '']) 
@@ -34,11 +35,28 @@ module TwitRSVP
         limit = Time.now.utc - 86400
         events.map { |event| event if event.start_at > limit }.compact
       end
+
+      def number_to_ordinal(num)
+        num = num.to_i
+        if (10...20)===num
+          "#{num}th"
+        else
+          g = %w{ th st nd rd th th th th th th }
+          a = num.to_s
+          c=a[-1..-1].to_i
+          a + g[c]
+        end
+      end
     end
 
     error do
       TwitRSVP::Log.logger.info env['sinatra.error'].message
       haml :failed
+    end
+
+    get '/application.js' do
+      response['Content-Type'] = 'text/javascript'
+      @application_js ||= File.read(File.dirname(__FILE__)+'/views/application.js')
     end
 
     post '/events/:id/confirm' do
@@ -147,10 +165,6 @@ module TwitRSVP
     get '/peace' do
       session.clear
       redirect '/'
-    end
-
-    get '/application.js' do
-      @application_js ||= File.read(File.dirname(__FILE__)+'/views/application.js')
     end
   end
 end

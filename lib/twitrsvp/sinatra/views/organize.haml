@@ -15,7 +15,7 @@
     %input{:type => 'text', :name => 'address', :size => 40, :value => @event.address}
   %label{:for => 'starts_at'}
     %h2 Date/Time
-    %input{:type => 'text', :name => 'starts_at', :size => 40, :value => params['starts_at']}
+    %input.date-picker{:type => 'text', :name => 'starts_at', :size => 40, :value => params['starts_at']}
   %label{:for => 'description'}
     %h2 140 Character description of the event
     %textarea{:name => 'description', :rows => 5, :columns => 76}

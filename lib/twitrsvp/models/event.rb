@@ -24,6 +24,10 @@ module TwitRSVP
     before :create, :geocode
     before :create, :create_permalink
 
+    def google_map_link
+      address.nil? ? nil : "http://maps.google.com/maps?q=#{address.gsub(/\s/, '+')}"
+    end
+
     def geocode
       self.longitude, self.latitude, self.address = TwitRSVP.geocode(address) unless address.nil?
     rescue OpenURI::HTTPError

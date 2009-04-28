@@ -1,45 +1,39 @@
-%h1= @event.description
-%h2= "#{@event.localtime.strftime('%a %b %e -> %l:%M %P')} #{@event.user.time_zone}"
+#event_header
+  #event_description.left
+    %h2= @event.name
+    - if @event.description
+      %p= @event.description
+  #calendar.left
+    %h1= @event.localtime.strftime('%A')
+    .month_day= "#{@event.localtime.strftime('%b')} #{number_to_ordinal(@event.localtime.day)}"
+    %h2= @event.localtime.strftime('%l:%M %p')
+  .clear
+%h2 
+  = "at #{@event.place}"
+  - unless @event.google_map_link.nil?
+    %a{:href => @event.google_map_link, :rel => '_none' } Link
+- if @event.longitude && @event.latitude
+  %span#address_listing{:style => 'display:none'}
+    @event.address
+  #map
+    %script{:type => 'text/javascript'}
+      = 'var map = new GMap2(document.getElementById("map"));'
+      = "map.setCenter(new GLatLng(#{@event.latitude}, #{@event.longitude}), 15);"
+      = "var point = new GLatLng(#{@event.latitude}, #{@event.longitude});"
+      = "map.addOverlay(new GMarker(point, {title:'#{@event.address}'}));"
+      = "map.setUIToDefault();"
 
-%h3 Attendees
-- unless @event.confirmed.empty?
-  %ul.confirmed
-    - @event.confirmed.each do |attendee|
-      %li
-        %a{:href => attendee.user.url}
-          %img{:src => attendee.user.avatar, :alt => attendee.user.name}
-- else
-  %h5 No one is coming, yet!
 
-%h3 Pending
-- unless @event.invited.empty?
-  %ul.invited
-    - @event.invited.each do |attendee|
-      %li
-        %a{:href => attendee.user.url}
-          %img{:src => attendee.user.avatar, :alt => attendee.user.name}
-- else
-  %h5 Everyone has made their decision!
-
-%h3 Declined
-- unless @event.declined.empty?
-  %ul.declined
-    - @event.declined.each do |attendee|
-      %li
-        %a{:href => attendee.user.url}
-          %img{:src => attendee.user.avatar, :alt => attendee.user.name}
-- else
-  %h5 No one has declined!
-
-%a{:href => '/'} Home
-
-%form{:action => event_url(@event)+'/confirm', :method => 'POST'}
-  %input.submit{:type => 'submit', :value => "I'll be there!"}
-
-%form{:action => event_url(@event)+'/decline', :method => 'POST'}
-  %input.submit{:type => 'submit', :value => "I can't make it"}
-
-- if current_user.id == @event.user_id
-  %form{:action => event_url(@event), :method => 'POST'}
-    %input{:type => 'hidden', :name => '_method', :value => "delete"}
-    %input.submit{:type => 'submit', :value => "Cancel the entire event"}
+#attendees
+  #going_not_going.left
+    #going.bottom_space
+      %h2 Going:
+      = @event.confirmed.map { |attendee| "<a class='positive' href='#{attendee.user.url}'>#{attendee.user.name}</a>" }.join(', ')
+    #not_going.bottom_space
+      %h2 Not Going:
+      = @event.declined.map { |attendee| "<a class='negative' href='#{attendee.user.url}'>#{attendee.user.name}</a>" }.join(', ')
+  #unresponsive.left
+    %h2 Unresponsive:
+    = @event.invited.map { |attendee| "<a class='positive' href='#{attendee.user.url}'>#{attendee.user.name}</a>" }.join(', ')
+  .clear
+#rounded_footer
