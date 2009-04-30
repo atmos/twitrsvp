@@ -120,10 +120,11 @@ module TwitRSVP
         events.each do |event|
           next if event.start_at < now
           attendee = event.attendees.detect { |attendee| attendee if attendee.user.twitter_id == message['sender_id'] }
+          next if attendee.nil? || attendee.updated_at > DateTime.parse(message['created_at'])
           if message['text'] =~ /^yes (\w{4})/i
             attendee.confirm! if attendee.dm_key == $1
           elsif message['text'] =~ /^no (\w{4})/i
-            TwitRSVP::Log.logger.info("Response: #{attendee.inspect}, #{$1}")
+            attendee.decline! if attendee.dm_key == $1
           end
         end
       end

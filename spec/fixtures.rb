@@ -81,7 +81,7 @@ module TwitRSVP::Fixtures
 
   def self.successful_direct_message_query(attendees)
     messages = attendees.map do |attendee|
-      "{\"sender_id\":#{attendee.user.twitter_id},\"text\":\"#{rand(10) % 2 == 0 ? 'yes' : 'no'} #{attendee.dm_key}\"}"
+      "{\"sender_id\":#{attendee.user.twitter_id},\"created_at\":\"#{Chronic.parse("10 minutes ago").utc}\",\"text\":\"#{rand(10) % 2 == 0 ? 'yes' : 'no'} #{attendee.dm_key}\"}"
     end
     "[#{messages.join(',')}]"
   end

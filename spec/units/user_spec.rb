@@ -73,6 +73,7 @@ describe "TwitRSVP::User" do
     TwitRSVP::User.gen
     lambda { TwitRSVP::User.handle_direct_message_replies }.should_not raise_error
   end
+
   it "can retrieve direct messages for the users" do
     user  = TwitRSVP::User.gen
     event = TwitRSVP::Event.gen(:user_id => user.id)

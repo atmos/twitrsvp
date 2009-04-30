@@ -86,6 +86,7 @@ module TwitRSVP
     get '/events/:id' do
       @event = TwitRSVP::Event.get(params['id'])
       @event = TwitRSVP::Event.first(:permalink => params['id']) if @event.nil?
+      @page_title = @event.short_name
       throw(:halt, [401, "You aren't authorized to view this event"]) unless @event.authorized?(current_user)
       haml :event
     end
@@ -114,6 +115,7 @@ module TwitRSVP
     end
 
     get '/organize' do
+      @page_title = "Create a new Event"
       @event = current_user.events.build(:start_at => Chronic.parse('2 hours from now').utc + 86400)
       haml(:organize)
     end
