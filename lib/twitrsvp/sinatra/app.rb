@@ -1,5 +1,4 @@
 module TwitRSVP
-  
   class App < Sinatra::Base
     set :views, File.dirname(__FILE__)+'/views'
     enable :sessions
@@ -12,6 +11,7 @@ module TwitRSVP
       next if request.path_info == '/signup'
       next if request.path_info == '/callback'
       next if request.path_info == '/application.js'
+      next if request.path_info == '/favicon.ico'
       unless session[:user_id]
         session[:return_to] = request.path_info
         throw(:halt, [302, {'Location' => '/signup'}, '']) 
@@ -34,6 +34,11 @@ module TwitRSVP
       def prune_expired_events(events)
         limit = Time.now.utc - 86400
         events.map { |event| event if event.start_at > limit }.compact
+      end
+
+      def start_time(event)
+        event.start_at = (Time.now.utc + 86400) if event.start_at.nil?
+        event.localtime
       end
 
       def number_to_ordinal(num)
@@ -96,21 +101,20 @@ module TwitRSVP
 
     put '/events/:id' do
       @event = TwitRSVP::Event.get(params['id'])
-      #@event.update_attributes(current_user.organize(params['name'], params['place'], params['address'], params['description'],
-                                     #params['starts_at'], params['usernames'].split(','))
-
+      @event.update_attributes(:name => params['name'], :place => params['place'], :address => params['address'],
+                               :description => params['description'])
       @event.valid? ? redirect(event_url(@event)) : haml(:organize)
     end
 
     post '/events' do
       @event = current_user.organize(params['name'], params['place'], params['address'], params['description'],
-                                     params['starts_at'], params['usernames'].split(','))
+                                     params['start_date'], params['start_time'], params['usernames'].split(','))
 
       @event.valid? ? redirect(event_url(@event)) : haml(:organize)
     end
 
     get '/organize' do
-      @event = Event.new
+      @event = current_user.events.build(:start_at => Chronic.parse('2 hours from now').utc + 86400)
       haml(:organize)
     end
 

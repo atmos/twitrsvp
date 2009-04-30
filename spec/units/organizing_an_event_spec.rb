@@ -9,6 +9,7 @@ describe "organizing an event" do
   it "can organize events" do
     get '/organize'
 
+    last_response.should have_selector("h1:contains('Welcome Quentin Blake,')")
     last_response.should have_selector("form[action='/events']")
     last_response.should have_selector("form[action='/events'] label[for='name']")
     last_response.should have_selector("form[action='/events'] input[type='text'][name='name']")
@@ -18,14 +19,16 @@ describe "organizing an event" do
     last_response.should have_selector("form[action='/events'] input[type='text'][name='address']")
     last_response.should have_selector("form[action='/events'] label[for='description']")
     last_response.should have_selector("form[action='/events'] textarea[name='description']")
-    last_response.should have_selector("form[action='/events'] label[for='starts_at']")
-    last_response.should have_selector("form[action='/events'] input[type='text'][name='starts_at']")
+    last_response.should have_selector("form[action='/events'] label[for='start_date']")
+    last_response.should have_selector("form[action='/events'] input[type='text'][name='start_date']")
+    last_response.should have_selector("form[action='/events'] label[for='start_time']")
+    last_response.should have_selector("form[action='/events'] input[type='text'][name='start_time']")
     last_response.should have_selector("form[action='/events'] textarea[name='usernames']")
     last_response.should have_selector("form[action='/events'] input[type='submit'][value='Create!']")
     last_response.should have_selector("form[action='/events'] a[href='/']:contains('Cancel')")
 
-    post '/events', :name => /\w{4,20}/.gen, :place => /\w{4,20}/.gen,
-      :starts_at => 'tonight at 8', :address => '1535 Pearl St, Boulder, CO',
+    post '/events', :name => /\w{4,20}/.gen, :place => /\w{4,20}/.gen, :address => '1535 Pearl St, Boulder, CO',
+      :start_date => Time.now.utc.strftime('%Y/%m/%d'), :start_time => Time.now.utc.strftime('%l:%M'),
       :usernames => 'atmos, ubermajestix', :description => /[:paragraph]/.gen[0..139]
     last_response.headers['Location'].should match(%r!/events/\d!)
   end
@@ -33,6 +36,7 @@ describe "organizing an event" do
     post '/events', :name => /\w{4,20}/.gen, :place => /\w{4,20}/.gen,
       :address => '1535 Pearl St, Boulder, CO', :usernames => 'atmos, ubermajestix', :description => /[:paragraph]/.gen[0..139]
 
+    last_response.should have_selector("h1:contains('Welcome Quentin Blake,')")
     last_response.should have_selector("form[action='/events']")
     last_response.should have_selector("form[action='/events'] label[for='name']")
     last_response.should have_selector("form[action='/events'] input[type='text'][name='name']")
@@ -42,8 +46,10 @@ describe "organizing an event" do
     last_response.should have_selector("form[action='/events'] input[type='text'][name='address']")
     last_response.should have_selector("form[action='/events'] label[for='description']")
     last_response.should have_selector("form[action='/events'] textarea[name='description']")
-    last_response.should have_selector("form[action='/events'] label[for='starts_at']")
-    last_response.should have_selector("form[action='/events'] input[type='text'][name='starts_at']")
+    last_response.should have_selector("form[action='/events'] label[for='start_date']")
+    last_response.should have_selector("form[action='/events'] input[type='text'][name='start_date']")
+    last_response.should have_selector("form[action='/events'] label[for='start_time']")
+    last_response.should have_selector("form[action='/events'] input[type='text'][name='start_time']")
     last_response.should have_selector("form[action='/events'] textarea[name='usernames']:contains('atmos, ubermajestix')")
     last_response.should have_selector("form[action='/events'] input[type='submit'][value='Create!']")
     last_response.should have_selector("form[action='/events'] a[href='/']:contains('Cancel')")

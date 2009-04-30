@@ -1,3 +1,5 @@
+ENV["RACK_ENV"] = "test"
+
 $TESTING=true
 $:.push File.join(File.dirname(__FILE__), '..', 'lib')
 require 'rubygems'
@@ -5,7 +7,7 @@ require 'randexp'
 require 'twitrsvp'
 require 'do_sqlite3'
 require 'rack/test'
-require 'webrat/sinatra'
+require 'webrat'
 require 'dm-sweatshop'
 require 'fakeweb'
 require 'pp'
@@ -42,8 +44,14 @@ Spec::Runner.configure do |config|
 
   def app
     @app = Rack::Builder.new do
+      TwitRSVP::App.set :environment, 'production'
       run TwitRSVP::App
     end
+  end
+
+  def quentin_time(t)
+    time_offset = Time.now.dst? ? 3600 : 0
+    t + -25200 + time_offset
   end
 
   def login_quentin

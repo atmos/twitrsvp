@@ -23,8 +23,8 @@ module TwitRSVP
     has n, :invites, :class_name => '::TwitRSVP::Attendee', 
            :child_key => [:user_id], :order => [:status.asc]
 
-    def organize(name, place, address, description, start_time, names)
-      begin_time = Chronic.parse(start_time)
+    def organize(name, place, address, description, start_date, start_time, names)
+      begin_time = Chronic.parse("#{start_date} at #{start_time}")
       event = self.events.create({:user_id => self.id,
                                   :name        => name, 
                                   :description => description,

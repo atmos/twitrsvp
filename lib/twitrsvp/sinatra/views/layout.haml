@@ -7,6 +7,7 @@
     %script{:type => 'text/javascript', :src => '/js/jquery-1.3.2.js'}
     %script{:type => 'text/javascript', :src => '/js/ui.core.js'}
     %script{:type => 'text/javascript', :src => '/js/ui.datepicker.js'}
+    %script{:type => 'text/javascript', :src => '/js/jquery.timePicker.js'}
     %script{:type => 'text/javascript', :src => "http://maps.google.com/maps?file=api&v=2&sensor=true&key=ABQIAAAA9elu2N8AA1OHV-W3tjttIRTyfKNApYviIr_4tsng-m8_nML1MxTjUDJuCGOEla7rxTSEuQDer26d3g"}
     %script{:type => 'text/javascript', :src => '/application.js'}
 
@@ -19,7 +20,7 @@
           %ul#nav
             %li{:class => (request.path_info == '/organize' ? 'current' : '') }
               %a{:href => '/organize' } schedule
-            %li{:class => (request.path_info == '/organize' ? '' : 'current') }
+            %li{:class => (request.path_info == '/' ? 'current' : '') }
               %a{:href => '/'} manage
         #main
           = yield

@@ -11,7 +11,7 @@
 %h2 
   = "at #{@event.place}"
   - unless @event.google_map_link.nil?
-    %a{:href => @event.google_map_link, :rel => '_none' } Link
+    %a{:href => @event.google_map_link, :target => '_none' } Link
 - if @event.longitude && @event.latitude
   %span#address_listing{:style => 'display:none'}
     @event.address

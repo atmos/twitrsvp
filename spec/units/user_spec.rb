@@ -28,7 +28,8 @@ describe "TwitRSVP::User" do
 
       lambda do
         @user.organize(/\w{5,14}/.gen, /w{3,12}/.gen, '1535 Pearl St, Boulder, CO',
-                     'a big shindig with beer and stuff', 'tomorrow night at 8', 
+                     'a big shindig with beer and stuff',
+                     Time.now.strftime('%Y/%m/%d'), Time.now.strftime('%l:%M'),
                      ['atmos', 'ubermajestix', '@aniero'])
       end.should change(@user.events, :size).by(1)
       event = @user.events.last
@@ -41,7 +42,8 @@ describe "TwitRSVP::User" do
                            [{:string => TwitRSVP::Fixtures.unsuccessful_google_response, :status => ['401', 'Unauthorized']}])
       lambda do
         @user.organize(/\w{5,14}/.gen, /w{3,12}/.gen, '15359428972 Somefreakinroadgooglecantfind, nome, AK',
-                     'a big shindig with beer and stuff', 'tomorrow night at 8', 
+                     'a big shindig with beer and stuff',
+                     Time.now.strftime('%Y/%m/%d'), Time.now.strftime('%l:%M'),
                      ['atmos', 'ubermajestix', '@aniero'])
       end.should change(@user.events, :size).by(1)
       event = @user.events.last

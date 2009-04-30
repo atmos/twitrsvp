@@ -10,13 +10,9 @@ describe "viewing an event" do
     event = TwitRSVP::Event.get(attendee.event_id)
 
     get "/events/#{event.id}"
-    last_response.should have_selector("h1:contains('#{event.description}')")
-    last_response.should have_selector("h2")
-    #last_response.should have_selector("ul.confirmed")
-    last_response.should have_selector("ul")
-    #last_response.should have_selector("ul.declined")
-    last_response.should have_selector("form[action='/events/#{event.id}/confirm'] > input[type='submit']")
-    last_response.should have_selector("form[action='/events/#{event.id}/decline'] > input[type='submit']")
+    last_response.should have_selector("p:contains('#{event.description}')")
+    last_response.should have_selector("#attendees #going_not_going")
+    last_response.should have_selector("#attendees #unresponsive")
   end
 
   it "displays the event after authenticating when the current_user is an attendee of the event" do
@@ -31,12 +27,8 @@ describe "viewing an event" do
     login_quentin
     follow_redirect!
 
-    last_response.should have_selector("h1:contains('#{event.description}')")
-    last_response.should have_selector("h2")
-    #last_response.should have_selector("ul.confirmed")
-    last_response.should have_selector("ul")
-    #last_response.should have_selector("ul.declined")
-    last_response.should have_selector("form[action='/events/#{event.id}/confirm'] > input[type='submit']")
-    last_response.should have_selector("form[action='/events/#{event.id}/decline'] > input[type='submit']")
+    last_response.should have_selector("p:contains('#{event.description}')")
+    last_response.should have_selector("#attendees #going_not_going")
+    last_response.should have_selector("#attendees #unresponsive")
   end
 end

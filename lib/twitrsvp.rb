@@ -74,4 +74,12 @@ module TwitRSVP
     end
     yield
   end
+
+  def self.date_format(date)
+    date.strftime('%Y/%m/%d')
+  end
+
+  def self.time_format(date)
+    date.strftime('%l:%M %p')
+  end
 end
