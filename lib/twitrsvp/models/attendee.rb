@@ -31,6 +31,14 @@ module TwitRSVP
     end
     after :create, :notify!
 
+    def dm_response(text)
+      if text =~ /^yes (\w{4})/i
+        confirm! if dm_key == $1
+      elsif text =~ /^no (\w{4})/i
+        decline! if dm_key == $1
+      end
+    end
+
     def notify!
       return if user.twitter_id == event.user.twitter_id
       message = "#{event.short_name} - #{event.localtime.strftime('%b %e@%l:%M%P')}"[0..59]

@@ -27,8 +27,8 @@ module TwitRSVP
         session[:user_id].nil? ? nil : ::TwitRSVP::User.get(session[:user_id])
       end
 
-      def event_url(event)
-        "/events/#{event.id}"
+      def event_url(event, suffix = nil)
+        "/events/#{event.id}#{suffix}"
       end
 
       def prune_expired_events(events)
@@ -103,7 +103,8 @@ module TwitRSVP
     put '/events/:id' do
       @event = TwitRSVP::Event.get(params['id'])
       @event.update_attributes(:name => params['name'], :place => params['place'], :address => params['address'],
-                               :description => params['description'])
+                               :description => params['description'], 
+                               :start_at => Chronic.parse("#{params['start_date']} at #{params['start_time']}"))
       @event.valid? ? redirect(event_url(@event)) : haml(:organize)
     end
 

@@ -57,7 +57,7 @@ module TwitRSVP
 
     def self.create_twitter_user(twitter_id)
       content = Curl::Easy.perform("http://twitter.com/users/show/#{twitter_id}.json") do |curl|
-        curl.timeout = 30
+        curl.timeout = 10 
       end
       user_info = JSON.parse(content.body_str)
       raise UserCreationError.new("Unable to find '#{twitter_id}'") if(user_info['error'] == 'Not found')
@@ -121,11 +121,7 @@ module TwitRSVP
           next if event.start_at < now
           attendee = event.attendees.detect { |attendee| attendee if attendee.user.twitter_id == message['sender_id'] }
           next if attendee.nil? || attendee.updated_at > DateTime.parse(message['created_at'])
-          if message['text'] =~ /^yes (\w{4})/i
-            attendee.confirm! if attendee.dm_key == $1
-          elsif message['text'] =~ /^no (\w{4})/i
-            attendee.decline! if attendee.dm_key == $1
-          end
+          attendee.dm_response(message['text'])
         end
       end
     end

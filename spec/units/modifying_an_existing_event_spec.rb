@@ -17,7 +17,7 @@ describe "modifying an event" do
     last_response.should have_selector("form[action='/events/#{event.id}'] label[for='place']")
     last_response.should have_selector("form[action='/events/#{event.id}'] input[type='text'][name='place'][value='#{event.place}']")
     last_response.should have_selector("form[action='/events/#{event.id}'] label[for='address']")
-    last_response.should have_selector("form[action='/events/#{event.id}'] input[type='text'][name='address']")
+    last_response.should have_selector("form[action='/events/#{event.id}'] textarea[name='address']")
     last_response.should have_selector("form[action='/events/#{event.id}'] label[for='start_date']")
     last_response.should have_selector("form[action='/events/#{event.id}'] input[type='text'][name='start_date'][value='#{TwitRSVP.date_format(quentin_time(event.start_at))}']")
     last_response.should have_selector("form[action='/events/#{event.id}'] label[for='start_time']")
@@ -27,6 +27,6 @@ describe "modifying an event" do
     last_response.should have_selector("form[action='/events/#{event.id}'] p:contains('#{event.attendees.map { |attendee| attendee.user.screen_name }.join(',')}')")
     last_response.should have_selector("form[action='/events/#{event.id}'] textarea[name='usernames']")
     last_response.should have_selector("form[action='/events/#{event.id}'] input[type='submit'][value='Create!']")
-    last_response.should have_selector("form[action='/events/#{event.id}'] a[href='/']:contains('Cancel')")
+    last_response.should have_selector("form[action='/events/#{event.id}'] a.unsubmit.negative[href='/']:contains('Oh Nevermind')")
   end
 end

@@ -15,20 +15,42 @@
 
   %body
     #page
-      #center
-        #header
-          %a#logo{:href => '/'}
-            twitRSVP
-          %ul#nav
-            %li{:class => (request.path_info =~ %r!/(events/\d+/edit|organize)! ? 'current' : '') }
-              %a{:href => '/organize' } schedule
-            %li{:class => (request.path_info == '/' ? 'current' : '') }
-              %a{:href => '/'} manage
-        #main
-          = yield
+      / Header*********
+      #header
+        %a#logo{:href => '/'}
+          twitRSVP
+        %ul#nav
+          %li{:class => (request.path_info =~ %r!/(events/\d+/edit|organize)! ? 'current' : '') }
+            %a{:href => '/organize' } schedule
+          %li{:class => (request.path_info == '/' ? 'current' : '') }
+            %a{:href => '/'} manage
+      / Header/Sidebar*********
+      #sidebar.left
+        - if request.path_info == '/' && !@declined_events.nil? && @declined_events.any?
+          #declined
+            %h1.declined_header Declined:
+            - @declined_events.each do |event|
+              .declined_event
+                %h3
+                  %a{:href => event_url(event)}= event.name
+                %p.context= event.localtime.strftime('%a %b %e @ %l:%M %P')
+                %a.positive{:href => event_url(event, '/confirm')} accept
+        %ul
+          %li{:class => (request.path_info =~ %r!/(events/\d+/edit|organize)! ? 'current' : '') }
+            %a{:href => '/organize' } schedule
+          %li{:class => (request.path_info == '/' ? 'current' : '') }
+            %a{:href => '/'} manage
 
-        #rounded_footer
-        #footer 
+
+      / Sidebar/Main*********
+      #main.left
+        = yield
+
+      / Main/Footer*********
+      #rounded_footer.clear
+      #footer 
+        #twito.right Twito Ayes. Straight Outta Boulder.
+        #bubble.right
           %p
             TwitRSVP uses
             %a{:href => 'http://twitter.com'} twitter's
@@ -40,5 +62,3 @@
             %p
               Please,
               %a{:href => '/peace'} log me out.
-
-        #twito Twito Ayes. Straight Outta Boulder.

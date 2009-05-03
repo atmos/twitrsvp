@@ -1,6 +1,6 @@
 TwitRSVP::User.fix {{
   :twitter_id => /\d{8,14}/.gen,
-  :screen_name => /\w{4,12}/.gen,
+  :screen_name => %w(atmos jlarrimore ubermajestix aniero stolt45).pick,
   :name => "#{/\w{2,8}/.gen.capitalize} #{/\w{3,12}/.gen.capitalize}",
   :token => /\w{8,16}/.gen,
   :secret => /\w{8,16}/.gen,

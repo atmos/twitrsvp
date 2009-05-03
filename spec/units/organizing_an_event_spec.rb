@@ -16,7 +16,7 @@ describe "organizing an event" do
     last_response.should have_selector("form[action='/events'] label[for='place']")
     last_response.should have_selector("form[action='/events'] input[type='text'][name='place']")
     last_response.should have_selector("form[action='/events'] label[for='address']")
-    last_response.should have_selector("form[action='/events'] input[type='text'][name='address']")
+    last_response.should have_selector("form[action='/events'] textarea[name='address']")
     last_response.should have_selector("form[action='/events'] label[for='description']")
     last_response.should have_selector("form[action='/events'] textarea[name='description']")
     last_response.should have_selector("form[action='/events'] label[for='start_date']")
@@ -25,7 +25,7 @@ describe "organizing an event" do
     last_response.should have_selector("form[action='/events'] input[type='text'][name='start_time']")
     last_response.should have_selector("form[action='/events'] textarea[name='usernames']")
     last_response.should have_selector("form[action='/events'] input[type='submit'][value='Create!']")
-    last_response.should have_selector("form[action='/events'] a[href='/']:contains('Cancel')")
+    last_response.should have_selector("form[action='/events'] a.unsubmit.negative[href='/']:contains('Oh Nevermind')")
 
     post '/events', :name => /\w{4,20}/.gen, :place => /\w{4,20}/.gen, :address => '1535 Pearl St, Boulder, CO',
       :start_date => Time.now.utc.strftime('%Y/%m/%d'), :start_time => Time.now.utc.strftime('%l:%M'),
@@ -43,7 +43,7 @@ describe "organizing an event" do
     last_response.should have_selector("form[action='/events'] label[for='place']")
     last_response.should have_selector("form[action='/events'] input[type='text'][name='place']")
     last_response.should have_selector("form[action='/events'] label[for='address']")
-    last_response.should have_selector("form[action='/events'] input[type='text'][name='address']")
+    last_response.should have_selector("form[action='/events'] textarea[name='address']")
     last_response.should have_selector("form[action='/events'] label[for='description']")
     last_response.should have_selector("form[action='/events'] textarea[name='description']")
     last_response.should have_selector("form[action='/events'] label[for='start_date']")
@@ -52,6 +52,6 @@ describe "organizing an event" do
     last_response.should have_selector("form[action='/events'] input[type='text'][name='start_time']")
     last_response.should have_selector("form[action='/events'] textarea[name='usernames']:contains('atmos, ubermajestix')")
     last_response.should have_selector("form[action='/events'] input[type='submit'][value='Create!']")
-    last_response.should have_selector("form[action='/events'] a[href='/']:contains('Cancel')")
+    last_response.should have_selector("form[action='/events'] a.unsubmit.negative[href='/']:contains('Oh Nevermind')")
   end
 end
