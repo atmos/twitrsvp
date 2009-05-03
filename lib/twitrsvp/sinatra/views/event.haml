@@ -6,7 +6,7 @@
   #calendar.left
     %h1= @event.localtime.strftime('%A')
     .month_day= "#{@event.localtime.strftime('%b')} #{number_to_ordinal(@event.localtime.day)}"
-    %h2= @event.localtime.strftime('%l:%M %p')
+    %h2= "#{@event.localtime.strftime('%l:%M %p')} #{@event.localtime.zone}"
   .clear
 %h2 
   = "at #{@event.place}"
@@ -22,7 +22,6 @@
       = "var point = new GLatLng(#{@event.latitude}, #{@event.longitude});"
       = "map.addOverlay(new GMarker(point, {title:'#{@event.address}'}));"
       = "map.setUIToDefault();"
-
 
 #attendees
   #going_not_going.left
