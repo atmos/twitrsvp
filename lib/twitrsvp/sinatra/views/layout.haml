@@ -37,9 +37,7 @@
                 %a.positive.should_post{:href => event_url(event, '/confirm')} accept
         %ul
           %li{:class => (request.path_info == '/about' ? 'current' : '') }
-            %a{:href => '/'} About
-          %li{:class => (request.path_info == '/faq' ? 'current' : '') }
-            %a{:href => '/'} FAQ
+            %a{:href => '/about'} About
 
 
       / Sidebar/Main*********
