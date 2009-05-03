@@ -11,6 +11,7 @@ describe "organizing an event" do
 
     last_response.should have_selector("h1:contains('Welcome Quentin Blake,')")
     last_response.should have_selector("form[action='/events']")
+    last_response.should_not have_selector("form[action='/events'][name='_method'][value='put']")
     last_response.should have_selector("form[action='/events'] label[for='name']")
     last_response.should have_selector("form[action='/events'] input[type='text'][name='name']")
     last_response.should have_selector("form[action='/events'] label[for='place']")
@@ -38,6 +39,7 @@ describe "organizing an event" do
 
     last_response.should have_selector("h1:contains('Welcome Quentin Blake,')")
     last_response.should have_selector("form[action='/events']")
+    last_response.should_not have_selector("form[action='/events'][name='_method'][value='put']")
     last_response.should have_selector("form[action='/events'] label[for='name']")
     last_response.should have_selector("form[action='/events'] input[type='text'][name='name']")
     last_response.should have_selector("form[action='/events'] label[for='place']")

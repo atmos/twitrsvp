@@ -34,12 +34,12 @@
                 %h3
                   %a{:href => event_url(event)}= event.name
                 %p.context= event.localtime.strftime('%a %b %e @ %l:%M %P')
-                %a.positive{:href => event_url(event, '/confirm')} accept
+                %a.positive.should_post{:href => event_url(event, '/confirm')} accept
         %ul
-          %li{:class => (request.path_info =~ %r!/(events/\d+/edit|organize)! ? 'current' : '') }
-            %a{:href => '/organize' } schedule
-          %li{:class => (request.path_info == '/' ? 'current' : '') }
-            %a{:href => '/'} manage
+          %li{:class => (request.path_info == '/about' ? 'current' : '') }
+            %a{:href => '/'} About
+          %li{:class => (request.path_info == '/faq' ? 'current' : '') }
+            %a{:href => '/'} FAQ
 
 
       / Sidebar/Main*********
