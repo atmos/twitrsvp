@@ -36,11 +36,6 @@ module TwitRSVP
         events.map { |event| event if event.start_at > limit }.compact
       end
 
-      def start_time(event)
-        event.start_at = (Time.now.utc + 86400) if event.start_at.nil?
-        event.localtime
-      end
-
       def number_to_ordinal(num)
         num = num.to_i
         if (10...20)===num

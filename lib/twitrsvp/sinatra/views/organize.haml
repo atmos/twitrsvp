@@ -27,11 +27,11 @@
   .left
     %label{:for => 'start_date'}
       %h2 Date
-      %input.date-picker.left{:type => 'text', :name => 'start_date', :size => 15, :value => TwitRSVP.date_format(start_time(@event)) }
+      %input.date-picker.left{:type => 'text', :name => 'start_date', :size => 15, :value => TwitRSVP.date_format(@event.start_time) }
   .left
     %label{:for => 'start_time'}
       %h2 Time
-      %input.time-picker.left{:type => 'text', :name => 'start_time', :size => 10, :value => TwitRSVP.time_format(start_time(@event)) }
+      %input.time-picker.left{:type => 'text', :name => 'start_time', :size => 10, :value => TwitRSVP.time_format(@event.start_time) }
   .clear
     %label{:for => 'description'}
       %h2

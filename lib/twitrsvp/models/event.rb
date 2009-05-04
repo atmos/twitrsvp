@@ -66,5 +66,10 @@ module TwitRSVP
     def authorized?(user)
       user_id == user.id || attendees.select { |attendee| attendee.user_id == user.id }
     end
+
+    def start_time
+      self.start_at = (Time.now.utc + 86400) if start_at.nil?
+      localtime
+    end
   end
 end
