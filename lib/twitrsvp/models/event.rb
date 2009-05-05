@@ -43,8 +43,7 @@ module TwitRSVP
     end
 
     def localtime
-      time_offset = Time.now.dst? ? 3600 : 0
-      start_at + user.utc_offset + time_offset
+      user.tz.utc_to_local(start_at)
     end
 
     def invited

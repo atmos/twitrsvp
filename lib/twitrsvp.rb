@@ -34,6 +34,7 @@ require root + '/twitrsvp/models/user'
 require root + '/twitrsvp/models/event'
 require root + '/twitrsvp/models/attendee'
 require root + '/twitrsvp/sinatra/app'
+require root + '/twitrsvp/ext/tzinfo_timezone'
 
 module TwitRSVP
   module Log

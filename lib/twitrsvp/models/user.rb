@@ -23,13 +23,16 @@ module TwitRSVP
     has n, :invites, :class_name => '::TwitRSVP::Attendee', 
            :child_key => [:user_id], :order => [:status.asc]
 
-    def organize(name, place, address, description, start_date, start_time, names)
-      begin_time = Chronic.parse("#{start_date} at #{start_time}")
+    def tz
+      @tz ||= TzinfoTimezone[time_zone]
+    end
+
+    def organize(name, place, address, description, start_at, names)
       event = self.events.create({:user_id => self.id,
-                                  :name        => name, 
+                                  :name        => name,
                                   :description => description,
-                                  :place       => place, 
-                                  :start_at    => begin_time.nil? ? nil : begin_time.utc,
+                                  :place       => place,
+                                  :start_at    => start_at,
                                   :address     => address})
       if event.valid?
         names.each do |invitee_name|

@@ -28,6 +28,8 @@ spec = Gem::Specification.new do |s|
   s.add_dependency "curb", "~>0.3.2"
   s.add_dependency "nokogiri", "~>1.2.3"
   s.add_dependency "uuidtools", "~>1.0.7"
+  s.add_dependency "tzinfo", "~>0.3.13"
+  s.add_dependency "tztime", "~>0.1.0"
 
   s.require_path = 'lib'
   s.autorequire = GEM

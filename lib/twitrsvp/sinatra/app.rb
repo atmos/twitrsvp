@@ -23,6 +23,15 @@ module TwitRSVP
         ::TwitRSVP::OAuth.consumer
       end
 
+      def localtime(start_date, start_time)
+        time_of_day = Time.parse(start_time)
+        year, month, day = start_date.split('/')
+
+        current_user.tz.local_to_utc(Time.local(year, month, day, time_of_day.hour, time_of_day.min))
+      rescue => e
+        nil
+      end
+
       def current_user
         session[:user_id].nil? ? nil : ::TwitRSVP::User.get(session[:user_id])
       end
@@ -99,13 +108,13 @@ module TwitRSVP
       @event = TwitRSVP::Event.get(params['id'])
       @event.update_attributes(:name => params['name'], :place => params['place'], :address => params['address'],
                                :description => params['description'], 
-                               :start_at => Chronic.parse("#{params['start_date']} at #{params['start_time']}"))
+                               :start_at => localtime(params['start_date'], params['start_time']))
       @event.valid? ? redirect(event_url(@event)) : haml(:organize)
     end
 
     post '/events' do
       @event = current_user.organize(params['name'], params['place'], params['address'], params['description'],
-                                     params['start_date'], params['start_time'], params['usernames'].split(','))
+                                     localtime(params['start_date'], params['start_time']), params['usernames'].split(','))
 
       @event.valid? ? redirect(event_url(@event)) : haml(:organize)
     end
