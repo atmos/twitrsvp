@@ -37,7 +37,7 @@ module TwitRSVP
       end
 
       def attendee_uninvite(attendee)
-        "<a class='orange uninvited should_post' href='/events/#{attendee.event.id}/uninvite/#{attendee.id}'>[x]</a>"
+        "<a class='negative should_post' href='/events/#{attendee.event.id}/uninvite/#{attendee.id}'>[x]</a>"
       end
 
       def event_attendees_links(event)
@@ -92,8 +92,8 @@ module TwitRSVP
 
     get '/events/:id/edit' do
       @event = TwitRSVP::Event.get(params['id'])
-      @form_path = "/events/#{params['id']}"
       throw(:halt, [401, "You aren't authorized to view this event"]) unless @event.user == current_user
+      @form_path = "/events/#{params['id']}"
       haml :organize
     end
 
