@@ -3,6 +3,7 @@
   - if @pending_events.nil? || @pending_events.empty?
     %div.pending_event
       %h3 None at this time
+      %p &nbsp;
   - else
     - @pending_events.each do |event|
       .pending_event

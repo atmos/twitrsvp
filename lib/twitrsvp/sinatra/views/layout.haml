@@ -42,10 +42,10 @@
             #declined_tab.right
         %ul
           %li{:class => (request.path_info == '/about' ? 'current' : '') }
-            %a{:href => '/about'} About
+            %a{:href => '/about'} about
           - if current_user
             %li
-              %a{:href => '/peace'} Logout
+              %a{:href => '/peace'} logout
 
 
       / Sidebar/Main*********

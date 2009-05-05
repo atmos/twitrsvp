@@ -28,7 +28,11 @@
         = 'var map = new GMap2(document.getElementById("map"));'
         = "map.setCenter(new GLatLng(#{@event.latitude}, #{@event.longitude}), 15);"
         = "var point = new GLatLng(#{@event.latitude}, #{@event.longitude});"
-        = "map.addOverlay(new GMarker(point, {title:'#{@event.address}'}));"
+        = "var icon = build_icon();"
+        = "var html = \"<div class='map_info'><h2>It's time to party!</h2><a href='#{@event.google_map_link}' target='_blank'>Get Directions</a></div>\";"
+        = "var title = \"#{@event.name}\";"
+        = "var marker = createMarker(point, html, icon, title);"
+        = "map.addOverlay(marker);"
         = "map.setUIToDefault();"
 
 #events
