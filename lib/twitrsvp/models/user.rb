@@ -35,20 +35,7 @@ module TwitRSVP
                                   :start_at    => start_at,
                                   :address     => address})
       if event.valid?
-        names.each do |invitee_name|
-          next if invitee_name == screen_name
-          invitee_name = invitee_name.strip.gsub(/^@/, '')
-          next if invitee_name.blank?
-          begin
-            TwitRSVP.retryable(:times => 2) do 
-              user = User.first(:name => invitee_name)
-              user = User.create_twitter_user(invitee_name) if user.nil?
-              event.attendees.create(:user_id => user.id, :dm_key => /\w{4}/.gen)
-            end
-          rescue TwitRSVP::User::UserCreationError => e
-            TwitRSVP::Log.logger.info(e.message)
-          end
-        end
+        event.invite_users(names)
         event.attendees.create(:user_id => self.id,  :status => TwitRSVP::Attendee::CONFIRMED, :dm_key => /\w{4}/.gen)
       end
       event

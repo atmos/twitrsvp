@@ -11,8 +11,9 @@ describe "viewing an event" do
 
     get "/events/#{event.id}"
     last_response.should have_selector("p:contains('#{event.description}')")
-    last_response.should have_selector("#attendees #going_not_going")
-    last_response.should have_selector("#attendees #unresponsive")
+    last_response.should have_selector("#events #going")
+    last_response.should have_selector("#events #not_going")
+    last_response.should have_selector("#events #right_events")
   end
 
   it "displays the event after authenticating when the current_user is an attendee of the event" do
@@ -28,7 +29,8 @@ describe "viewing an event" do
     follow_redirect!
 
     last_response.should have_selector("p:contains('#{event.description}')")
-    last_response.should have_selector("#attendees #going_not_going")
-    last_response.should have_selector("#attendees #unresponsive")
+    last_response.should have_selector("#events #going")
+    last_response.should have_selector("#events #not_going")
+    last_response.should have_selector("#events #right_events")
   end
 end

@@ -27,6 +27,6 @@ describe "modifying an event" do
     last_response.should have_selector("form[action='/events/#{event.id}'] p:contains('#{event.attendees.map { |attendee| attendee.user.screen_name }.join(',')}')")
     last_response.should have_selector("form[action='/events/#{event.id}'] textarea[name='usernames']")
     last_response.should have_selector("form[action='/events/#{event.id}'] input[type='submit'][value='Create!']")
-    last_response.should have_selector("form[action='/events/#{event.id}'] a.unsubmit.negative[href='/']:contains('Oh Nevermind')")
+    last_response.should have_selector("form[action='/events/#{event.id}'] a.unsubmit.negative[href='/events/#{event.id}']:contains('Oh Nevermind')")
   end
 end

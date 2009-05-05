@@ -17,21 +17,22 @@
       %input{:type => 'text', :name => 'name', :size => 26, :value => @event.name}
   .left
     %label{:for => 'place'}
-      %h2 Location
+      %h2 Location:
       %input{:type => 'text', :name => 'place', :size => 26, :value => @event.place}
   .clear
     %label{:for => 'address'}
-      %h2 Address
+      %h2 Address:
       %textarea{:name => 'address', :rows => 2, :columns => 76}
         = @event.address
   .left
     %label{:for => 'start_date'}
-      %h2 Date
+      %h2 Date:
       %input.date-picker.left{:type => 'text', :name => 'start_date', :size => 15, :value => TwitRSVP.date_format(@event.start_time) }
   .left
     %label{:for => 'start_time'}
-      %h2 Time
+      %h2 Time:
       %input.time-picker.left{:type => 'text', :name => 'start_time', :size => 10, :value => TwitRSVP.time_format(@event.start_time) }
+      %a.time.left{:href => '#'} time
   .clear
     %label{:for => 'description'}
       %h2
@@ -50,5 +51,4 @@
       %br
 
   %input.submit{:type => 'submit', :value => 'Create!'}
-  or
-  %a.unsubmit.negative{:href => '/'} Oh Nevermind
+  %a.unsubmit.negative{:href => @event.new_record? ? '/' : event_url(@event)} Oh Nevermind

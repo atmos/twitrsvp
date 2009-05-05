@@ -21,6 +21,7 @@ module TwitRSVP
     belongs_to :user, :class_Name => '::TwitRSVP::User', :child_key => [:user_id]
     has n, :attendees, :order => [:status.asc]
 
+    before :save, :geocode
     before :create, :geocode
     before :create, :create_permalink
 
@@ -29,7 +30,7 @@ module TwitRSVP
     end
 
     def geocode
-      self.longitude, self.latitude, self.address = TwitRSVP.geocode(address) unless address.nil?
+      self.longitude, self.latitude, self.address = TwitRSVP.geocode(address) if attribute_dirty?(:address)
     rescue OpenURI::HTTPError
       self.longitude = self.latitude = self.address = ''
     end
@@ -69,6 +70,23 @@ module TwitRSVP
     def start_time
       self.start_at = (Time.now.utc + 86400) if start_at.nil?
       localtime
+    end
+
+    def invite_users(users)
+      users.each do |invitee_name|
+        next if invitee_name == user.screen_name
+        invitee_name = invitee_name.strip.gsub(/^@/, '')
+        next if invitee_name.blank?
+        begin
+          TwitRSVP.retryable(:times => 2) do 
+            user = User.first(:name => invitee_name)
+            user = User.create_twitter_user(invitee_name) if user.nil?
+            attendees.create(:user_id => user.id, :dm_key => /\w{4}/.gen)
+          end
+        rescue TwitRSVP::User::UserCreationError => e
+          TwitRSVP::Log.logger.info(e.message)
+        end
+      end
     end
   end
 end

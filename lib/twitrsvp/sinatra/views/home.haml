@@ -1,44 +1,44 @@
 #pending
   %h1.pending_header Pending
-  %div.pending_event
-    - if @pending_events.nil? || @pending_events.empty?
+  - if @pending_events.nil? || @pending_events.empty?
+    %div.pending_event
       %h3 None at this time
-    - else
-      - @pending_events.each do |event|
-        %div.left.event_detail
+  - else
+    - @pending_events.each do |event|
+      .pending_event
+        .left.event_detail
           %h3
-            %a{:href => "/events/#{event.id}"}= event.name
-          %p
+            %a{:href => event_url(event)}= event.name
+          %p.context
             = event.localtime.strftime('%a %b %e @ %l:%M %P')
             %br
             = event.place
-        %div.left.event_action
-          %a.positive.should_post{:href => "/events/#{event.id}/confirm"} accept
-        %div.left.event_action
-          %a.negative.should_post{:href => "/events/#{event.id}/decline"} decline
+        .right.event_action
+          %a.positive.should_post{:href => event_url(event, "/confirm")} accept
+          %a.negative.should_post{:href => event_url(event, "/decline")} decline
         %div.clear
 
-#your_and_going_to_events
-  #your_events.left
+#events
+  #left_events.left
     %h1 Your Events:
     - if @organized_events.nil? || @organized_events.empty?
       %div.your_event.left
-      %h3 None at this time
-      %div.clear
+        %h3 None at this time
+        %div.clear
     - else
       - @organized_events.each do |event|
-        %div.your_event.left
+        .your_event.left
           %h3
-            %a.event{:href => "/events/#{event.id}"}= event.name
-          %p
+            %a.event{:href => event_url(event)}= event.name
+          %p.context
             = event.localtime.strftime('%a %b %e @ %l:%M %P')
             %br
             = event.place
         %div.left.event_action
-          %a.negative{:href => "/events/#{event.id}/edit"} edit
+          %a.negative{:href => event_url(event, '/edit')} edit
         %div.clear
 
-  #attending_events.left
+  #right_events.left
     %h1 Going To:
     - if @confirmed_events.nil? || @confirmed_events.empty?
       %div.going_to.left
@@ -46,14 +46,14 @@
       %div.clear
     - else
       - @confirmed_events.each do |event|
-        %div.going_to.left
+        .attending_event.left
           %h3
-            %a.event{:href => "/events/#{event.id}"}= event.name
-          %p
+            %a.event{:href => event_url(event)}= event.name
+          %p.context
             = event.localtime.strftime('%a %b %e @ %l:%M %P')
             %br
             = event.place
-        %div.left.event_action
+        %div.right.event_action
           %a.negative.should_post{:href => "/events/#{event.id}/decline"} decline
         %div.clear
   %div.clear

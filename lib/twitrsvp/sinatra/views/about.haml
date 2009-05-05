@@ -1,7 +1,8 @@
 %h1 Hey, do you use twitter?  Would you mind trying this out?
 
-%h2
-  %a{:href => '/signup'} Get Started Now
+- unless current_user
+  %h2
+    %a{:href => '/signup'} Get Started Now
 
 %h2 What we were thinking when we created this
 %ul
@@ -21,14 +22,14 @@
     to send messages on your behalf without requring you to provide your password.
   %li
     Confirmation via direct messaging, "rsvp yes" or "rsvp no"
-%p
-  Another
-  %a{:href => 'http://github.com/atmos/twitrsvp'} open source
-  %a{:href => 'http://oauth.org'} oauth
-  experiment brought to you by 
-  %a{:href => 'http://twitter.com/atmos'} @atmos,
-  %a{:href => 'http://twitter.com/ubermajestix'} @ubermajestix,
-  and
-  %a{:href => 'http://twitter.com/jeffreylarrimore/'} @jlarrimore.
-  Hosted on
-  %a{:href => 'http://engineyard.com/solo'} EY Solo.
+  %li
+    Another
+    %a{:href => 'http://github.com/atmos/twitrsvp'} open source
+    %a{:href => 'http://oauth.org'} oauth
+    experiment brought to you by 
+    %a{:href => 'http://twitter.com/atmos'} @atmos,
+    %a{:href => 'http://twitter.com/ubermajestix'} @ubermajestix,
+    and
+    %a{:href => 'http://twitter.com/jeffreylarrimore/'} @jlarrimore.
+    Hosted on
+    %a{:href => 'http://engineyard.com/solo'} EY Solo.

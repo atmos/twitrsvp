@@ -16,6 +16,8 @@ module TwitRSVP
     property :notified, Boolean, :default => false
     property :dm_key,   String,  :nullable => false, :length => 4 
 
+    validates_is_unique :user_id, :scope => [:event_id]
+
     timestamps :at
     belongs_to :user, :class_name => '::TwitRSVP::User', :child_key => [:user_id]
     belongs_to :event, :class_name => '::TwitRSVP::Event', :child_key => [:event_id]

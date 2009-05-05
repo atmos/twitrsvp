@@ -42,7 +42,7 @@ module TwitRSVP
 
       def prune_expired_events(events)
         limit = Time.now.utc - 86400
-        events.map { |event| event if event.start_at > limit }.compact
+        events.sort { |a,b| b.start_at <=> a.start_at }.map { |event| event if event.start_at > limit }.compact
       end
 
       def number_to_ordinal(num)
@@ -109,6 +109,7 @@ module TwitRSVP
       @event.update_attributes(:name => params['name'], :place => params['place'], :address => params['address'],
                                :description => params['description'], 
                                :start_at => localtime(params['start_date'], params['start_time']))
+      @event.invite_users(params['usernames'].split(','))
       @event.valid? ? redirect(event_url(@event)) : haml(:organize)
     end
 
@@ -154,6 +155,11 @@ module TwitRSVP
         session[:request_token_secret] = request_token.secret
         redirect request_token.authorize_url
       end
+    end
+
+    get '/declined' do
+      @declined_events  = current_user.declined(100)
+      haml :declined
     end
 
     get '/' do

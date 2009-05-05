@@ -1,7 +1,13 @@
 #event_header
   #event_description.left
-    %h2= @event.name
-    - if @event.description
+    %h1
+      = @event.name
+      - if @event.user == current_user
+        %span.context
+          %a{:href => event_url(@event, '/edit')} edit
+    - if @event.description.blank?
+      %p no description for this event
+    - else
       %p= @event.description
   #calendar.left
     %h1= @event.localtime.strftime('%A')
@@ -11,28 +17,39 @@
 %h2 
   = "at #{@event.place}"
   - unless @event.google_map_link.nil?
-    %a{:href => @event.google_map_link, :target => '_none' } Link
+    %span.context
+      %a{:href => @event.google_map_link, :target => '_none' } Link
 - if @event.longitude && @event.latitude
   %span#address_listing{:style => 'display:none'}
     @event.address
   #map
-    %script{:type => 'text/javascript'}
-      = 'var map = new GMap2(document.getElementById("map"));'
-      = "map.setCenter(new GLatLng(#{@event.latitude}, #{@event.longitude}), 15);"
-      = "var point = new GLatLng(#{@event.latitude}, #{@event.longitude});"
-      = "map.addOverlay(new GMarker(point, {title:'#{@event.address}'}));"
-      = "map.setUIToDefault();"
+    - unless @event.longitude.blank? || @event.latitude.blank?
+      %script{:type => 'text/javascript'}
+        = 'var map = new GMap2(document.getElementById("map"));'
+        = "map.setCenter(new GLatLng(#{@event.latitude}, #{@event.longitude}), 15);"
+        = "var point = new GLatLng(#{@event.latitude}, #{@event.longitude});"
+        = "map.addOverlay(new GMarker(point, {title:'#{@event.address}'}));"
+        = "map.setUIToDefault();"
 
-#attendees
-  #going_not_going.left
-    #going.bottom_space
-      %h2 Going:
-      = @event.confirmed.map { |attendee| "<a class='positive' href='#{attendee.user.url}'>#{attendee.user.name}</a>" }.join(', ')
-    #not_going.bottom_space
-      %h2 Not Going:
-      = @event.declined.map { |attendee| "<a class='negative' href='#{attendee.user.url}'>#{attendee.user.name}</a>" }.join(', ')
-  #unresponsive.left
-    %h2 Unresponsive:
-    = @event.invited.map { |attendee| "<a class='positive' href='#{attendee.user.url}'>#{attendee.user.name}</a>" }.join(', ')
+#events
+  #left_events.left
+    #going
+      %h1 Going:
+      - if @event.confirmed.any?
+        = @event.confirmed.map { |attendee| "<a class='positive' href='#{attendee.user.url}'>#{attendee.user.name}</a>" }.join(', ')
+      - else
+        No One
+    #not_going
+      %h1 Not Going:
+      - if @event.declined.any?
+        = @event.declined.map { |attendee| "<a class='negative' href='#{attendee.user.url}'>#{attendee.user.name}</a>" }.join(', ')
+      - else
+        No One
+  #right_events.left
+    %h1 Unresponsive:
+    - if @event.invited.any?
+      = @event.invited.map { |attendee| "<a class='positive' href='#{attendee.user.url}'>#{attendee.user.name}</a>" }.join(', ')
+    - else
+      No One
   .clear
 #rounded_footer
