@@ -3,22 +3,19 @@
   %p
     In order to get things going you just need to fill out the following fields.
 
-- unless @event.errors.empty?
-  .errors
-    - @event.errors.each do |error|
-      %span= error
-
 %form{:action => (@form_path||'/events'), :method => 'POST'}
   - unless @event.new_record?
     %input{:type => 'hidden', :name => '_method', :value => 'put'}
   .left
     %label{:for => 'name'}
       %h2 Name of Event:
-      %input{:type => 'text', :name => 'name', :size => 26, :value => @event.name}
+      - css_class = @event.errors.on(:name).nil? ? '' : 'form_errors'
+      %input{:type => 'text', :name => 'name', :size => 26, :value => @event.name, :class => css_class}
   .left
     %label{:for => 'place'}
       %h2 Location:
-      %input{:type => 'text', :name => 'place', :size => 26, :value => @event.place}
+      - css_class = @event.errors.on(:place).nil? ? '' : 'form_errors'
+      %input{:type => 'text', :name => 'place', :size => 26, :value => @event.place, :class => css_class}
   .clear
     %label{:for => 'address'}
       %h2 Address:
@@ -27,18 +24,21 @@
   .left
     %label{:for => 'start_date'}
       %h2 Date:
-      %input.date-picker.left{:type => 'text', :name => 'start_date', :size => 15, :value => TwitRSVP.date_format(@event.start_time) }
+      - css_class = @event.errors.on(:start_at).nil? ? '' : 'form_errors'
+      %input.date-picker.left{:type => 'text', :name => 'start_date', :size => 15, :value => TwitRSVP.date_format(@event.start_time), :class => css_class }
   .left
     %label{:for => 'start_time'}
       %h2 Time:
-      %input.time-picker.left{:type => 'text', :name => 'start_time', :size => 10, :value => TwitRSVP.time_format(@event.start_time) }
+      - css_class = @event.errors.on(:start_at).nil? ? '' : 'form_errors'
+      %input.time-picker.left{:type => 'text', :name => 'start_time', :size => 10, :value => TwitRSVP.time_format(@event.start_time), :class => css_class }
       / %a.time.left{:href => '#'} time
   .clear
     %label{:for => 'description'}
       %h2
         Description:
         %span#charlimitinfo.context.orange (char left: 140)
-      %textarea{:name => 'description', :rows => 3, :columns => 76}
+      - css_class = @event.errors.on(:description).nil? ? '' : 'form_errors'
+      %textarea{:name => 'description', :rows => 3, :columns => 76, :class => css_class }
         = @event.description
   .clear
     %label{:for => 'usernames'}
