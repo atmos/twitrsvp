@@ -21,6 +21,6 @@ describe "viewing decilned events" do
     end
 
     get '/declined'
-    last_response.should have_selector("#pending h1.pending_header:contains('Declined')")
+    last_response.should have_selector("#pending h1.declined_header:contains('Declined')")
   end
 end

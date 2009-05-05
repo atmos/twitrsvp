@@ -24,7 +24,6 @@ describe "modifying an event" do
     last_response.should have_selector("form[action='/events/#{event.id}'] input[type='text'][name='start_time'][value='#{TwitRSVP.time_format(quentin_time(event.start_at))}']")
     last_response.should have_selector("form[action='/events/#{event.id}'] label[for='description']")
     last_response.should have_selector("form[action='/events/#{event.id}'] textarea[name='description']:contains('#{event.description}')")
-    last_response.should have_selector("form[action='/events/#{event.id}'] p:contains('#{event.attendees.map { |attendee| attendee.user.screen_name }.join(',')}')")
     last_response.should have_selector("form[action='/events/#{event.id}'] textarea[name='usernames']")
     last_response.should have_selector("form[action='/events/#{event.id}'] input[type='submit'][value='Create!']")
     last_response.should have_selector("form[action='/events/#{event.id}'] a.unsubmit.negative[href='/events/#{event.id}']:contains('Oh Nevermind')")

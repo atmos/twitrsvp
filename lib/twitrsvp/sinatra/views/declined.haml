@@ -1,11 +1,11 @@
 #pending
-  %h1.pending_header Declined
+  %h1.declined_header Declined
   - if @declined_events.nil? || @declined_events.empty?
-    %div.pending_event
+    %div.declined_event
       %h3 None at this time
   - else
     - @declined_events.each do |event|
-      .pending_event
+      .declined_event
         .left.event_detail
           %h3
             %a{:href => event_url(event)}= event.name

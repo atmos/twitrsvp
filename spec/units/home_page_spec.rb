@@ -22,6 +22,7 @@ describe "home page" do
     end
 
     get '/'
+    follow_redirect!
 
     last_response.should have_selector("ul")
     last_response.should have_selector("h1:contains('Pending')")

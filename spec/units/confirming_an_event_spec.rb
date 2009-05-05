@@ -17,12 +17,12 @@ describe "confirming an event" do
       end
     end
 
-    get '/'
+    get '/manage'
 
     post "/events/#{@event_id}/confirm"
     last_response.headers['Location'].should eql("/events/#{@event_id}")
 
-    get '/'
+    get '/manage'
     last_response.should have_selector("h3 > a[href='/events/#{@event_id}']")
   end
 end

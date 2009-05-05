@@ -17,12 +17,12 @@ describe "declining an event" do
       end
     end
 
-    get '/'
+    get '/manage'
 
     post "/events/#{@event_id}/decline"
     last_response.headers['Location'].should eql("/events/#{@event_id}")
 
-    get '/'
+    get '/manage'
     last_response.should have_selector("h3:contains('None at this time')")
   end
 end

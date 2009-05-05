@@ -32,25 +32,25 @@
     %label{:for => 'start_time'}
       %h2 Time:
       %input.time-picker.left{:type => 'text', :name => 'start_time', :size => 10, :value => TwitRSVP.time_format(@event.start_time) }
-      %a.time.left{:href => '#'} time
+      / %a.time.left{:href => '#'} time
   .clear
     %label{:for => 'description'}
       %h2
         Description:
-        %span.context.orange (char left: 140)
+        %span#charlimitinfo.context.orange (char left: 140)
       %textarea{:name => 'description', :rows => 3, :columns => 76}
         = @event.description
   .clear
     %label{:for => 'usernames'}
       %h2.left Who would you like to invite?
-      %a.invite.left{:href => '#'} Invite
+      / %a.invite.left{:href => '#'} Invite
       %textarea{:name => 'usernames', :rows => 5, :columns => 76}
         = params['usernames']
       - unless @event.new_record?
         %p.context
           You've already invited these people:
-          = @event.attendees.map { |attendee| attendee.user.screen_name }.join(',')
+          = event_attendees_links(@event)
       %p.context Twitter names to invite, separated by commas.  These are the names you normally @reply.  You can only invite people that follow you at this time.
 
   %input.submit{:type => 'submit', :value => 'Create!'}
-  %a.unsubmit.negative{:href => @event.new_record? ? '/' : event_url(@event)} Oh Nevermind
+  %a.unsubmit.negative{:href => @event.new_record? ? '/manage' : event_url(@event)} Oh Nevermind

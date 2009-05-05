@@ -36,6 +36,16 @@ module TwitRSVP
         session[:user_id].nil? ? nil : ::TwitRSVP::User.get(session[:user_id])
       end
 
+      def attendee_uninvite(attendee)
+        "<a class='orange uninvited should_post' href='/events/#{attendee.event.id}/uninvite/#{attendee.id}'>[x]</a>"
+      end
+
+      def event_attendees_links(event)
+        event.attendees.map do |attendee| 
+          " <a href='#{attendee.user.url}'>@#{attendee.user.screen_name}</a> " + attendee_uninvite(attendee)
+        end.join(',')
+      end
+
       def event_url(event, suffix = nil)
         "/events/#{event.id}#{suffix}"
       end
@@ -120,7 +130,7 @@ module TwitRSVP
       @event.valid? ? redirect(event_url(@event)) : haml(:organize)
     end
 
-    get '/organize' do
+    get '/schedule' do
       @page_title = "Create a new Event"
       @event = current_user.events.build(:start_at => Chronic.parse('2 hours from now').utc + 86400)
       haml(:organize)
@@ -162,17 +172,13 @@ module TwitRSVP
       haml :declined
     end
 
-    get '/' do
-      if current_user
-        @event = Event.new
-        @organized_events = prune_expired_events(current_user.events)[0..5]
-        @pending_events   = prune_expired_events(current_user.invited)
-        @declined_events  = prune_expired_events(current_user.declined)
-        @confirmed_events = prune_expired_events(current_user.confirmed)
-        haml :home
-      else
-        haml :about
-      end
+    get '/manage' do
+      @event = Event.new
+      @organized_events = prune_expired_events(current_user.events)[0..5]
+      @pending_events   = prune_expired_events(current_user.invited)
+      @declined_events  = prune_expired_events(current_user.declined)
+      @confirmed_events = prune_expired_events(current_user.confirmed)
+      haml :home
     end
 
     get '/about' do
@@ -182,6 +188,14 @@ module TwitRSVP
     get '/peace' do
       session.clear
       redirect '/'
+    end
+
+    get '/' do
+      if current_user
+        redirect '/manage'
+      else
+        haml :about
+      end
     end
   end
 end

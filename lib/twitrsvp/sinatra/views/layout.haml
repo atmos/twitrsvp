@@ -11,7 +11,6 @@
     %script{:type => 'text/javascript', :src => '/js/fancy.js'}
     %script{:type => 'text/javascript', :src => '/js/ui.core.js'}
     %script{:type => 'text/javascript', :src => '/js/ui.datepicker.js'}
-    %script{:type => 'text/javascript', :src => '/js/jquery.timePicker.js'}
     %script{:type => 'text/javascript', :src => "http://maps.google.com/maps?file=api&v=2&sensor=true&key=ABQIAAAA9elu2N8AA1OHV-W3tjttIRTyfKNApYviIr_4tsng-m8_nML1MxTjUDJuCGOEla7rxTSEuQDer26d3g"}
     %script{:type => 'text/javascript', :src => '/js/gmap.js'}
     %script{:type => 'text/javascript', :src => '/application.js'}
@@ -22,13 +21,15 @@
       #header
         %a#logo{:href => '/'} twitRSVP
         %ul#nav
-          %li{:class => (request.path_info =~ %r!/(events/\d+/edit|organize)! ? 'current' : '') }
-            %a{:href => '/organize' } schedule
-          %li{:class => (request.path_info == '/' ? 'current' : '') }
-            %a{:href => '/'} manage
+          %li{:class => (request.path_info == '/about' ? 'current' : '') }
+            %a{:href => '/about'} about
+          %li{:class => (request.path_info =~ %r!/(events/\d+/edit|schedule)! ? 'current' : '') }
+            %a{:href => '/schedule' } schedule
+          %li{:class => (request.path_info == '/manage' ? 'current' : '') }
+            %a{:href => '/manage'} manage
       / Header/Sidebar*********
       #sidebar.left
-        - if request.path_info == '/' && !@declined_events.nil? && @declined_events.any?
+        - if request.path_info == '/manage' && !@declined_events.nil? && @declined_events.any?
           #declined_whole
             #declined.right
               %h1.declined_header 
@@ -42,8 +43,9 @@
                   %a.positive.should_post{:href => event_url(event, '/confirm')} accept
             #declined_tab.right
         %ul
-          %li{:class => (request.path_info == '/about' ? 'current' : '') }
-            %a{:href => '/about'} about
+          - unless request.path_info =~ %r!^/(manage|schedule|about)*$!
+            %li{:class => 'goback'}
+              %a{:href => '/manage'} &laquo; Go Back
           - if current_user
             %li
               %a{:href => '/peace'} logout
@@ -65,3 +67,8 @@
             to simplify organizing events with your friends.
             %a{:href => '/about'} Learn
             more.
+    %script{:type => 'text/javascript'}
+      = "var gaJsHost = ((\"https:\" == document.location.protocol) ? \"https://ssl.\" : \"http://www.\");"
+      = "document.write(unescape(\"%3Cscript src='\" + gaJsHost + \"google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E\"));"
+    %script{:type => 'text/javascript'}
+      = "try { var pageTracker = _gat._getTracker(\"UA-8691589-1\"); pageTracker._trackPageview(); } catch(err) {}"

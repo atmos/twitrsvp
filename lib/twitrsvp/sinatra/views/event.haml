@@ -12,13 +12,13 @@
   #calendar.left
     %h1= @event.localtime.strftime('%A')
     .month_day= "#{@event.localtime.strftime('%b')} #{number_to_ordinal(@event.localtime.day)}"
-    %h2= "#{@event.localtime.strftime('%l:%M %p')}"
+    %h2{:title => @event.user.time_zone}= "#{@event.localtime.strftime('%l:%M %p')}"
   .clear
 %h2 
   = "at #{@event.place}"
   - unless @event.google_map_link.nil?
     %span.context
-      %a{:href => @event.google_map_link, :target => '_none' } Link
+      %a{:href => @event.google_map_link, :target => '_none' }= @event.address
 - if @event.longitude && @event.latitude
   %span#address_listing{:style => 'display:none'}
     @event.address
