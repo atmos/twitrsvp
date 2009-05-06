@@ -63,8 +63,8 @@ module TwitRSVP
       "#{name}, #{place}"
     end
 
-    def authorized?(user)
-      user_id == user.id || attendees.select { |attendee| attendee.user_id == user.id }
+    def authorized?(authorized_user)
+      user_id == authorized_user.id || attendees.select { |attendee| attendee.user_id == authorized_user.id }.any?
     end
 
     def start_time
