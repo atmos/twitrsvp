@@ -14,7 +14,6 @@ module TwitRSVP
     property :event_id, Integer, :nullable => false
     property :status,   Integer, :nullable => false, :default => INVITED
     property :notified, Boolean, :default => false
-    property :dm_key,   String,  :nullable => false, :length => 4 
 
     validates_is_unique :user_id, :scope => [:event_id]
 
@@ -35,9 +34,9 @@ module TwitRSVP
 
     def dm_response(text)
       if text =~ /^yes (\w{4})/i
-        confirm! if dm_key == $1
+        confirm! if event.dm_key == $1
       elsif text =~ /^no (\w{4})/i
-        decline! if dm_key == $1
+        decline! if event.dm_key == $1
       end
     end
 
@@ -47,7 +46,7 @@ module TwitRSVP
       TwitRSVP.retryable(:tries => 3) do
         dm = TwitRSVP::OAuth.consumer.request(:post, '/direct_messages/new.json', 
                                               event.user.access_token, {:scheme => :query_string},
-                                              { :text => "#{message}, dm back with 'yes #{dm_key}', 'no #{dm_key}' or visit #{event.tiny_url}",
+                                              { :text => "#{message}, visit #{event.tiny_url} or use the event key '#{event.dm_key}'",
                                                 :user => user.twitter_id })
         case dm
         when Net::HTTPSuccess # message was delivered

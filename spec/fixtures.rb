@@ -14,23 +14,21 @@ TwitRSVP::Event.fix {{
   :place    => /\w{8,20}/.gen,
   :start_at => Time.now.utc + 7200,
   :description => [:paragraph][0..139],
+  :dm_key   => /\w{4}/.gen,
   :attendees => 7.of { TwitRSVP::Attendee.make }
 }}
 
 TwitRSVP::Attendee.fix {{
   :user_id  => TwitRSVP::User.gen.id,
-  :dm_key   => /\w{4}/.gen
 }}
 
 TwitRSVP::Attendee.fix(:user) {{
   :event_id => TwitRSVP::Event.gen.id,
-  :dm_key   => /\w{4}/.gen
 }}
 
 TwitRSVP::Attendee.fix(:standalone) {{
   :user_id  => TwitRSVP::User.gen.id,
   :event_id => TwitRSVP::Event.gen.id,
-  :dm_key   => /\w{4}/.gen
 }}
 
 module TwitRSVP::Fixtures
@@ -81,7 +79,7 @@ module TwitRSVP::Fixtures
 
   def self.successful_direct_message_query(attendees)
     messages = attendees.map do |attendee|
-      "{\"sender_id\":#{attendee.user.twitter_id},\"created_at\":\"#{Chronic.parse("10 minutes ago").utc}\",\"text\":\"#{rand(10) % 2 == 0 ? 'yes' : 'no'} #{attendee.dm_key}\"}"
+      "{\"sender_id\":#{attendee.user.twitter_id},\"created_at\":\"#{Chronic.parse("10 minutes ago").utc}\",\"text\":\"#{rand(10) % 2 == 0 ? 'yes' : 'no'} #{attendee.event.dm_key}\"}"
     end
     "[#{messages.join(',')}]"
   end

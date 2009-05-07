@@ -33,10 +33,13 @@ module TwitRSVP
                                   :description => description,
                                   :place       => place,
                                   :start_at    => start_at,
-                                  :address     => address})
+                                  :address     => address,
+                                  :dm_key      => /\w{4}/.gen.downcase})
       if event.valid?
         event.invite_users(names)
-        event.attendees.create(:user_id => self.id,  :status => TwitRSVP::Attendee::CONFIRMED, :dm_key => /\w{4}/.gen)
+        event.attendees.create(:user_id => self.id,  :status => TwitRSVP::Attendee::CONFIRMED)
+        TwitRSVP::OAuth.consumer.request(:post, '/direct_messages/new.json', access_token, {:scheme => :query_string},
+                                         { :text => "You've successfully scheduled \"#{event.short_name}\", the event key is '#{event.dm_key}'", :user => twitter_id })
       end
       event
     end

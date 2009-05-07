@@ -10,13 +10,13 @@ describe "TwitRSVP::Attendee" do
   end
 
   it "should handle dm responses for rsvping yes" do
-    text = "yEs #{@attendee.dm_key}"
+    text = "yEs #{@attendee.event.dm_key}"
     @attendee.dm_response(text)
     @attendee.status.should eql(TwitRSVP::Attendee::CONFIRMED)
   end
 
   it "should handle dm responses for rsvping no" do
-    text = "No #{@attendee.dm_key}"
+    text = "No #{@attendee.event.dm_key}"
     @attendee.dm_response(text)
     @attendee.status.should eql(TwitRSVP::Attendee::DECLINED)
   end

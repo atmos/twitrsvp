@@ -5,16 +5,17 @@ module TwitRSVP
     storage_names[:default] = 'twitrsvp_events'
 
     property :id,          Serial
-    property :name,        String, :nullable => false, :length => 32
-    property :place,       String, :nullable => true,  :length => 32
-    property :address,     String, :nullable => true,  :length => 2048
-    property :latitude,    String, :nullable => true,  :length => 16
-    property :longitude,   String, :nullable => true,  :length => 16
-    property :permalink,   String, :nullable => true,  :length => 64
-    property :tiny_url,    String, :nullable => true,  :length => 32
-    property :description, String, :nullable => true,  :length => 140
-    property :start_at,    Time,   :nullable => false
-    property :is_public,   Boolean, :default => false
+    property :name,        String,  :nullable => false, :length => 32
+    property :place,       String,  :nullable => true,  :length => 32
+    property :address,     String,  :nullable => true,  :length => 2048
+    property :latitude,    String,  :nullable => true,  :length => 16
+    property :longitude,   String,  :nullable => true,  :length => 16
+    property :permalink,   String,  :nullable => true,  :length => 64
+    property :tiny_url,    String,  :nullable => true,  :length => 32
+    property :description, String,  :nullable => true,  :length => 140
+    property :start_at,    Time,    :nullable => false
+    property :is_public,   Boolean, :default  => false
+    property :dm_key,      String,  :nullable => false, :length => 4 
 
     timestamps :at
 
@@ -75,13 +76,12 @@ module TwitRSVP
     def invite_users(users)
       users.each do |invitee_name|
         invitee_name = invitee_name.strip.gsub(/^@/, '')
-        next if invitee_name.blank?
-        next if invitee_name == user.screen_name
+        next if invitee_name.blank? || invitee_name == user.screen_name
         begin
           TwitRSVP.retryable(:times => 2) do 
             user = User.first(:name => invitee_name)
             user = User.create_twitter_user(invitee_name) if user.nil?
-            attendees.create(:user_id => user.id, :dm_key => /\w{4}/.gen)
+            attendees.create(:user_id => user.id)
           end
         rescue TwitRSVP::User::UserCreationError => e
           TwitRSVP::Log.logger.info(e.message)
