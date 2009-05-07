@@ -3,10 +3,10 @@ module TwitRSVP
     class AttendeeDirectMessageError < StandardError; end
 
     include DataMapper::Resource
-    INVITED   = 1
-    DECLINED  = 3
-    CONFIRMED = 5
-
+    INVITED      = 1
+    DECLINED     = 3
+    CONFIRMED    = 5
+    UNAUTHORIZED = 7
     storage_names[:default] = 'twitrsvp_attendees'
 
     property :id,       Serial
@@ -54,8 +54,8 @@ module TwitRSVP
           self.notified = true
           save
         when Net::HTTPForbidden 
-          TwitRSVP::Log.logger.info("Response: #{dm.code}, #{user.name} probably doesn't follow #{event.user.name}.  http://doesfollow.com/#{user.name}/#{event.user.name}")
-          raise AttendeeDirectMessageError.new(user.twitter_id)
+          self.status = UNAUTHORIZED
+          save
         else # will retry up to 3 times, logging the response each time
           TwitRSVP::Log.logger.info("Response: #{dm.code}, Something screwed up, hopefully a retry will fix it. #{event.user.twitter_id} inviting #{user.twitter_id}")
           raise AttendeeDirectMessageError.new(user.twitter_id)

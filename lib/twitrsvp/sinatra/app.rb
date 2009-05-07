@@ -52,7 +52,7 @@ module TwitRSVP
 
       def prune_expired_events(events)
         limit = Time.now.utc - 86400
-        events.sort { |a,b| b.start_at <=> a.start_at }.map { |event| event if event.start_at > limit }.compact
+        events.sort { |a,b| a.start_at <=> b.start_at }.map { |event| event if event.start_at > limit }.compact
       end
 
       def number_to_ordinal(num)

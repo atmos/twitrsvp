@@ -29,18 +29,23 @@
             %a{:href => '/manage'} manage
       / Header/Sidebar*********
       #sidebar.left
-        - if request.path_info == '/manage' && !@declined_events.nil? && @declined_events.any?
+        - if request.path_info == '/manage'
           #declined_whole
             #declined.right
               %h1.declined_header 
                 Declined:
                 %a{:href => '/declined'} view all
-              - @declined_events.each do |event|
+              - if @declined_events.any?
+                - @declined_events.sort { |a,b| a.updated_at <=> b.updated_at }[0..1].each do |event|
+                  .declined_event
+                    %h3
+                      %a{:href => event_url(event)}= event.name
+                    %p.context= event.localtime.strftime('%a %b %e @ %l:%M %P')
+                    %a.positive.should_post{:href => event_url(event, '/confirm')} accept
+              - else
                 .declined_event
-                  %h3
-                    %a{:href => event_url(event)}= event.name
-                  %p.context= event.localtime.strftime('%a %b %e @ %l:%M %P')
-                  %a.positive.should_post{:href => event_url(event, '/confirm')} accept
+                  %h3 You're a Party Animal!
+
             #declined_tab.right
         %ul
           - unless request.path_info =~ %r!^/(manage|schedule|about)*$!

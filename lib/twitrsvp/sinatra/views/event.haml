@@ -18,7 +18,7 @@
   = "at #{@event.place}"
   - unless @event.google_map_link.nil?
     %span.context
-      %a{:href => @event.google_map_link, :target => '_none' }= @event.address
+      %a{:href => @event.google_map_link, :target => '_none' }= @event.address.gsub(/\d{5}, USA$/, '')
 - if @event.longitude && @event.latitude
   %span#address_listing{:style => 'display:none'}
     @event.address
@@ -38,7 +38,6 @@
 #events
   - unless current_user.id == @event.user_id
     #confirmation_forms
-      %h1 You've Been Invited!
       %form.left{:action => event_url(@event, '/confirm'), :method => 'POST'}
         %input.submit{:type => 'submit', :value => "I'm going!"}
       %form{:action => event_url(@event, '/decline'), :method => 'POST'}
