@@ -73,11 +73,6 @@ module TwitRSVP
       haml :failed
     end
 
-    get '/application.js' do
-      response['Content-Type'] = 'text/javascript'
-      @application_js ||= File.read(File.dirname(__FILE__)+'/views/application.js')
-    end
-
     post '/events/:id/confirm' do
       attendee = TwitRSVP::Attendee.first(:user_id => current_user.id, :event_id => params['id'])
       attendee.confirm!
@@ -132,7 +127,7 @@ module TwitRSVP
 
     get '/schedule' do
       @page_title = "Create a new Event"
-      @event = current_user.events.build(:start_at => Chronic.parse('2 hours from now').utc + 86400)
+      @event = current_user.events.build(:start_at => Time.now.utc + 7200)
       haml(:organize)
     end
 

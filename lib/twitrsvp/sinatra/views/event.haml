@@ -36,6 +36,13 @@
         = "map.setUIToDefault();"
 
 #events
+  - unless current_user.id == @event.user_id
+    #confirmation_forms
+      %h1 You've Been Invited!
+      %form.left{:action => event_url(@event, '/confirm'), :method => 'POST'}
+        %input.submit{:type => 'submit', :value => "I'm going!"}
+      %form{:action => event_url(@event, '/decline'), :method => 'POST'}
+        %input.unsubmit{:type => 'submit', :value => "No thanks."}
   #left_events.left
     #going
       %h1 Going:
@@ -50,7 +57,7 @@
       - else
         No One
   #right_events.left
-    %h1 Unresponsive:
+    %h1 Not Yet Responded:
     - if @event.invited.any?
       = @event.invited.map { |attendee| "<a class='positive' href='#{attendee.user.url}'>#{attendee.user.name}</a>" }.join(', ')
     - else

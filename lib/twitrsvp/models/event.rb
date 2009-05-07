@@ -68,15 +68,15 @@ module TwitRSVP
     end
 
     def start_time
-      self.start_at = (Time.now.utc + 86400) if start_at.nil?
+      self.start_at = (Time.now.utc + 7200) if start_at.nil?
       localtime
     end
 
     def invite_users(users)
       users.each do |invitee_name|
-        next if invitee_name == user.screen_name
         invitee_name = invitee_name.strip.gsub(/^@/, '')
         next if invitee_name.blank?
+        next if invitee_name == user.screen_name
         begin
           TwitRSVP.retryable(:times => 2) do 
             user = User.first(:name => invitee_name)

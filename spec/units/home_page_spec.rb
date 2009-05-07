@@ -1,10 +1,6 @@
 require File.dirname(__FILE__)+'/../spec_helper'
 
 describe "home page" do
-  it "can view the application js" do
-    login_quentin
-    get '/application.js'
-  end
   it "can view events" do
     login_quentin
 
