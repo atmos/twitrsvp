@@ -1,8 +1,9 @@
 <!-- Sidebar/Main********* -->
 #main.left
   %h1.left What is TwitRSVP?
-  %p.context
-    = "(<a href='/signup'>Get Started Now</a>)"
+  - unless current_user
+    %p.context
+      = "(<a href='/signup'>Get Started Now</a>)"
   %p
     %object{:width => "469", :height => "264"}
       %param{:name => "allowfullscreen", :value => "true"}
