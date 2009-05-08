@@ -195,11 +195,7 @@ module TwitRSVP
     end
 
     get '/' do
-      if current_user
-        redirect '/manage'
-      else
-        haml :about
-      end
+      current_user ? redirect('/manage') : haml(:about)
     end
   end
 end
