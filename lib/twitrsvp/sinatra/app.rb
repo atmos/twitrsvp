@@ -104,7 +104,7 @@ module TwitRSVP
 
     get '/events/:id' do |event_id|
       @event = TwitRSVP::Event.first(:permalink => event_id)
-      @current_attendee = current_user == @event.user_id ? nil : @event.attendees.find { |attendee| attendee.user == current_user }
+      @current_attendee = current_user == @event.user ? nil : @event.attendees.find { |attendee| attendee.user == current_user }
       @page_title = @event.short_name
       throw(:halt, [401, "You aren't authorized to view this event"]) unless @event.authorized?(current_user)
       haml :event

@@ -2,6 +2,11 @@
   %h1= "Welcome #{current_user.name},"
   %p
     In order to get things going you just need to fill out the following fields.
+  - if @event.errors.any?
+    .message.decline
+      - @event.errors.each do |errors|
+        %h2.orange= errors.join(',')
+        .clear
 
 %form{:action => (@form_path||'/events'), :method => 'POST'}
   - unless @event.new_record?

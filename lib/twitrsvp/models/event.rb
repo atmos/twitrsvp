@@ -6,7 +6,7 @@ module TwitRSVP
 
     property :id,          Serial
     property :name,        String,  :nullable => false, :length => 32
-    property :place,       String,  :nullable => true,  :length => 32
+    property :place,       String,  :nullable => false, :length => 32
     property :address,     String,  :nullable => true,  :length => 2048
     property :latitude,    String,  :nullable => true,  :length => 16
     property :longitude,   String,  :nullable => true,  :length => 16

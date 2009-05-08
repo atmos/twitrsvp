@@ -34,10 +34,13 @@ describe "organizing an event" do
     last_response.headers['Location'].should match(%r!/events/[^/]{36}!)
   end
   it "should repopulate the form properly on failed signup" do
-    post '/events', :name => /\w{4,20}/.gen, :place => /\w{4,20}/.gen,
-      :address => '1535 Pearl St, Boulder, CO', :usernames => 'atmos, ubermajestix', :description => /[:paragraph]/.gen[0..139]
+    post '/events', :address => '1535 Pearl St, Boulder, CO', 
+      :start_date => Time.now.utc.strftime('%Y/%m/%d'), :start_time => Time.now.utc.strftime('%l:%M'),
+      :usernames => 'atmos, ubermajestix', :description => /[:paragraph]/.gen[0..139]
 
     last_response.should have_selector("h1:contains('Welcome Quentin Blake,')")
+    last_response.should have_selector(".message.decline h2.orange:contains('Place must not be blank')")
+    last_response.should have_selector(".message.decline h2.orange:contains('Name must not be blank')")
     last_response.should have_selector("form[action='/events']")
     last_response.should_not have_selector("form[action='/events'][name='_method'][value='put']")
     last_response.should have_selector("form[action='/events'] label[for='name']")
