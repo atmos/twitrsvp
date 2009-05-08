@@ -50,7 +50,7 @@ module TwitRSVP
 
     def self.create_twitter_user(twitter_id)
       content = Curl::Easy.perform("http://twitter.com/users/show/#{twitter_id}.json") do |curl|
-        curl.timeout = 10 
+        curl.timeout = 20
       end
       user_info = JSON.parse(content.body_str)
       raise UserCreationError.new("Unable to find '#{twitter_id}'") if(user_info['error'] == 'Not found')
