@@ -55,6 +55,6 @@
             %br
             = event.place
         %div.right.event_action
-          %a.negative.should_post{:href => "/events/#{event.id}/decline"} decline
+          %a.negative.should_post{:href => event_url(@event, '/decline') } decline
         %div.clear
   %div.clear

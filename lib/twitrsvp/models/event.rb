@@ -27,13 +27,21 @@ module TwitRSVP
     before :create, :create_permalink
 
     def google_map_link
-      address.nil? ? nil : "http://maps.google.com/maps?q=#{address.gsub(/\s/, '+')}"
+      return address if address.nil?
+      case Addressable::URI.parse(address).scheme
+      when 'http', 'https'
+        address
+      else
+        "http://maps.google.com/maps?q=#{address.gsub(/\s/, '+')}"
+      end
     end
 
     def geocode
+      old_address = address
       self.longitude, self.latitude, self.address = TwitRSVP.geocode(address) if attribute_dirty?(:address)
     rescue OpenURI::HTTPError
-      self.longitude = self.latitude = self.address = ''
+      self.longitude = self.latitude = ''
+      self.address = old_address
     end
 
     def create_permalink

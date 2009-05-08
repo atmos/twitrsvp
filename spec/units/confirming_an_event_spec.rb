@@ -13,7 +13,7 @@ describe "confirming an event" do
       when 2
         attendee.confirm!
       else
-        @event_id = attendee.event_id
+        @event_id = attendee.event.permalink
       end
     end
 

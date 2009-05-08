@@ -9,7 +9,7 @@ describe "viewing an event" do
     attendee = TwitRSVP::Attendee.gen(:user, :user_id => user.id)
     event = TwitRSVP::Event.get(attendee.event_id)
 
-    get "/events/#{event.id}"
+    get "/events/#{event.permalink}"
     last_response.should have_selector("p:contains('#{event.description}')")
     last_response.should have_selector("#events #going")
     last_response.should have_selector("#events #not_going")
@@ -23,7 +23,7 @@ describe "viewing an event" do
     attendee = TwitRSVP::Attendee.gen(:user, :user_id => user.id)
     event = TwitRSVP::Event.get(attendee.event_id)
 
-    get "/events/#{event.id}"
+    get "/events/#{event.permalink}"
 
     login_quentin
     follow_redirect!

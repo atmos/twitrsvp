@@ -31,7 +31,7 @@ describe "organizing an event" do
     post '/events', :name => /\w{4,20}/.gen, :place => /\w{4,20}/.gen, :address => '1535 Pearl St, Boulder, CO',
       :start_date => Time.now.utc.strftime('%Y/%m/%d'), :start_time => Time.now.utc.strftime('%l:%M'),
       :usernames => 'atmos, ubermajestix', :description => /[:paragraph]/.gen[0..139]
-    last_response.headers['Location'].should match(%r!/events/\d!)
+    last_response.headers['Location'].should match(%r!/events/[^/]{36}!)
   end
   it "should repopulate the form properly on failed signup" do
     post '/events', :name => /\w{4,20}/.gen, :place => /\w{4,20}/.gen,

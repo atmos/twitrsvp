@@ -9,7 +9,7 @@ describe "deleting an event" do
 
     get '/'
 
-    delete "/events/#{event.id}"
+    delete "/events/#{event.permalink}"
     last_response.headers['Location'].should eql("/")
   end
   it "fails unless you're the owner of the event" do
@@ -19,7 +19,7 @@ describe "deleting an event" do
     attendee = TwitRSVP::Attendee.gen(:user, :user_id => user.id)
 
     get '/'
-    delete "/events/#{attendee.event_id}"
+    delete "/events/#{attendee.event.permalink}"
     last_response.status.should eql(401)
   end
 end

@@ -2,6 +2,8 @@
   #event_description.left
     %h1
       = @event.name
+      %span.context
+        = "(<a href='#{event_url(@event)}' />permalink</a>)"
       - if @event.user == current_user
         %span.context
           %a{:href => event_url(@event, '/edit')} edit
@@ -20,8 +22,6 @@
     %span.context
       %a{:href => @event.google_map_link, :target => '_none' }= @event.address.gsub(/\d{5}, USA$/, '')
 - if @event.longitude && @event.latitude
-  %span#address_listing{:style => 'display:none'}
-    @event.address
   #map
     - unless @event.longitude.blank? || @event.latitude.blank?
       %script{:type => 'text/javascript'}
@@ -36,12 +36,26 @@
         = "map.setUIToDefault();"
 
 #events
-  - unless current_user.id == @event.user_id
+  - unless @current_attendee.nil?
     #confirmation_forms
-      %form.left{:action => event_url(@event, '/confirm'), :method => 'POST'}
-        %input.submit{:type => 'submit', :value => "I'm going!"}
-      %form{:action => event_url(@event, '/decline'), :method => 'POST'}
-        %input.unsubmit{:type => 'submit', :value => "No thanks."}
+      - case @current_attendee.status
+        -  when TwitRSVP::Attendee::CONFIRMED
+          .message.accept
+            %h2.green
+              Accepted:
+            = "We can't wait to see you there!"
+            %a.negative.should_post{:href => event_url(@event, '/decline') } Changed your mind?
+        -  when TwitRSVP::Attendee::DECLINED
+          .message.decline
+            %h2.orange
+              Declined:
+            = "We're bummed you can't make it!"
+            %a.positive.should_post{:href => event_url(@event, '/confirm') } Changed your mind?
+        - else
+          %form.left{:action => event_url(@event, '/confirm'), :method => 'POST'}
+            %input.submit{:type => 'submit', :value => "I'm going!"}
+          %form{:action => event_url(@event, '/decline'), :method => 'POST'}
+            %input.unsubmit{:type => 'submit', :value => "No thanks."}
   #left_events.left
     #going
       %h1 Going:

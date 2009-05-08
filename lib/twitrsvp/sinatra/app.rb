@@ -37,7 +37,7 @@ module TwitRSVP
       end
 
       def attendee_uninvite(attendee)
-        "<a class='negative should_post' href='/events/#{attendee.event.id}/uninvite/#{attendee.id}'>[x]</a>"
+        "<a class='negative should_post' href='#{event_url(attendee.event, '/uninvite')}/#{attendee.id}'>[x]</a>"
       end
 
       def event_attendees_links(event)
@@ -47,7 +47,7 @@ module TwitRSVP
       end
 
       def event_url(event, suffix = nil)
-        "/events/#{event.id}#{suffix}"
+        "/events/#{event.permalink}#{suffix}"
       end
 
       def prune_expired_events(events)
@@ -73,44 +73,53 @@ module TwitRSVP
       haml :failed
     end
 
-    post '/events/:id/confirm' do
-      attendee = TwitRSVP::Attendee.first(:user_id => current_user.id, :event_id => params['id'])
+    post '/events/:event_id/uninvite/:attendee_id' do |event_id, attendee_id|
+      event = TwitRSVP::Event.first(:permalink => event_id)
+      throw(:halt, [401, "You aren't authorized to uninvite people to this event"]) unless event.user == current_user
+      attendee = TwitRSVP::Attendee.first(:event_id => event.id, :id => attendee_id)
+      attendee.destroy unless attendee.user == current_user
+      redirect event_url(event, '/edit')
+    end
+
+    post '/events/:id/confirm' do |event_id|
+      @event = TwitRSVP::Event.first(:permalink => event_id)
+      attendee = TwitRSVP::Attendee.first(:user_id => current_user.id, :event_id => @event.id)
       attendee.confirm!
       redirect event_url(attendee.event)
     end
 
-    post '/events/:id/decline' do
-      attendee = TwitRSVP::Attendee.first(:user_id => current_user.id, :event_id => params['id'])
+    post '/events/:id/decline' do |event_id|
+      @event = TwitRSVP::Event.first(:permalink => event_id)
+      attendee = TwitRSVP::Attendee.first(:user_id => current_user.id, :event_id => @event.id)
       attendee.decline!
       redirect event_url(attendee.event)
     end
 
-    get '/events/:id/edit' do
-      @event = TwitRSVP::Event.get(params['id'])
+    get '/events/:id/edit' do |event_id|
+      @event = TwitRSVP::Event.first(:permalink => event_id)
       throw(:halt, [401, "You aren't authorized to view this event"]) unless @event.user == current_user
       @form_path = "/events/#{params['id']}"
       haml :organize
     end
 
-    get '/events/:id' do
-      @event = TwitRSVP::Event.get(params['id'])
-      @event = TwitRSVP::Event.first(:permalink => params['id']) if @event.nil?
+    get '/events/:id' do |event_id|
+      @event = TwitRSVP::Event.first(:permalink => event_id)
+      @current_attendee = current_user == @event.user_id ? nil : @event.attendees.find { |attendee| attendee.user == current_user }
       @page_title = @event.short_name
       throw(:halt, [401, "You aren't authorized to view this event"]) unless @event.authorized?(current_user)
       haml :event
     end
 
-    delete '/events/:id' do
-      @event = TwitRSVP::Event.get(params['id'])
+    delete '/events/:id' do |event_id|
+      @event = TwitRSVP::Event.first(:permalink => event_id)
+      throw(:halt, [401, "You aren't authorized to delete this event"]) unless @event.user_id == current_user.id
       @event.attendees.each { |attendee| attendee.destroy }
       @event.destroy
-
-      throw(:halt, [401, "You aren't authorized to delete this event"]) unless @event.user_id == current_user.id
       redirect '/'
     end
 
-    put '/events/:id' do
-      @event = TwitRSVP::Event.get(params['id'])
+    put '/events/:event_id' do |event_id|
+      @event = TwitRSVP::Event.first(:permalink => event_id)
       @event.update_attributes(:name => params['name'], :place => params['place'], :address => params['address'],
                                :description => params['description'], 
                                :start_at => localtime(params['start_date'], params['start_time']))
