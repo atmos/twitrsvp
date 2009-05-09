@@ -6,7 +6,7 @@ describe "peacing out" do
     get '/peace'
 
     get '/'
-    last_response.should have_selector("p.context a[href='/signup']:contains('Get Started Now')")
+    last_response.should have_selector("input[type='submit'][value='Make an Event!']")
   end
 end
 
