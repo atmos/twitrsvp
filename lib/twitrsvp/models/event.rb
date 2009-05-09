@@ -82,18 +82,22 @@ module TwitRSVP
     end
 
     def invite_users(users)
-      users.each do |invitee_name|
-        invitee_name = invitee_name.strip.gsub(/^@/, '')
-        next if invitee_name.blank? || invitee_name == user.screen_name
-        begin
-          TwitRSVP.retryable(:times => 2) do 
-            user = User.first(:name => invitee_name)
-            user = User.create_twitter_user(invitee_name) if user.nil?
-            attendees.create(:user_id => user.id)
+      if attendees.size + users.size < 20
+        users.each do |invitee_name|
+          invitee_name = invitee_name.strip.gsub(/^@/, '')
+          next if invitee_name.blank? || invitee_name == user.screen_name
+          begin
+            TwitRSVP.retryable(:times => 2) do 
+              user = User.first(:name => invitee_name)
+              user = User.create_twitter_user(invitee_name) if user.nil?
+              attendees.create(:user_id => user.id)
+            end
+          rescue TwitRSVP::User::UserCreationError => e
+            TwitRSVP::Log.logger.info(e.message)
           end
-        rescue TwitRSVP::User::UserCreationError => e
-          TwitRSVP::Log.logger.info(e.message)
         end
+      else
+        errors.add(:attendees, "20 User Limit Exceeded")
       end
     end
   end

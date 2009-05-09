@@ -21,8 +21,12 @@
       #header
         %a#logo{:href => '/'} twitRSVP
         %ul#nav
-          %li{:class => (request.path_info == '/about' ? 'current' : '') }
-            %a{:href => '/about'} about
+          - if request.path_info == '/about' || (request.path_info == '/' && current_user.nil?)
+            %li{ :class => 'current' }
+              %a{:href => '/about'} about
+          - else
+            %li
+              %a{:href => '/about'} about
           %li{:class => (request.path_info =~ %r!/(events/\d+/edit|schedule)! ? 'current' : '') }
             %a{:href => '/schedule' } schedule
           %li{:class => (request.path_info == '/manage' ? 'current' : '') }

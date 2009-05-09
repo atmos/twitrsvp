@@ -28,4 +28,17 @@ describe "modifying an event" do
     last_response.should have_selector("form[action='/events/#{event.permalink}'] input[type='submit'][value='Create!']")
     last_response.should have_selector("form[action='/events/#{event.permalink}'] a.unsubmit.negative[href='/events/#{event.permalink}']:contains('Oh Nevermind')")
   end
+  it "should limit to 20 invitees" do
+    user = TwitRSVP::User.first(:twitter_id => 1484261)
+    event = TwitRSVP::Event.gen(:user_id => user.id)
+
+    get "/events/#{event.permalink}/edit"
+
+    put "/events/#{event.permalink}", :usernames => (0..20).map { /\w{8}/.gen.downcase }.join(','),
+      :name => event.name, :place => event.place, :start_date => event.start_at.strftime('%Y/%m/%d'),
+      :start_time => event.start_at.strftime('%Y/%m/%d'), :description => event.description
+
+    last_response.should have_selector("h1:contains('Welcome Quentin Blake,')")
+    last_response.should have_selector(".message.decline h2.orange:contains('20 User Limit Exceeded')")
+  end
 end

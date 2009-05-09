@@ -35,7 +35,10 @@ module TwitRSVP
                                   :start_at    => start_at,
                                   :address     => address,
                                   :dm_key      => /\w{4}/.gen.downcase})
-      if event.valid?
+      event.errors.add(:attendees, "20 User Limit Exceeded") if names.size > 20
+      if event.errors.any?
+        event.destroy
+      else
         event.invite_users(names)
         event.attendees.create(:user_id => self.id,  :status => TwitRSVP::Attendee::CONFIRMED)
         TwitRSVP::OAuth.consumer.request(:post, '/direct_messages/new.json', access_token, {:scheme => :query_string},
@@ -50,7 +53,7 @@ module TwitRSVP
 
     def self.create_twitter_user(twitter_id)
       content = Curl::Easy.perform("http://twitter.com/users/show/#{twitter_id}.json") do |curl|
-        curl.timeout = 20
+        curl.timeout = 12
       end
       user_info = JSON.parse(content.body_str)
       raise UserCreationError.new("Unable to find '#{twitter_id}'") if(user_info['error'] == 'Not found')

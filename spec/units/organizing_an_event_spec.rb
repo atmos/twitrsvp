@@ -59,4 +59,13 @@ describe "organizing an event" do
     last_response.should have_selector("form[action='/events'] input[type='submit'][value='Create!']")
     last_response.should have_selector("form[action='/events'] a.unsubmit.negative[href='/manage']:contains('Oh Nevermind')")
   end
+  it "should limit to 20 invitees" do
+    user_list = (0..20).map { /\w{8}/.gen.downcase }.join(',')
+    post '/events', :name => /\w{4,20}/.gen, :place => /\w{4,20}/.gen, :address => '1535 Pearl St, Boulder, CO',
+      :start_date => Time.now.utc.strftime('%Y/%m/%d'), :start_time => Time.now.utc.strftime('%l:%M'),
+      :usernames => user_list, :description => /[:paragraph]/.gen[0..139]
+
+    last_response.should have_selector("h1:contains('Welcome Quentin Blake,')")
+    last_response.should have_selector(".message.decline h2.orange:contains('20 User Limit Exceeded')")
+  end
 end

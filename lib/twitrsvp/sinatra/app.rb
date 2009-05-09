@@ -51,7 +51,7 @@ module TwitRSVP
       end
 
       def prune_expired_events(events)
-        limit = Time.now.utc - 86400
+        limit = Time.now.utc - 43200
         events.sort { |a,b| a.start_at <=> b.start_at }.map { |event| event if event.start_at > limit }.compact
       end
 
@@ -124,14 +124,14 @@ module TwitRSVP
                                :description => params['description'], 
                                :start_at => localtime(params['start_date'], params['start_time']))
       @event.invite_users(params['usernames'].split(','))
-      @event.valid? ? redirect(event_url(@event)) : haml(:organize)
+      @event.errors.any? ? haml(:organize) : redirect(event_url(@event))
     end
 
     post '/events' do
       @event = current_user.organize(params['name'], params['place'], params['address'], params['description'],
                                      localtime(params['start_date'], params['start_time']), params['usernames'].split(','))
 
-      @event.valid? ? redirect(event_url(@event)) : haml(:organize)
+      @event.errors.any? ? haml(:organize) : redirect(event_url(@event))
     end
 
     get '/schedule' do
