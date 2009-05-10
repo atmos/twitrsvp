@@ -1,14 +1,12 @@
-%h1 What is TwitRSVP?
-- unless current_user
-  %span.context
-    = "(<a href='/signup'>skip me to making an event!</a>)"
+%h1
+  What is TwitRSVP?
+  - unless current_user
+    %span.context
+      = "(<a href='/signup'>skip me to making an event!</a>)"
 %p
-  Wouldn’t it be nice to 
-  %strong use twitter to say things like &ldquo;who wants to grab beers at mountain sun?&rdquo;
-  After talking to people we realized most people envisioned our service operating differently, 
-  %strong we have set forth to accommodate both.
-  We are interested in supporting both the ad-hoc twitter negotiation and the
-  people who organize events in advance.
+  Wouldn’t it be nice to use twitter to ask things like 
+  %strong &ldquo;who wants to grab beers tonight?&rdquo;
+  twitRSVP accommodates both ad-hoc twitter organization and planned meetups.
 
 %p
   %object{:width => "469", :height => "264"}
@@ -21,36 +19,18 @@
   %form{:action => '/schedule', :method => 'GET'}
     %input.submit{:type => 'submit', :value => 'Make an Event!'}
 
-%h2 The basic setup involves the following steps.
+%h2 The basic setup involves the following steps:
 %ul
+  %li You visit the interface to schedule an event.
   %li You decide on a time and place for the event.
-  %li You visit the twitRSVP.com web interface to schedule the event.
-  %li Invite up to 20 attendees to your event.
-  %li twitRSVP.com direct messages the attendees on your behalf with the event info.
-  %li Your Attendees can reply via the URL or the direct message by direct messaging the event organizer with the eventkey.
-  %li You can even go back and edit who should be at the event, or if you put the wrong time!
+  %li You can invite up to 20 attendees to your event.
+  %li We direct message the attendees on your behalf with the event info.
+  %li Your attendees can reply via the URL or by direct messaging you with the eventkey.
+  %li You can go back and edit events to make them more appealing.
+  / %li An hour before your event, we shoot you a reminder and a link to let you know who is attending.
 
 %h2 A little more info
 %p
   We've taken advantage of the 
   %a{:href => "http://twitter.com/oauth"} twitter oauth api
   to simplify a lot of things for you. Because why wouldn't we want to? Right?
-
-%span.jhide
-  %p
-    %strong If you're an organizer
-    , your friends can reply via direct messages OR via the web. 
-    %strong If you're an attendee
-    , you can let your friends know whether you are going to attend or not, whether or not you have the fanciest phone. 
-    %strong We're narrowcasting with twitRSVP
-    , which means all of your friends aren't going to know that you're gonna grab some microbrews kinda early on a friday. Your friends that are meeting you though, 
-    %strong they'll know you said you were gonna be there
-    \.
-  %p
-    %strong We've actually given a lot of thought to the idea of extending this beyond twitter
-    \.  Maybe we should invite folks via email who don't have twitter accounts?
-    Maybe we should include some other crazy feature? Realistically you can build
-    rich applications based on the twitter API without even considering things
-    like... email. If you think about it, 
-    %strong We think you'll be happy with our little product
-    \.
