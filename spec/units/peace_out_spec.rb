@@ -6,7 +6,7 @@ describe "peacing out" do
     get '/peace'
 
     get '/'
-    last_response.should have_selector("input[type='submit'][value='Make an Event!']")
+    last_response.should have_selector("input[type='submit'][value='Make an event now!']")
   end
 end
 
