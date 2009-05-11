@@ -8,18 +8,7 @@
   %a{:href => 'http://twitter.com'} twitter
   to organize events.
 
-%p
-  %object{:width => "469", :height => "264"}
-    %param{:name => "allowfullscreen", :value => "true"}
-    %param{:name => "allowscriptaccess", :value => "always"}
-    %param{:name => "movie", :value => "http://vimeo.com/moogaloop.swf?clip_id=1124192&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=00ADEF&amp;fullscreen=1"}
-      %embed{:src => "http://vimeo.com/moogaloop.swf?clip_id=1124192&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=00ADEF&amp;fullscreen=1", :type => "application/x-shockwave-flash", :allowfullscreen => "true", :allowscriptaccess => "always", :width => "469", :height => "264"}
-
-#click-through
-  %form{:action => '/schedule', :method => 'GET'}
-    %input.submit{:type => 'submit', :value => 'Make an event now!'}
-
-%h2 This is how we do it
+%h2 This is how you use it
 %ul
   %li You visit the interface to schedule an event.
   %li You decide on a time and place for the event.
@@ -28,3 +17,7 @@
   %li Your attendees can reply via the URL or by direct messaging you with the eventkey.
   %li You can go back and edit events to make them more appealing.
   / %li An hour before your event, we shoot you a reminder and a link to let you know who is attending.
+
+#click-through
+  %form{:action => '/schedule', :method => 'GET'}
+    %input.submit{:type => 'submit', :value => 'Make an event now!'}
