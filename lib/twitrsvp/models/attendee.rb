@@ -42,11 +42,13 @@ module TwitRSVP
 
     def notify!
       return if user.twitter_id == event.user.twitter_id
-      message = "#{event.short_name} - #{event.localtime.strftime('%b %e@%l:%M%P')}"[0..59]
+      event_time = event.localtime
+      time_format = "#{event_time.strftime('%b')} #{TwitRSVP.number_to_ordinal(event_time.strftime('%e'))}"
+      message = "#{time_format}@#{event_time.strftime('%l:%M%P').strip}-#{event.short_name}"[0..50]
       TwitRSVP.retryable(:tries => 3) do
         dm = TwitRSVP::OAuth.consumer.request(:post, '/direct_messages/new.json', 
                                               event.user.access_token, {:scheme => :query_string},
-                                              { :text => "#{message}, visit #{event.tiny_url} or use the event key '#{event.dm_key}'",
+                                              { :text => "#{message}, visit #{event.tiny_url} or dm back with YES or NO followed by the event key '#{event.dm_key}'",
                                                 :user => user.twitter_id })
         case dm
         when Net::HTTPSuccess # message was delivered
