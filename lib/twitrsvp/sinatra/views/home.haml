@@ -9,11 +9,11 @@
       .pending_event
         .left.event_detail
           %h3
-            %a{:href => event_url(event)}= event.name
+            %a{:href => event_url(event)}= h(event.name)
           %p.context
             = event.localtime.strftime('%a %b %e @ %l:%M %P')
             %br
-            = event.place
+            = h(event.place)
         .right.event_action
           %a.positive.should_post{:href => event_url(event, "/confirm")} accept
           %a.negative.should_post{:href => event_url(event, "/decline")} decline
@@ -30,11 +30,11 @@
       - @organized_events.each do |event|
         .your_event.left
           %h3
-            %a.event{:href => event_url(event)}= event.name
+            %a.event{:href => event_url(event)}= h(event.name)
           %p.context
             = event.localtime.strftime('%a %b %e @ %l:%M %P')
             %br
-            = event.place
+            = h(event.place)
         %div.left.event_action
           %a.negative{:href => event_url(event, '/edit')} edit
         %div.clear
@@ -49,11 +49,11 @@
       - @confirmed_events.each do |event|
         .attending_event.left
           %h3
-            %a.event{:href => event_url(event)}= event.name
+            %a.event{:href => event_url(event)}= h(event.name)
           %p.context
             = event.localtime.strftime('%a %b %e @ %l:%M %P')
             %br
-            = event.place
+            = h(event.place)
         %div.right.event_action
           %a.negative.should_post{:href => event_url(@event, '/decline') } decline
         %div.clear

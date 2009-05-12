@@ -59,6 +59,10 @@ module TwitRSVP
       def number_to_ordinal(num)
         TwitRSVP.number_to_ordinal(num)
       end
+
+      def h(text)
+        Rack::Utils.escape_html(text)
+      end
     end
 
     error do

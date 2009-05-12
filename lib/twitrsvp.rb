@@ -59,9 +59,9 @@ module TwitRSVP
     response = Nokogiri::XML(open("http://maps.google.com/maps/geo?q=#{URI.escape(address)}&output=xml&key=&oe=utf-8"))
     status =  response.search("code").inner_html
     raise OpenURI::HTTPError.new('Bad Response', nil) unless status == '200'
-    raise OpenURI::HTTPError.new('Too Many Results', nil) if response.search('Placemark').size > 1
-    coords =  response.search("coordinates").inner_html.split(",")[0,2]
-    coords << response.search("address").inner_html
+    raise OpenURI::HTTPError.new('Too Many Results', nil) if response.search('Placemark').size > 2
+    coords =  response.search('Placemark').first.search("coordinates").inner_html.split(",")[0,2]
+    coords << response.search('Placemark').first.search("address").inner_html
     return coords
   end
 

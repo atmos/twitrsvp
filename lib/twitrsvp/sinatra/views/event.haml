@@ -1,7 +1,7 @@
 #event_header
   #event_description.left
     %h1
-      = @event.name
+      = h(@event.name)
       %span.context
         = "(<a href='#{event_url(@event)}' />permalink</a>)"
       - if @event.user == current_user
@@ -10,17 +10,17 @@
     - if @event.description.blank?
       %p no description for this event
     - else
-      %p= @event.description
+      %p= h(@event.description)
   #calendar.left
     %h1= @event.localtime.strftime('%A')
     .month_day= "#{@event.localtime.strftime('%b')} #{number_to_ordinal(@event.localtime.day)}"
     %h2{:title => @event.user.time_zone}= "#{@event.localtime.strftime('%l:%M %p')}"
   .clear
 %h2 
-  = "at #{@event.place}"
+  = "at #{h(@event.place)}"
   - unless @event.google_map_link.nil?
     %span.context
-      %a{:href => @event.google_map_link, :target => '_none' }= @event.address.gsub(/\d{5}, USA$/, '')
+      %a{:href => @event.google_map_link, :target => '_none' }= h(@event.address.gsub(/\d{5}, USA$/, ''))
 
 - unless @event.longitude.blank? || @event.latitude.blank?
   #map
@@ -30,7 +30,7 @@
       = "var point = new GLatLng(#{@event.latitude}, #{@event.longitude});"
       = "var icon = build_icon();"
       = "var html = \"<div class='map_info'><h2>It's time to party!</h2><a href='#{@event.google_map_link}' target='_blank'>Get Directions</a></div>\";"
-      = "var title = \"#{@event.name}\";"
+      = "var title = \"#{h(@event.name)}\";"
       = "var marker = createMarker(point, html, icon, title);"
       = "map.addOverlay(marker);"
       = "map.setUIToDefault();"
