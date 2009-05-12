@@ -3,18 +3,30 @@
   - unless current_user
     %span.context
       = "(<a href='/signup'>log me in!</a>)"
+
 %p
-  twitRSVP is an application that uses 
+  Wouldn’t it be nice to use twitter to say things like 
+  = '"<strong>who wants to grab a beer?</strong>"'
+  After talking to people we realized most people envisioned a service
+  operating a little differently. We're interested in supporting both
+  %strong ad-hoc twitter meetups
+  and
+  %strong organizing events
+  with your twitter homies
+  %strong in advance.
+
+%p
+  This is an application that uses 
   %a{:href => 'http://twitter.com'} twitter
   to organize events.
 
 %h2 This is how you use it
 %ul
-  %li You visit the interface to schedule an event.
-  %li You decide on a time and place for the event.
-  %li You can invite up to 20 attendees.
+  %li Visit the interface to schedule an event.
+  %li Decide on a time and place for the event.
+  %li Invite up to 20 attendees.
   %li We direct message the attendees on your behalf with the event info.
-  %li Your attendees can reply via the URL or by direct messaging you with an event key.
+  %li Attendees can reply via the web or by direct messaging you with an event key.
   / %li You can go back and edit events to make them more appealing.
   / %li An hour before your event, we shoot you a reminder and a link to let you know who is attending.
 

@@ -12,6 +12,7 @@ module TwitRSVP
       next if request.path_info == '/callback'
       next if request.path_info == '/application.js'
       next if request.path_info == '/favicon.ico'
+      next if request.path_info =~ %r!/events/[^/]{36}!
       unless session[:user_id]
         session[:return_to] = request.path_info
         throw(:halt, [302, {'Location' => '/about'}, '']) 
@@ -98,7 +99,6 @@ module TwitRSVP
       @event = TwitRSVP::Event.first(:permalink => event_id)
       @current_attendee = current_user == @event.user ? nil : @event.attendees.find { |attendee| attendee.user == current_user }
       @page_title = @event.short_name
-      throw(:halt, [401, "You aren't authorized to view this event"]) unless @event.authorized?(current_user)
       haml :event
     end
 

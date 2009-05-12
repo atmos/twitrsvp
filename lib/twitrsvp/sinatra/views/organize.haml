@@ -31,7 +31,7 @@
       %input{:type => 'text', :name => 'place', :size => 26, :value => @event.place, :class => css_class}
   .clear
     %label{:for => 'address'}
-      %h2 Address:
+      %h2 Address/URL:
       %textarea{:name => 'address', :rows => 2, :columns => 76}
         = @event.address
   .left

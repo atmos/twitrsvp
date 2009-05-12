@@ -25,12 +25,6 @@ describe "viewing an event" do
 
     get "/events/#{event.permalink}"
 
-    login_quentin
-    follow_redirect!
-
     last_response.should have_selector("p:contains('#{event.description}')")
-    last_response.should have_selector("#events #going")
-    last_response.should have_selector("#events #not_going")
-    last_response.should have_selector("#events #right_events")
   end
 end
