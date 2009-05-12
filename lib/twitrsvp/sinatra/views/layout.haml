@@ -55,6 +55,9 @@
           - unless request.path_info =~ %r!^/(manage|schedule|about)*$!
             %li{:class => 'goback'}
               %a{:href => '/manage'} &laquo; Go Back
+            - unless current_user
+              %li
+                %a{:href => '/signup'} login
           - if current_user
             %li
               %a{:href => '/peace'} logout
