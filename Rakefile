@@ -5,7 +5,7 @@ require 'date'
 require 'spec/rake/spectask'
 
 GEM = "twitrsvp"
-GEM_VERSION = "0.1.3"
+GEM_VERSION = "0.1.4"
 AUTHOR = "Corey Donohoe"
 EMAIL = "atmos@atmos.org"
 HOMEPAGE = "http://twitrsvp.com"
