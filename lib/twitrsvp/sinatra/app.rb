@@ -1,6 +1,7 @@
 module TwitRSVP
   class App < Sinatra::Base
     set :views, File.dirname(__FILE__)+'/views'
+    enable :sessions
     enable :methodoverride
 
     before do
@@ -13,7 +14,7 @@ module TwitRSVP
       next if request.path_info == '/favicon.ico'
       unless session[:user_id]
         session[:return_to] = request.path_info
-        throw(:halt, [302, {'Location' => '/signup'}, '']) 
+        throw(:halt, [302, {'Location' => '/about'}, '']) 
       end
     end
 

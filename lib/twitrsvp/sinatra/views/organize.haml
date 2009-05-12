@@ -2,6 +2,8 @@
   %h1= "Welcome #{current_user.name},"
   - if @event.new_record?
     %p In order to get things going you just need to fill out the following fields.
+  - else
+    %p Updates to this event will notify your invitees via direct messages.
 
   - if @event.errors.any?
     .message.decline

@@ -1,5 +1,6 @@
 module TwitRSVP
   class User
+    class DirectMessageError < StandardError; end
     include DataMapper::Resource
     class  UserCreationError < StandardError; end
     storage_names[:default] = 'twitrsvp_users'
@@ -121,6 +122,7 @@ module TwitRSVP
         end
       end
     end
+
     def self.handle_direct_message_replies
       User.all.each do |user| 
         begin
@@ -129,6 +131,25 @@ module TwitRSVP
           TwitRSVP::Log.logger.info("Unable to fetch direct messages for #{user.screen_name}(#{e.message})")
         end
       end
+    end
+
+    def direct_message(recipient, message, &block)
+      TwitRSVP.retryable(:tries => 3) do
+        dm = TwitRSVP::OAuth.consumer.request(:post, '/direct_messages/new.json', 
+                                              access_token, {:scheme => :query_string},
+                                              { :text => message, :user => recipient.twitter_id })
+        case dm
+        when Net::HTTPSuccess, Net::HTTPForbidden # message was delivered
+          yield dm if block_given?
+        else # will retry up to 3 times, logging the response each time
+          TwitRSVP::Log.logger.info("Response: #{dm.code}, Something screwed up, hopefully a retry will fix it. #{twitter_id} inviting #{recipient.twitter_id}")
+          raise DirectMessageError.new(recipient.twitter_id)
+        end
+      end
+    rescue DirectMessageError => e
+      TwitRSVP::Log.logger.info("Unable to dm : #{recipient.twitter_id}")
+    rescue => e
+      TwitRSVP::Log.logger.info("Unable to do it, #{e.message}")
     end
   end
 end

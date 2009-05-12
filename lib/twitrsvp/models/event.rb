@@ -23,8 +23,9 @@ module TwitRSVP
     has n, :attendees, :order => [:status.asc]
 
     before :save, :geocode
-    before :create, :geocode
-    before :create, :create_permalink
+    before :save, :create_permalink
+
+    after  :update, :attendees_update
 
     def google_map_link
       return address if address.nil?
@@ -43,6 +44,7 @@ module TwitRSVP
     rescue OpenURI::HTTPError => e
       if e.message == 'Too Many Results'
         errors.add(:address, "Too many results for this address")
+        self.address = original_values[:location] || old_address
         false
       else
         self.longitude = self.latitude = ''
@@ -53,10 +55,12 @@ module TwitRSVP
 
     def create_permalink
       self.permalink ||= ::UUID.random_create.to_s
-      content = Curl::Easy.perform("http://tinyurl.com/api-create.php?url=http://twitrsvp.com/events/#{::URI.escape(permalink)}") do |curl|
-        curl.timeout = 30
+      if self.tiny_url.blank?
+        content = Curl::Easy.perform("http://tinyurl.com/api-create.php?url=http://twitrsvp.com/events/#{::URI.escape(permalink)}") do |curl|
+          curl.timeout = 30
+        end
+        self.tiny_url  ||= content.body_str
       end
-      self.tiny_url  ||= content.body_str
     end
 
     def localtime
@@ -105,6 +109,25 @@ module TwitRSVP
         end
       else
         errors.add(:attendees, "20 User Limit Exceeded")
+      end
+    end
+
+    def dm_description
+      time_format = "#{localtime.strftime('%b')} #{TwitRSVP.number_to_ordinal(localtime.strftime('%e'))}"
+      "#{time_format}@#{localtime.strftime('%l:%M%P').strip}-#{short_name}"
+    end
+
+    def attendees_update
+      return unless dirty_attributes.any?
+      message = "UPDATE: #{dm_description}, #{tiny_url}"
+      attendees.each do |attendee|
+        user.direct_message(attendee.user, message) do |dm|
+          case dm
+          when Net::HTTPSuccess # message was delivered
+            attendee.notified = true
+            attendee.save 
+          end
+        end
       end
     end
   end
