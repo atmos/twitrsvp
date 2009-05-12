@@ -44,6 +44,7 @@ Spec::Runner.configure do |config|
 
   def app
     @app = Rack::Builder.new do
+      TwitRSVP::App.enable :sessions
       TwitRSVP::App.set :environment, 'production'
       run TwitRSVP::App
     end
