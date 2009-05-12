@@ -38,7 +38,7 @@ module TwitRSVP
     end
 
     def notification_message
-      "#{event.dm_description[0..50]}, #{event.tiny_url} or dm back with YES or NO followed by the event key '#{event.dm_key}'"
+      "#{event.dm_description[0..50]}, #{event.tiny_url} or dm back YES or NO followed by event key '#{event.dm_key}'"
     end
     after :create, :notify!
 

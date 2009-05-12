@@ -19,5 +19,9 @@
   / %li An hour before your event, we shoot you a reminder and a link to let you know who is attending.
 
 #click-through
-  %form{:action => '/signup', :method => 'GET'}
-    %input.submit{:type => 'submit', :value => 'Make an event now!'}
+  - if current_user
+    %form{:action => '/schedule', :method => 'GET'}
+      %input.submit{:type => 'submit', :value => 'Make an event now!'}
+  - else
+    %form{:action => '/signup', :method => 'GET'}
+      %input.submit{:type => 'submit', :value => 'Make an event now!'}

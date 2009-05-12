@@ -114,7 +114,7 @@ module TwitRSVP
 
     def dm_description
       time_format = "#{localtime.strftime('%b')} #{TwitRSVP.number_to_ordinal(localtime.strftime('%e'))}"
-      "#{time_format}@#{localtime.strftime('%l:%M%P').strip}-#{short_name}"
+      "#{name}-#{time_format}-#{localtime.strftime('%l:%M%P').strip} @#{place}"
     end
 
     def attendees_update

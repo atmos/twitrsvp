@@ -39,7 +39,7 @@ describe "modifying an event" do
       :start_time => event.start_at.strftime('%Y/%m/%d'), :description => event.description
 
     last_response.should have_selector("form[action='/events/#{event.permalink}'][method='POST']")
-    last_response.should have_selector("h1:contains('Welcome Quentin Blake,')")
+    last_response.should have_selector("h1:contains('Editing: #{event.name}')")
     last_response.should have_selector(".message.decline h2.orange:contains('20 User Limit Exceeded')")
   end
 end
