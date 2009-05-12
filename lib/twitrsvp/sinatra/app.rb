@@ -43,8 +43,9 @@ module TwitRSVP
 
       def event_attendees_links(event)
         event.attendees.map do |attendee| 
+          next if attendee.user.nil?
           " <a href='#{attendee.user.url}'>@#{attendee.user.screen_name}</a> " + attendee_uninvite(attendee)
-        end.join(',')
+        end.compact.join(',')
       end
 
       def event_url(event, suffix = nil)
