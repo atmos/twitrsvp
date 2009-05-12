@@ -116,6 +116,7 @@ module TwitRSVP
                                :description => params['description'], 
                                :start_at => localtime(params['start_date'], params['start_time']))
       @event.invite_users(params['usernames'].split(','))
+      @form_path = event_url(@event)
       @event.errors.any? ? haml(:organize) : redirect(event_url(@event))
     end
 

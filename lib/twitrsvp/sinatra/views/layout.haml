@@ -27,7 +27,7 @@
           - else
             %li
               %a{:href => '/about'} about
-          %li{:class => (request.path_info =~ %r!^/(events/\d+/edit|schedule|events)$! ? 'current' : '') }
+          %li{:class => (request.path_info =~ %r!^/(schedule|events)$! ? 'current' : '') }
             %a{:href => '/schedule' } schedule
           %li{:class => (request.path_info == '/manage' ? 'current' : '') }
             %a{:href => '/manage'} manage

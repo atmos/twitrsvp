@@ -54,6 +54,34 @@ module TwitRSVP::Fixtures
 </kml>
     EOF
   end
+  def self.multi_google_response
+    <<-EOF
+<kml xmlns="http://earth.google.com/kml/2.0">
+  <Response>
+  <name>Lehigh St</name>
+  <Status>
+    <code>200</code>
+    <request>geocode</request>
+  </Status>
+  <Placemark id="p1">
+    <address>Lehigh St, PA 17925, USA</address>
+    <AddressDetails xmlns="urn:oasis:names:tc:ciq:xsdschema:xAL:2.0" Accuracy="6"><Country><CountryNameCode>US</CountryNameCode><CountryName>USA</CountryName><AdministrativeArea><AdministrativeAreaName>PA</AdministrativeAreaName><Thoroughfare><ThoroughfareName>Lehigh St</ThoroughfareName></Thoroughfare><PostalCode><PostalCodeNumber>17925</PostalCodeNumber></PostalCode></AdministrativeArea></Country></AddressDetails>
+    <ExtendedData>
+      <LatLonBox north="40.7979196" south="40.7916244" east="-75.9774134" west="-75.9837086"/>
+    </ExtendedData>
+    <Point><coordinates>-75.9805350,40.7947780,0</coordinates></Point>
+  </Placemark>
+  <Placemark id="p2">
+    <address>Lehigh St, Allentown, PA, USA</address>
+    <AddressDetails xmlns="urn:oasis:names:tc:ciq:xsdschema:xAL:2.0" Accuracy="6"><Country><CountryNameCode>US</CountryNameCode><CountryName>USA</CountryName><AdministrativeArea><AdministrativeAreaName>PA</AdministrativeAreaName><Locality><LocalityName>Allentown</LocalityName><Thoroughfare><ThoroughfareName>Lehigh St</ThoroughfareName></Thoroughfare></Locality></AdministrativeArea></Country></AddressDetails>
+    <ExtendedData>
+      <LatLonBox north="40.5997540" south="40.5381090" east="-75.4651880" west="-75.4987940"/>
+    </ExtendedData>
+    <Point><coordinates>-75.4823990,40.5690340,0</coordinates></Point>
+  </Placemark>
+    EOF
+  end
+
   def self.unsuccessful_google_response
     <<-EOF
 <?xml version="1.0" encoding="UTF-8"?>

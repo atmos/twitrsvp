@@ -25,7 +25,7 @@ describe "modifying an event" do
     last_response.should have_selector("form[action='/events/#{event.permalink}'] label[for='description']")
     last_response.should have_selector("form[action='/events/#{event.permalink}'] textarea[name='description']:contains('#{event.description}')")
     last_response.should have_selector("form[action='/events/#{event.permalink}'] textarea[name='usernames']")
-    last_response.should have_selector("form[action='/events/#{event.permalink}'] input[type='submit'][value='Create!']")
+    last_response.should have_selector("form[action='/events/#{event.permalink}'] input[type='submit'][value='Done Editing!']")
     last_response.should have_selector("form[action='/events/#{event.permalink}'] a.unsubmit.negative[href='/events/#{event.permalink}']:contains('Oh Nevermind')")
   end
   it "should limit to 20 invitees" do
@@ -38,6 +38,7 @@ describe "modifying an event" do
       :name => event.name, :place => event.place, :start_date => event.start_at.strftime('%Y/%m/%d'),
       :start_time => event.start_at.strftime('%Y/%m/%d'), :description => event.description
 
+    last_response.should have_selector("form[action='/events/#{event.permalink}'][method='POST']")
     last_response.should have_selector("h1:contains('Welcome Quentin Blake,')")
     last_response.should have_selector(".message.decline h2.orange:contains('20 User Limit Exceeded')")
   end

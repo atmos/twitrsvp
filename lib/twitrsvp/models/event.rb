@@ -39,9 +39,16 @@ module TwitRSVP
     def geocode
       old_address = address
       self.longitude, self.latitude, self.address = TwitRSVP.geocode(address) if attribute_dirty?(:address)
-    rescue OpenURI::HTTPError
-      self.longitude = self.latitude = ''
-      self.address = old_address
+      true
+    rescue OpenURI::HTTPError => e
+      if e.message == 'Too Many Results'
+        errors.add(:address, "Too many results for this address")
+        false
+      else
+        self.longitude = self.latitude = ''
+        self.address = old_address
+        true
+      end
     end
 
     def create_permalink

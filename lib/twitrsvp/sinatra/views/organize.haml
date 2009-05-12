@@ -1,7 +1,8 @@
 .intro
   %h1= "Welcome #{current_user.name},"
-  %p
-    In order to get things going you just need to fill out the following fields.
+  - if @event.new_record?
+    %p In order to get things going you just need to fill out the following fields.
+
   - if @event.errors.any?
     .message.decline
       - @event.errors.each do |errors|
@@ -61,11 +62,14 @@
       / %a.invite.left{:href => '#'} Invite
       %textarea{:name => 'usernames', :rows => 5, :columns => 76}
         = params['usernames']
+      %p.context Twitter names to invite, separated by commas.  These are the names you normally @reply.  You can only invite people that follow you at this time.
       - unless @event.new_record?
-        %p.context
+        %p.message.accept
           You've already invited these people:
           = event_attendees_links(@event)
-      %p.context Twitter names to invite, separated by commas.  These are the names you normally @reply.  You can only invite people that follow you at this time.
 
-  %input.submit{:type => 'submit', :value => 'Create!'}
+  - if @event.new_record?
+    %input.submit{:type => 'submit', :value => 'Create!'}
+  - else
+    %input.submit{:type => 'submit', :value => 'Done Editing!'}
   %a.unsubmit.negative{:href => @event.new_record? ? '/manage' : event_url(@event)} Oh Nevermind
