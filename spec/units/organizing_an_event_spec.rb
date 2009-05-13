@@ -68,4 +68,14 @@ describe "organizing an event" do
     last_response.should have_selector("h1:contains('Welcome Quentin Blake,')")
     last_response.should have_selector(".message.decline h2.orange:contains('20 User Limit Exceeded')")
   end
+  it "should handle empty addresses" do
+    FakeWeb.clean_registry
+    FakeWeb.register_uri(:any, %r!^http://maps.google.com!,
+                         [{:string => TwitRSVP::Fixtures.unsuccessful_google_response,   :status => ['200', 'OK']}])
+    post '/events', :name => /\w{4,20}/.gen, :place => /\w{4,20}/.gen, :address => '',
+      :start_date => Time.now.utc.strftime('%Y/%m/%d'), :start_time => Time.now.utc.strftime('%l:%M'),
+      :usernames => 'atmos,twitrsvp', :description => /[:paragraph]/.gen[0..139]
+
+    get last_response.headers['Location']
+  end
 end
