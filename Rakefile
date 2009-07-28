@@ -66,6 +66,3 @@ task :make_spec do
     file.puts spec.to_ruby
   end
 end
-
-load 'lib/tasks/devver.rake'
-
