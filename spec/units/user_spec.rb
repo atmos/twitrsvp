@@ -24,7 +24,7 @@ describe "TwitRSVP::User" do
   describe "organizing events" do
     it "with a valid event address" do
       FakeWeb.register_uri(:any, %r!^http://maps.google.com!,
-        [{:string => TwitRSVP::Fixtures.successful_google_response,   :status => ['200', 'OK']}])
+        [{:body => TwitRSVP::Fixtures.successful_google_response,   :status => ['200', 'OK']}])
 
       lambda do
         @user.organize(/\w{5,14}/.gen, /w{3,12}/.gen, '1535 Pearl St, Boulder, CO',
@@ -38,7 +38,7 @@ describe "TwitRSVP::User" do
 
     it "with an invalid event address" do
       FakeWeb.register_uri(:any, %r!^http://maps.google.com!,
-                           [{:string => TwitRSVP::Fixtures.unsuccessful_google_response, :status => ['401', 'Unauthorized']}])
+                           [{:body => TwitRSVP::Fixtures.unsuccessful_google_response, :status => ['401', 'Unauthorized']}])
       lambda do
         @user.organize(/\w{5,14}/.gen, /w{3,12}/.gen, '15359428972 Somefreakinroadgooglecantfind, nome, AK',
                      'a big shindig with beer and stuff',

@@ -3,7 +3,7 @@ require File.dirname(__FILE__)+'/../spec_helper'
 describe "organizing an event" do
   before(:each) do
     FakeWeb.register_uri(:any, %r!^http://maps.google.com!,
-                         [{:string => TwitRSVP::Fixtures.successful_google_response,   :status => ['200', 'OK']}])
+                         [{:body => TwitRSVP::Fixtures.successful_google_response,   :status => ['200', 'OK']}])
     login_quentin
   end
   it "can schedule events" do
@@ -71,7 +71,7 @@ describe "organizing an event" do
   it "should handle empty addresses" do
     FakeWeb.clean_registry
     FakeWeb.register_uri(:any, %r!^http://maps.google.com!,
-                         [{:string => TwitRSVP::Fixtures.unsuccessful_google_response,   :status => ['200', 'OK']}])
+                         [{:body => TwitRSVP::Fixtures.unsuccessful_google_response,   :status => ['200', 'OK']}])
     post '/events', :name => /\w{4,20}/.gen, :place => /\w{4,20}/.gen, :address => '',
       :start_date => Time.now.utc.strftime('%Y/%m/%d'), :start_time => Time.now.utc.strftime('%l:%M'),
       :usernames => 'atmos,twitrsvp', :description => /[:paragraph]/.gen[0..139]

@@ -1,9 +1,5 @@
-ENV["RACK_ENV"] = "test"
-
-$TESTING=true
+ENV["RACK_ENV"] = "development"
 $:.push File.join(File.dirname(__FILE__), '..', 'lib')
-require 'rubygems'
-require 'randexp'
 require 'twitrsvp'
 require 'do_sqlite3'
 require 'rack/test'
@@ -11,8 +7,6 @@ require 'webrat'
 require 'dm-sweatshop'
 require 'fakeweb'
 require 'pp'
-
-srand
 
 FakeWeb.allow_net_connect = false
 
@@ -36,17 +30,14 @@ Spec::Runner.configure do |config|
     DataMapper.auto_migrate!
     FakeWeb.clean_registry
     FakeWeb.register_uri(:any, %r!^http://twitter.com!,
-                         [{:string => "", :status => ["200", "OK"]},
-                          {:string => "", :status => ["401", "Unauthorized"]},
-                          {:string => "", :status => ["403", "Forbidden"]},
-                          {:string => "", :status => ["502", "Bad Gateway"]}])
+                         [{:body => "", :status => ["200", "OK"]},
+                          {:body => "", :status => ["401", "Unauthorized"]},
+                          {:body => "", :status => ["403", "Forbidden"]},
+                          {:body => "", :status => ["502", "Bad Gateway"]}])
   end
 
   def app
-    @app = Rack::Builder.new do
-      TwitRSVP::App.set :environment, 'production'
-      run TwitRSVP::App
-    end
+    TwitRSVP.app
   end
 
   def quentin_time(t)

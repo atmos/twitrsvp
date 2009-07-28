@@ -1,4 +1,4 @@
-require 'rubygems'
+require File.dirname(__FILE__)+'/vendor/gems/environments/default.rb'
 require 'rake/gempackagetask'
 require 'rubygems/specification'
 require 'date'
@@ -66,3 +66,6 @@ task :make_spec do
     file.puts spec.to_ruby
   end
 end
+
+load 'lib/tasks/devver.rake'
+

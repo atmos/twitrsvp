@@ -10,8 +10,13 @@ It's a sinatra app, packaged as a gem, deployed as a rack app.
     % sudo gem install pkg/twitrsvp*.gem
 
 Your basic deps look like this:
-
-    % sudo gem install oauth json haml chronic curb data_objects dm-core dm-types dm-validations dm-timestamps sinatra
+    
+    % git clone git://github.com/wycats/bundler.git
+    % cd bundler
+    % rake repackage
+    % sudo gem install pkg/*.gem
+    % hash -r
+    % gem_bundler
 
 Deployment
 ==========
@@ -36,15 +41,9 @@ Example config.ru
 
 testing
 =======
-You need [jacqui][jacqui]'s fork of fakeweb for the time being
-    % git clone git://github.com/jacqui/fakeweb.git
-    % cd fakeweb
-    % rake repackage
-    % sudo gem install pkg/fakeweb-1.2.0.gem
 
-Then you just run rake...
+Just run rake...
 
-[jacqui]: http://github.com/jacqui
 [sinatra]: http://www.sinatrarb.com
 [twitrsvp]: http://twitrsvp.com
 [twitter]: http://twitter.com

@@ -1,4 +1,7 @@
-.DS_Store
+.devver
 coverage
 pkg
+.DS_Store
 twitrsvp.log
+bin
+vendor

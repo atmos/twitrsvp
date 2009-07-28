@@ -1,28 +1,17 @@
-gem 'oauth'
+require File.dirname(__FILE__)+'/../vendor/gems/environments/default.rb'
 require 'oauth'
-gem 'json'
 require 'json'
-gem 'haml', '~>2.0.9'
 require 'haml/util'
 require 'haml/engine'
-gem 'chronic'
-require 'chronic'
-gem 'curb'
 require 'curb'
+require 'chronic'
 require 'logger'
-gem 'nokogiri'
 require 'nokogiri'
-gem 'uuidtools'
 require 'uuidtools'
 require 'open-uri'
-gem 'randexp'
 require 'randexp'
+require 'digest/sha1'
 
-gem 'data_objects', '~>0.9.11'
-gem 'dm-core', '~>0.9.10'
-gem 'dm-types', '~>0.9.10'
-gem 'dm-validations', '~>0.9.10'
-gem 'dm-timestamps', '~>0.9.10'
 require 'dm-core'
 require 'dm-types'
 require 'dm-validations'
@@ -33,10 +22,18 @@ root = File.dirname(__FILE__)
 require root + '/twitrsvp/models/user'
 require root + '/twitrsvp/models/event'
 require root + '/twitrsvp/models/attendee'
-require root + '/twitrsvp/sinatra/app'
+require root + '/twitrsvp/app'
 require root + '/twitrsvp/ext/tzinfo_timezone'
 
 module TwitRSVP
+  def self.app
+    @app ||= Rack::Builder.new do
+      use Rack::Session::Cookie, :key => 'rack.session', :path => '/',
+       :expire_after => 2592000, :secret => ::Digest::SHA1.hexdigest(Time.now.to_s)
+      run App
+    end
+  end
+
   module Log
     def self.logger
       if @logger.nil?

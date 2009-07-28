@@ -1,7 +1,6 @@
 module TwitRSVP
   class App < Sinatra::Base
-    set :views, File.dirname(__FILE__)+'/views'
-    enable :sessions
+    set :views, File.join(File.dirname(__FILE__), '/views')
     enable :methodoverride
 
     before do
