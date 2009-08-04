@@ -1,4 +1,5 @@
 ENV["RACK_ENV"] = "development"
+require File.dirname(__FILE__)+'/../vendor/gems/environments/default.rb'
 $:.push File.join(File.dirname(__FILE__), '..', 'lib')
 require 'twitrsvp'
 require 'do_sqlite3'

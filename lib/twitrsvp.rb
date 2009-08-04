@@ -1,4 +1,3 @@
-require File.dirname(__FILE__)+'/../vendor/gems/environments/default.rb'
 require 'oauth'
 require 'json'
 require 'haml/util'
