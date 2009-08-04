@@ -58,6 +58,13 @@
             %input.submit{:type => 'submit', :value => "I'm going!"}
           %form{:action => event_url(@event, '/decline'), :method => 'POST'}
             %input.unsubmit{:type => 'submit', :value => "No thanks."}
+  - else
+    #unauthenticated_confirmation_forms
+      %form.left{:action => event_url(@event, '/confirm'), :method => 'POST'}
+        %input.submit{:type => 'submit', :value => "I'm going!"}
+      %form{:action => event_url(@event, '/decline'), :method => 'POST'}
+        %input.unsubmit{:type => 'submit', :value => "No thanks."}
+
   - if current_user && @event.authorized?(current_user)
     #left_events.left
       #going
