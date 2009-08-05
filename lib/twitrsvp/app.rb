@@ -23,6 +23,16 @@ module TwitRSVP
         ::TwitRSVP::OAuth.consumer
       end
 
+      def absolute_url(suffix = nil)
+        port_part = case request.scheme
+                    when "http"
+                      request.port == 80 ? "" : ":#{request.port}"
+                    when "https"
+                      request.port == 443 ? "" : ":#{request.port}"
+                    end
+          "#{request.scheme}://#{request.host}#{port_part}#{suffix}"
+      end
+
       def localtime(start_date, start_time)
         time_of_day = Time.parse(start_time)
         year, month, day = start_date.split('/')
@@ -161,7 +171,7 @@ module TwitRSVP
 
     get '/signup' do
       TwitRSVP.retryable(:times => 2) do 
-        request_token = oauth_consumer.get_request_token
+        request_token = oauth_consumer.get_request_token(:oauth_callback => absolute_url('/callback'))
         session[:request_token] = request_token.token
         session[:request_token_secret] = request_token.secret
         redirect request_token.authorize_url
