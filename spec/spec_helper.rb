@@ -38,7 +38,11 @@ Spec::Runner.configure do |config|
   end
 
   def app
-    TwitRSVP.app
+    @app ||= Rack::Builder.app do
+      use Rack::Session::Cookie, :key => 'rack.session', :path => '/', :domain => 'example.com',
+       :expire_after => 2592000, :secret => ::Digest::SHA1.hexdigest(Time.now.to_s)
+      run TwitRSVP.app
+    end
   end
 
   def quentin_time(t)

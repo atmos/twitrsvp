@@ -3,10 +3,11 @@ require 'rake/gempackagetask'
 require 'rubygems/specification'
 require 'date'
 require 'spec/rake/spectask'
+require 'bundler'
 
 GEM = "twitrsvp"
-GEM_VERSION = "0.1.4"
-AUTHOR = "Corey Donohoe"
+GEM_VERSION = "0.1.5"
+AUTHORS = ["Corey Donohoe", 'Jeffrey Larrimore', 'Tyler Montgomery']
 EMAIL = "atmos@atmos.org"
 HOMEPAGE = "http://twitrsvp.com"
 SUMMARY = "A gem that provides twitter rsvp based on oauth and sinatra"
@@ -18,18 +19,15 @@ spec = Gem::Specification.new do |s|
   s.has_rdoc = true
   s.summary = SUMMARY
   s.description = s.summary
-  s.author = AUTHOR
+  s.authors = AUTHORS
   s.email = EMAIL
   s.homepage = HOMEPAGE
 
-  # Uncomment this to add a dependency
-  s.add_dependency "oauth", '~>0.3.2'
-  s.add_dependency "sinatra", '~>0.9.1.1'
-  s.add_dependency "curb", "~>0.3.2"
-  s.add_dependency "nokogiri", "~>1.2.3"
-  s.add_dependency "uuidtools", "~>1.0.7"
-  s.add_dependency "tzinfo", "~>0.3.13"
-  s.add_dependency "tztime", "~>0.1.0"
+  manifest = Bundler::ManifestFile.load(File.dirname(__FILE__) + '/Gemfile')
+  manifest.dependencies.each do |d|
+    next unless d.in?(:release)
+    s.add_dependency(d.name, d.version)
+  end
 
   s.require_path = 'lib'
   s.autorequire = GEM

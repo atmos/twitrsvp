@@ -27,8 +27,6 @@ require root + '/twitrsvp/ext/tzinfo_timezone'
 module TwitRSVP
   def self.app
     @app ||= Rack::Builder.new do
-      use Rack::Session::Cookie, :key => 'rack.session', :path => '/',
-       :expire_after => 2592000, :secret => ::Digest::SHA1.hexdigest(Time.now.to_s)
       run App
     end
   end
