@@ -9,6 +9,7 @@ gem 'dm-types', '>=0.9.11'
 gem 'oauth', '=0.3.2'
 gem 'json', '>=1.1.7'
 gem 'dm-sweatshop', '>=0.9.11'
+gem 'nokogiri', '>=1.3.3'
 gem "uuidtools", "~>1.0.7"
 gem "tzinfo", "~>0.3.13"
 gem "tztime", "~>0.1.0"
