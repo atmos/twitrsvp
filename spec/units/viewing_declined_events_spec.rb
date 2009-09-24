@@ -1,9 +1,6 @@
 require File.dirname(__FILE__)+'/../spec_helper'
 
-describe "viewing decilned events" do
-  before(:each) do
-    login_quentin
-  end
+describe "viewing declined events" do
   it "displays the event when the current_user is an attendee of the event" do
     login_quentin
 

@@ -11,7 +11,7 @@ module TwitRSVP
       next if request.path_info == '/callback'
       next if request.path_info == '/application.js'
       next if request.path_info == '/favicon.ico'
-      next if request.path_info =~ %r!/events/[^/]{36}!
+      #next if request.path_info =~ %r!/events/[^/]{36}!
       unless session[:user_id]
         session[:return_to] = request.path_info
         throw(:halt, [302, {'Location' => '/about'}, '']) 

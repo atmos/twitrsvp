@@ -12,7 +12,6 @@ require 'randexp'
 require 'digest/sha1'
 
 require 'dm-core'
-require 'dm-types'
 require 'dm-validations'
 require 'dm-timestamps'
 require 'sinatra/base'

@@ -1,4 +1,7 @@
-require File.dirname(__FILE__)+'/vendor/gems/environments/default.rb'
+project_root = File.expand_path(File.dirname(__FILE__))
+require File.join(project_root, 'vendor', 'gems', 'environment')
+Bundler.require_env
+
 require 'rake/gempackagetask'
 require 'rubygems/specification'
 require 'date'
@@ -6,7 +9,7 @@ require 'spec/rake/spectask'
 require 'bundler'
 
 GEM = "twitrsvp"
-GEM_VERSION = "0.1.5"
+GEM_VERSION = "0.1.6"
 AUTHORS = ["Corey Donohoe", 'Jeffrey Larrimore', 'Tyler Montgomery']
 EMAIL = "atmos@atmos.org"
 HOMEPAGE = "http://twitrsvp.com"
@@ -23,9 +26,9 @@ spec = Gem::Specification.new do |s|
   s.email = EMAIL
   s.homepage = HOMEPAGE
 
-  manifest = Bundler::ManifestFile.load(File.dirname(__FILE__) + '/Gemfile')
+  manifest = Bundler::Environment.load(File.dirname(__FILE__) + '/Gemfile')
   manifest.dependencies.each do |d|
-    next unless d.in?(:release)
+    next if d.only && d.only.include?('test')
     s.add_dependency(d.name, d.version)
   end
 

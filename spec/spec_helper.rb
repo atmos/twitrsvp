@@ -1,30 +1,27 @@
-ENV["RACK_ENV"] = "development"
-require File.dirname(__FILE__)+'/../vendor/gems/environments/default.rb'
+ENV['RACK_ENV'] ||= 'test'
+project_root = File.expand_path(File.dirname(__FILE__))
+require File.join(project_root, '..', 'vendor', 'gems', 'environment')
+Bundler.require_env(:test)
+
 $:.push File.join(File.dirname(__FILE__), '..', 'lib')
 require 'twitrsvp'
-require 'do_sqlite3'
-require 'rack/test'
-require 'webrat'
-require 'dm-sweatshop'
-require 'fakeweb'
 require 'pp'
 
 FakeWeb.allow_net_connect = false
 
-require File.dirname(__FILE__)+'/fixtures'
+require File.join(project_root, 'fixtures')
 
 DataMapper.setup(:default, 'sqlite3::memory:')
 
-class Net::HTTPResponse 
-  def body=(content) 
-    @body = content 
-    @read = true 
-  end 
+class Net::HTTPResponse
+  def body=(content)
+    @body = content
+    @read = true
+  end
 end
 
 Spec::Runner.configure do |config|
   config.include(Rack::Test::Methods)
-  config.include(Webrat::Methods)
   config.include(Webrat::Matchers)
 
   config.before(:each) do
