@@ -1,0 +1,454 @@
+* {
+color:#2E2E2E;
+font-family:verdana;
+font-size:12px;
+line-height:16px;
+margin:0;
+padding:0;
+}
+
+p { margin-bottom:1.1em; }
+h1, h2, h3 { font-family:"Trebuchet MS"; color:#000000; margin-bottom:0.3em; }
+h1 { font-size:1.5em; }
+h2 { font-size:1.17em; }
+h3 { font-size: 1.083333em; }
+
+.left { float:left; }
+.right { float:right; }
+.clear { clear:both; }
+.green { color:#709A20 !important; }
+.orange { color:#C96422 !important; }
+
+a:link { color:#709A20; }
+a:visited { color:#709A20; }
+a:hover { color:#4F4F4F; }
+
+h1 a, h2 a, h3 a { font-weight: normal; }
+h1 span.context a {font-size:1em;}
+h2 span.context a, h3 span.context a {font-size:1.1em;}
+
+a.positive:link { color:#709A20; text-decoration:underline; }
+a.positive:visited { color:#709A20; }
+a.positive:hover { color:#2E2E2E; }
+
+a.negative:link { color:#C96422; text-decoration:underline; }
+a.negative:visited { color:#C96422; }
+a.negative:hover { color:#2E2E2E; }
+
+.pending_event h3 a:link { color:#2E2E2E; text-decoration:underline; font-size:1.01em; font-weight:normal; line-height:1.2em; }
+.pending_event h3 a:visited { color:#2E2E2E; text-decoration:underline; }
+.pending_event h3 a:hover { color:#C96422; text-decoration:underline; }
+.declined_event h3 a:link { color:#2E2E2E; text-decoration:underline; font-size:1.01em; font-weight:normal; line-height:1.2em; }
+.declined_event h3 a:visited { color:#2E2E2E; text-decoration:underline; }
+.declined_event h3 a:hover { color:#C96422; text-decoration:underline; }
+
+h1.declined_header a { font-size:0.68em; color:#fff; }
+h1.declined_header a:hover { color:#2e2e2e;	}
+
+#your_and_going_to_events h3 a { font-size:1.01em; font-weight:normal; line-height:1.2em; }
+
+body {
+background-color:#FFFFFF;
+background-image:url(../img/gradient.jpg);
+background-position:center top;
+background-repeat:repeat-x;
+width:100%;
+}
+#page {
+display:block;
+margin:0 auto;
+width:700px;
+}
+* html body { text-align:center; }
+* html #page { text-align:left; }
+/* Messaging errors/confirms */
+.message{
+width:429px; /* 469px; */
+padding:10px 18px;
+border-width:1px;
+border-style:solid;
+}
+.message h2{ display:inline;}
+.message.accept{
+border-color:#d4e1bc;
+background-color:#f0f5e8;
+}
+.message.decline{
+border-color:#efd0bc;
+background-color:#f9efe8;
+}
+/* MainHTML/Containers ---------------------------------------- Overrides */
+
+h1.pending_header, h1.declined_header {
+color:#FFFFFF;
+font-weight:normal;
+letter-spacing:0.03em;
+margin-bottom:2px;
+padding:6px 6px 6px 8px;
+}
+h2.left{ margin-right:8px; }
+h1 span.context, h2 span.context, h3 span.context {
+font-size:0.66em;
+font-weight:normal;
+}
+textarea { width:430px; }
+ul{
+list-style-position:outside;
+list-style-type:disc;
+padding:0 0 0 18px;
+margin:0 0 24px 0;
+}
+li{
+margin:8px 0;
+}
+input {
+border:1px solid gray;
+padding:2px;
+margin: 0 4px 0 0;
+cursor:pointer;
+}
+input.submit {
+background:#709A20 none repeat scroll 0 0;
+border:1px solid #FFFFFF;
+color:#FFFFFF;
+font-size:1.17em;
+padding:5px 10px;
+}
+input.unsubmit {
+background:#C96422 none repeat scroll 0 0;
+border:1px solid #FFFFFF;
+color:#FFFFFF;
+font-size:1.17em;
+padding:5px 10px;
+}
+a.unsubmit {
+font-family:"Trebuchet MS";
+font-weight:bold;
+color:#C96422;
+font-size:1.1em;
+padding:5px 7px;
+text-decoration: none;
+}
+/* Overrides ---------------------------------------- HEADER */
+
+#header {
+background:transparent url(../img/header.png) no-repeat scroll right 0;
+font-size:18px;
+height:146px;
+}
+#header a:link {
+color:#000000;
+text-decoration:none;
+}
+#header a:visited {
+color:#000000;
+text-decoration:none;
+}
+#header a:hover {
+color:#709A20;
+}
+#logo {
+background:transparent url(../img/logo.png) no-repeat right 0;
+height:219px;
+margin-top:30px;
+overflow:hidden;
+position:absolute;
+text-indent:-300px;
+width:203px;
+}
+ul#nav {
+float:right;
+list-style-type:none;
+margin:0 12px 0 0;
+}
+ul#nav li {
+background:#CFE6F7 url(../img/tl_corner.png) no-repeat scroll 0 0;
+float:left;
+height:24px;
+margin:0 8px 0 0;
+position:relative;
+top:106px;
+}
+ul#nav li.current {
+background-color:white;
+}
+ul#nav li a {
+background:transparent url(../img/tr_corner.png) no-repeat scroll right top;
+display:block;
+font-family:Trebuchet MS;
+font-size:16px;
+font-weight:bold;
+line-height:18px;
+padding:5px 15px 0;
+}
+/* HEADER ---------------------------------------- SIDEBAR */
+
+#sidebar {
+width:160px;
+padding: 100px 0 0 0;
+}
+#declined_whole {
+position: relative;
+margin:0px 0 0 -34px;
+overflow:hidden;
+width:194px;
+z-index:1000;
+}
+#declined_tab { 	
+background: transparent url(../img/declined.png) no-repeat 0 0;
+width:34px;
+height: 41px;
+padding:0px;
+}
+#declined { 
+width:160px;
+padding:0px;
+background-color:#fff;
+}
+h1.declined_header {
+font-size:1.3em;
+background-color:#c96422;
+}
+.declined_event {
+background:#f8f8f8 none repeat scroll 0 0;
+padding:6px 12px 12px 12px;
+margin-bottom:2px;
+}
+#sidebar ul{
+margin:47px 0 0 0;
+float:right;
+list-style:none;
+position:relative;
+z-index: 100;
+}
+#sidebar ul li{
+background:transparent url('../img/sidetab.png') no-repeat 0 0;
+margin-bottom:3px;
+padding:4px 7px 7px 10px;
+text-align:center;
+width:56px;
+}
+#sidebar ul li a{
+font-family:Trebuchet MS;
+font-weight:bold;
+text-decoration:none;
+color:#000;
+}
+#sidebar ul li.goback{
+background:transparent url('../img/sidetab_big.png') no-repeat 0 0;
+/* padding:7px 7px 7px 20px; */
+margin:-47px 0 0 -41px;
+padding:12px 4px;
+position:absolute;
+width:114px;
+}
+#sidebar ul li.goback a{
+font-size:1.5em;
+color:#709A20;
+}
+#sidebar ul li.goback a:hover{
+text-decoration: underline;
+}
+/* SIDEBAR ---------------------------------------- MAIN */
+
+#main {
+background:#FFFFFF none repeat scroll 0 0;
+padding:12px 35px 70px 35px; 
+width:470px;
+}
+/* MAIN ---------------------------------------- Content */
+
+/* Uni ---
+Context */
+.context, #footer p {
+/*color:#4F4F4F;*/
+font-size:0.9em;
+}
+form div p.context{
+margin-top: 5px;
+}
+/* Schedule ---
+Form */
+form div, div.intro {
+margin: 0 0 16px 0;	
+}
+div.intro .message{margin-bottom:22px;}
+form div.left {
+margin-right:15px;
+}
+form div.clear {
+width:470px;
+}
+/* Button Icons */
+.invite, .time, .calendar {
+overflow:hidden;
+height:22px;
+width:23px;
+text-indent:-300px;
+}
+.invite {
+background:transparent url(../img/invites.png) no-repeat 0 0;
+}
+.time {
+background:transparent url(../img/time.png) no-repeat 0 center;
+}
+.calendar {
+background:transparent url(../img/calendar.png) no-repeat 0 center;
+}
+.form_errors {
+  border:1px solid #C96422;
+}
+#click-through {
+	text-align: center;
+	padding:8px 0 25px 0;
+}
+#click-through input {
+	width: 250px;
+}
+#confirmation_forms {
+  padding:5px 0 30px 0;
+}
+#confirmation_forms input{
+width:228px;
+}
+/* Manage ---
+About */
+div.portrait{border: 1px solid #c6c6c6; margin-bottom:30px; margin-left:9px;}
+div#corey{background: transparent url("../img/corey.jpg"); height:208px; width:145px;}
+div#jeff{background: transparent url("../img/jeff.jpg");height:208px; width:145px;}
+div#tyler{background: transparent url("../img/tyler.jpg");height:208px; width:145px;}
+h2.portrait_title{padding-top:210px;}
+
+/* About ---
+Pending */
+#pending {
+width:470px;
+margin-bottom:1em;
+}
+h1.pending_header {
+font-size:1.3em;
+background-color:#BAD28C;
+}
+.pending_event {
+background-color:#F1F8E5;
+padding:12px 12px 0 12px;
+margin-bottom:2px;
+}
+/* Events */
+#event_header { margin-bottom:18px; }
+div.event_detail {
+width:300px;
+}
+div.event_action a {
+text-align:center;
+padding:0 12px;
+}
+#events {
+margin:16px 0 0 0;
+padding:2px;
+}
+#left_events{
+width:220px;
+margin:0 16px 0 0;
+border-right:1px solid #AAAAAA;
+}
+#going{ margin-bottom:30px; }
+div.your_event {
+width:140px;
+}
+#right_events {
+width:225px; 
+}
+div.attending_event {
+width:140px;
+}
+div#event_description {
+width:340px;
+}
+div#attendees {
+margin:20px 0 50px;
+}
+div#going_not_going {
+border-right:1px solid #AAAAAA;
+padding:5px;
+width:220px;
+}
+div#unresponsive {
+padding:5px 5px 5px 10px;
+width:220px;
+}
+/* Event ---
+Drop Calendar */
+div#calendar {
+background:transparent url(../img/timestamp.png) no-repeat scroll 0 0;
+height:80px;
+margin-left:15px;
+width:114px;
+}
+div#calendar h1 {
+color:#FFFFFF;
+text-align:center;
+padding: 8px 0px 5px 0px;
+}
+div.month_day {
+color:#000000;
+font-size:1.75em;
+text-align:center;
+padding: 10px 0px 20px 0px;
+}
+div#calendar h2 {
+  text-align:center;
+}
+div#map {
+border:1px solid #999999;
+height:200px;
+}
+
+#map.empty {
+border:1px solid #999999;
+height:200px;
+background:gray url(../img/sorrymap.jpg) no-repeat 0 0;
+}
+
+
+/* Content ---------------------------------------- FOOTER */
+
+div#rounded_footer {
+background:transparent url(../img/footer.png) no-repeat right 0;
+height:16px;
+}
+#footer {
+top:-10px;
+right:-45px;
+position:relative;
+width:700px;
+}
+#footer a { font-size:1em; }
+div#bubble {
+background-color:#F2F2F2;
+padding:20px;
+width:390px;
+}
+div#twito {
+background:transparent url(../img/twito_ayes.png) no-repeat scroll 0 0;
+height:169px;
+overflow:hidden;
+text-indent:-300px;
+width:138px;
+}
+/* FOOTER ---------------------------------------- EXTRA */
+div#error_500 {
+background:transparent url(../img/500.png) no-repeat scroll 0 0;
+height:589px;
+text-indent:-1200px;
+width:877px;
+}
+
+body#error #page {
+width:877px;
+}
+/* IE hacks */
+
+div#twito {
+filter: progid: DXImageTransform. Microsoft. AlphaImageLoader (src='../img/twito_ayes.png', sizingMethod='crop');
+}

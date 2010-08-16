@@ -1,7 +1,11 @@
-ENV['RACK_ENV'] ||= 'test'
-project_root = File.expand_path(File.dirname(__FILE__))
-require File.join(project_root, '..', 'vendor', 'gems', 'environment')
-Bundler.require_env(:test)
+begin
+  require File.expand_path('../../.bundle/environment', __FILE__)
+rescue LoadError
+  require "rubygems"
+  require "bundler"
+  Bundler.setup(:default, :test)
+end
+Bundler.require(:default, :test)
 
 $:.push File.join(File.dirname(__FILE__), '..', 'lib')
 require 'twitrsvp'
@@ -9,6 +13,7 @@ require 'pp'
 
 FakeWeb.allow_net_connect = false
 
+project_root = File.expand_path(File.dirname(__FILE__))
 require File.join(project_root, 'fixtures')
 
 DataMapper.setup(:default, 'sqlite3::memory:')
